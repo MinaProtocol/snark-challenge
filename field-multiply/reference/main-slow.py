@@ -23,6 +23,7 @@ class Field:
         return Field((self.value + other.value) % field_order)
 
     def __mul__(self, other):
+        time.sleep(0.000001)
         return Field((self.value * other.value) % field_order)
 
     def __eq__(self, other):
