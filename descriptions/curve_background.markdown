@@ -103,7 +103,7 @@ The twist of Tock is defined over $\F_{r^3} = \F_r[\beta] / (\beta^3 - 11)$ and 
 \end{align*}
 \]
 
------
+## Ok. So what does the SNARK prover do and how can we make it fast?
 
 The SNARK "prover" (the algorithm that produces SNARKs, compressing the blockchain) performs
 operations involving arithmetic over $\F_q, \F_r$ and the [group operation]() in the groups
@@ -119,4 +119,20 @@ consists of several basic parts:
 1. [Fast fourier transforms (FFTs)]() over $\F_r$.
 2. [Multi exponentiation] in Tick.
 3. [Multi exponentiation] in the twist of Tick.
+
+
+### Optimizing field arithmetic
+All of these algorithms rely on arithmetic in either $\F_r$ or $\F_q$. So any speedup
+to addition and multiplication would yield an essentially proportional speedup to
+the SNARK prover as a whole. Multiplication especially is important as it is considerably
+more expensive than addition.
+
+Using vectorized instructions is likely to help a lot here. We have heard that Sean Bowe's
+Rust implementation of the curve BLS12-381 is faster than the existing C++ implementations
+of Tick and Tock because the Rust compiler is better at emitting vectorized instructions.
+This may be a promising avenue for optimization.
+
+Here are several good approaches to improving the speed of these three algorithms.
+
+That being said, there are certainly many optimization ideas beyond these.
 
