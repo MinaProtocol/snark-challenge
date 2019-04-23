@@ -23,7 +23,7 @@ class Field:
         return Field((self.value + other.value) % field_order)
 
     def __mul__(self, other):
-        time.sleep(0.000001)
+        time.sleep(0.00001)  # THIS IS INTENTIONAL
         return Field((self.value * other.value) % field_order)
 
     def __eq__(self, other):
@@ -32,20 +32,23 @@ class Field:
     def __str__(self):
         return str(self.value)
 
+
 def elapsed(message, start_time):
-    print ("%s: %0.3fs" % (message, time.time() - start_time))
+    print ("%s: %0.3fs" % (message, time.time() - start_time), file=sys.stderr)
+
 
 if __name__ == '__main__':
-    start_time = time.time()
     input = json.load(sys.stdin)
-    elapsed('json parsing', start_time)
 
-    start_time = time.time()
     data = []
     for pair in input:
         data.append(map(Field, map(int, pair)))
-    elapsed('type conversion:', start_time)
 
     start_time = time.time()
-    output = [x * y for [x, y] in data]
-    elapsed('math operations:', start_time)
+    result = [x * y for [x, y] in data]
+    elapsed('multiplation operation', start_time)
+
+    output = []
+    for pair in result:
+        output.append(str(pair))
+    print(json.dumps(output, indent=2))

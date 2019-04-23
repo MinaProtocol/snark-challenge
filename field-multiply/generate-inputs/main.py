@@ -13,10 +13,11 @@ field_order = int("""
 3537265295843852015916057220131264689314043479498405430079863
 27743462853720628051692141265303114721689601""".replace("\n", ""))
 
-COUNT = 1000000
+COUNT = 10_000
+
 
 def random_field_elt():
-    # uses string representation to avoid json conversion to float
+    # uses string representation for json conversion
     return str(random.randint(0, field_order))
 
 
@@ -25,5 +26,7 @@ def generate_input():
 
 
 if __name__ == '__main__':
-    print('Generating %s random pairs' % (COUNT))
-    json.dump(generate_input(), sys.stdout)
+    print('Generating %s random input pairs in json format' % (COUNT),
+          file=sys.stderr)
+    print(json.dumps(generate_input(), indent=2))
+    print('')
