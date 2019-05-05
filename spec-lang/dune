@@ -1,0 +1,5 @@
+(executable
+  (name specl)
+  (public_name specl)
+  (libraries base64 stationary bignum core async)
+  (preprocess (pps ppx_jane ppx_deriving.std)))
