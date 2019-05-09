@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import boto3
+from boto3 import resource
 from boto3.dynamodb.conditions import Key, Attr
 import botocore
 import json
@@ -11,7 +11,7 @@ pp = pprint.PrettyPrinter(indent=4)
 with open('config.json') as config_file:
     config = json.load(config_file)
 
-client = boto3.resource('dynamodb', region_name=config['region_name'])
+client = resource('dynamodb', region_name=config['region_name'])
 table = client.Table(config['table_name'])
 
 
