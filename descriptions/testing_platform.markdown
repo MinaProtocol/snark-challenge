@@ -14,7 +14,7 @@ This document is meant to capture general details on the testing platform used f
 ### Host Software:
 - **OS:** Ubuntu Server 18.04.02 LTS
 - **NVIDIA Dev:** CudaDrivers 418.40.04-1 (10.1)
-- **AMD Dev:** 
+- **AMD Dev:** AMD GPU PRo 19.10
 - **Containers:** Docker CE 5:18.09.5~3-0~ubuntu-bionic + nvidia-docker2 container runtime
 
 ### Container Resources:
@@ -32,7 +32,7 @@ This document is meant to capture general details on the testing platform used f
 #### OS Install Notes
 
 ```
-# Start with stock 18.04.2 LTS Server Edition
+# Start with stock Ubuntu 18.04.2 LTS Server Install
 
 ##################################################
 # AMD Driver Install
