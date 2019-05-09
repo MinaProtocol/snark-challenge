@@ -7,14 +7,14 @@ This document is meant to capture general details on the testing platform used f
 - **Motherboard:** Asus ROG Strix Z390-E Gaming
 - **RAM:** Corsair 2 x 16GB
 - **Storage:** Samsung 1TB 860 EVO SATA III
-- **GPU1:** EVGA RTX 2080 Ti XC Gaming 11GB GDDR6 (NVIDIA)
-- **GPU2:** Sapphire Radeon Nitro+ RX Vega 64 8GB DDR5 (AMD R9 Fury X)  (Note: Radeon VII consider too new to use)
+- **NVIDIA GPU:** EVGA RTX 2080 Ti XC Gaming 11GB GDDR6
+- **AMD GPU:** Sapphire Radeon Nitro+ RX Vega 64 8GB DDR5 (Note: Radeon VII consider too new to use)
 - **PSU:** Corsair RM1000X 1000W
 
 ### Host Software:
 - **OS:** Ubuntu Server 18.04.02 LTS
 - **NVIDIA Dev:** CudaDrivers 418.40.04-1 (10.1)
-- **AMD Dev:** ROCm 2.0
+- **AMD Dev:** 
 - **Containers:** Docker CE 5:18.09.5~3-0~ubuntu-bionic + nvidia-docker2 container runtime
 
 ### Container Resources:
