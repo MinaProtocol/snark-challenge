@@ -991,7 +991,7 @@ module Groth16_QAP_prove = struct
       in
       let a_def =
         sprintf
-          {md|%s + %s%s + \sum_{i=0}^{%s} w[i] %s[i]|md}
+          {md|%s + %s%s + \sum_{i=0}^{%s} w[i] \times %s[i]|md}
           (n alpha_g1)
           (n r)
           (n delta_g1)
@@ -1003,7 +1003,7 @@ module Groth16_QAP_prove = struct
       print_endline a_def;
       let b_def ~beta ~delta ~bt =
         sprintf
-          {md|%s + %s%s + \sum_{i=0}^{%s} w[i] %s[i]|md}
+          {md|%s + %s%s + \sum_{i=0}^{%s} w[i] \times %s[i]|md}
           (n beta)
           (n s)
           (n delta)
@@ -1017,7 +1017,7 @@ module Groth16_QAP_prove = struct
       let c_def =
         sprintf
 (*           {md| \left( \sum_{i=0}^{%s - 2} w[2 + i] %s[i]\right)  + \left(\sum_{i=0}^{%s - 1} H[i] %s[i] \right) + %s A+ %s B1- (%s %s) %s|md} *)
-          {md|\sum_{i=0}^{%s - 2} w[2 + i] %s[i] + \sum_{i=0}^{%s - 1} H[i] %s[i] + %s A+ %s B1- (%s %s) %s|md}
+          {md|\sum_{i=0}^{%s - 2} w[2 + i] \times %s[i] + \sum_{i=0}^{%s - 1} H[i] \times %s[i] + %s A+ %s B1- (%s %s) %s|md}
           (n num_vars)
           (n lt)
           (n num_constraints)
@@ -1029,7 +1029,13 @@ module Groth16_QAP_prove = struct
         |> latex
       in
       ksprintf Html.markdown
-{md|The output should be as follows.
+        {md|This problem is a version of the [Groth16 SNARK prover](https://eprint.iacr.org/2016/260.pdf), simplified to the difficult core of the problem.
+
+If $P, Q$ are points on an elliptic curve (either $%s$ or $%s$) and $s : %s$, then
+$P + Q$ denotes the sum of the points as described [here](https://en.wikipedia.org/wiki/Elliptic_curve#The_group_law)
+and $s \times P$ denotes the scalar-multiplication of $P$ by $s$ as described [here](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Basics).
+
+The output should be as follows.
 
 - A = %s
 - B = %s
@@ -1053,6 +1059,9 @@ $$
 
   for $0 \leq i < %s + 1$.
 |md}
+        (n g1)
+        (n g2)
+        (n field)
 a_def
 b2_def
 c_def
