@@ -879,17 +879,17 @@ module Groth16_QAP_prove = struct
                   ; length=Some len })
         )
     in
-    let lc_array name =
+    let evaluation_array name =
       !Batch_parameter name
         (Literal
-           (Array { element = Literal (Linear_combination { field=Name field })
-                  ; length = Some (Name num_constraints) }))
+           (Array { element = Name field
+                  ; length = Some (Literal (Add (Name num_constraints, Literal (Value Bigint.one)))) }))
     in
     let num_vars_plus_one = Literal (Integer.Add (Name num_vars, Literal (Value Bigint.one))) in
     let num_vars_minus_one = Literal (Integer.Sub (Name num_vars, Literal (Value Bigint.one))) in
-    let%map ca = lc_array "ca"
-    and cb = lc_array "cb"
-    and cc = lc_array "cc"
+    let%map ca = evaluation_array "ca"
+    and cb = evaluation_array "cb"
+    and cc = evaluation_array "cc"
     and at = group_array "At" g1 num_vars_plus_one
     (* At[i] = u_i(x) = A_i(t) *)
     and bt1 = group_array "Bt1" g1 num_vars_plus_one
@@ -899,12 +899,12 @@ module Groth16_QAP_prove = struct
        = (beta u_i(t) + alpha v_i(t) + w_i(t)) / delta
        = (beta At[i] + alpha Bt[i] + Ct[i]) / delta
     *)
+    and ht = group_array "Ht" g1 (Literal (Add (Name num_constraints, Literal (Value Bigint.one)))) (* TODO: Possibly minus one? *)
     and alpha_g1 = group_elt (latex "\\alpha") g1
-    and ht = group_array "Ht" g1 (Name num_constraints) (* TODO: Possibly minus one? *)
     and beta_g1 =group_elt (latex "\\beta_1") g1
     and beta_g2 =group_elt (latex "\\beta_2") g2
-    and delta_g1 = group_elt (latex "\\delta") g1
-    and delta_g2 = group_elt (latex "\\delta") g2
+    and delta_g1 = group_elt (latex "\\delta_1") g1
+    and delta_g2 = group_elt (latex "\\delta_2") g2
     in
     (* Note: Here is a dictionary between the names in libsnark and the names in Groth16.
 
@@ -986,7 +986,7 @@ module Groth16_QAP_prove = struct
           ; bt1; beta_g1
           ; num_constraints
           ; ht
-          ; ca=_; cb; cc=_
+          ; ca; cb; cc
           } = batch_params
       in
       let a_def =
@@ -997,6 +997,7 @@ module Groth16_QAP_prove = struct
           (n delta_g1)
           (n num_vars)
           (n at)
+        |> latex
         |> latex
       in
       print_endline a_def;
@@ -1009,17 +1010,14 @@ module Groth16_QAP_prove = struct
           (n num_vars)
           (n bt)
         |> latex
+        |> latex
       in
       let b1_def = b_def ~beta:beta_g1 ~delta:delta_g1 ~bt:bt1 in
       let b2_def = b_def ~beta:beta_g2 ~delta:delta_g2 ~bt:bt2 in
       let c_def =
         sprintf
-          {md|\left(\sum_{i=0}^{%s - 2} w[2 + i] %s[i]\right) 
-          + \left(\sum_{i=0}^{%s - 1} H[i] %s[i] \right) 
-          + %s A
-          + %s B1
-          - (%s %s) %s
-          |md}
+(*           {md| \left( \sum_{i=0}^{%s - 2} w[2 + i] %s[i]\right)  + \left(\sum_{i=0}^{%s - 1} H[i] %s[i] \right) + %s A+ %s B1- (%s %s) %s|md} *)
+          {md|\sum_{i=0}^{%s - 2} w[2 + i] %s[i] + \sum_{i=0}^{%s - 1} H[i] %s[i] + %s A+ %s B1- (%s %s) %s|md}
           (n num_vars)
           (n lt)
           (n num_constraints)
@@ -1027,6 +1025,8 @@ module Groth16_QAP_prove = struct
           (n s)
           (n r)
           (n r) (n s) (n delta_g1)
+        |> latex
+        |> latex
       in
       ksprintf Html.markdown
 {md|The output should be as follows.
@@ -1042,18 +1042,26 @@ where
   $h(x) = (a(x) b(x) - c(x)) / z(x)$
   where $a, b, c$ are the degree %s
   polynomials specified by
-\[
+
+$$
 \begin{aligned}
-  b(\omega_i) &= evalLinearCombination(%s[i], w) \\
+  a(\omega_i) &= %s[i] \\
+  b(\omega_i) &= %s[i] \\
+  c(\omega_i) &= %s[i] \\
 \end{aligned}
-\]
+$$
+
+  for $0 \leq i < %s + 1$.
 |md}
 a_def
 b2_def
 c_def
 b1_def
 (n num_constraints)
+(n ca)
 (n cb)
+(n cc)
+(n num_constraints)
     in
     return description
 
@@ -1112,6 +1120,21 @@ let wrap cs =
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
     onload="renderMathInElement(document.body);"></script>|h}
         ]
+    ; Html.literal
+        {html|<script>
+          document.addEventListener("DOMContentLoaded", function() {
+            var blocks = document.querySelectorAll(".math.display");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:true});
+            }
+            blocks = document.querySelectorAll(".math.inline");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:false});
+            }
+          });
+        </script>|html}
     ; node "body" [] cs ]
 
 let site =
