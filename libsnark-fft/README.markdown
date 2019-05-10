@@ -4,6 +4,7 @@ sudo apt-get install cmake \
                      pkg-config \
                      libboost-dev \
                      libboost-program-options-dev \
+		     libomp-dev \
                      libprocps-dev \
                      libssl-dev \
                      libgmp-dev
