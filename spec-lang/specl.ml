@@ -1,23 +1,7 @@
 open Core
 open Stationary
 
-module Html = struct
-  include Html
-  let div = node "div"
-  let p s = node "p" [] [ text s ]
-  let ul = node "ul"
-  let li = node "li"
-  let a = node "a"
-  let span = node "span"
-
-  let href = Attribute.href
-  let class_ = Attribute.class_
-  let sub = node "sub" []
-  let sup = node "sup" []
-
-  let h1 = node "h1"
-  let h2 = node "h2"
-end
+module Html = Html_concise
 
 let base_url = ""
 
@@ -869,6 +853,7 @@ module Groth16_QAP_prove = struct
   let batch_params {field;g1;g2} =
     let open Problem.Interface in
     let%bind num_constraints = !Batch_parameter "n" (Literal UInt64)
+    and max_degree = !Batch_parameter "N" (Literal UInt64)
     and num_vars = !Batch_parameter "m" (Literal UInt64)
     in
     let group_elt name group = !Batch_parameter name (Name group) in
@@ -883,7 +868,7 @@ module Groth16_QAP_prove = struct
       !Batch_parameter name
         (Literal
            (Array { element = Name field
-                  ; length = Some (Literal (Add (Name num_constraints, Literal (Value Bigint.one)))) }))
+                  ; length = Some (Literal (Add (Name max_degree, Literal (Value Bigint.one)))) }))
     in
     let num_vars_plus_one = Literal (Integer.Add (Name num_vars, Literal (Value Bigint.one))) in
     let num_vars_minus_one = Literal (Integer.Sub (Name num_vars, Literal (Value Bigint.one))) in
@@ -899,7 +884,7 @@ module Groth16_QAP_prove = struct
        = (beta u_i(t) + alpha v_i(t) + w_i(t)) / delta
        = (beta At[i] + alpha Bt[i] + Ct[i]) / delta
     *)
-    and ht = group_array "Ht" g1 (Literal (Add (Name num_constraints, Literal (Value Bigint.one)))) (* TODO: Possibly minus one? *)
+    and ht = group_array "Ht" g1 (Name max_degree) (* TODO: Possibly minus one? *)
     and alpha_g1 = group_elt (latex "\\alpha") g1
     and beta_g1 =group_elt (latex "\\beta_1") g1
     and beta_g2 =group_elt (latex "\\beta_2") g2
@@ -967,9 +952,11 @@ module Groth16_QAP_prove = struct
       let num_vars_plus_one = Literal (Integer.Add (Name batch_params.num_vars, Literal (Value Bigint.one))) in
       !Input "w" 
         (Literal (Array { element=Name field; length = Some num_vars_plus_one }))
-    and r = field_input "r"
-    and s = field_input "s" in
-    let%bind _output =
+    and r = field_input "r" in
+    let%bind selected_degree =
+      !Output "d" (Literal UInt64)
+    in
+    let%bind _proof =
       !Output "proof"
         (Literal (Record
                  [ "A", Name g1
@@ -980,10 +967,10 @@ module Groth16_QAP_prove = struct
     let latex s = sprintf "$%s$" s in
     let description =
       let n = Fn.compose delatex Name.to_string in
-      let { num_vars; alpha_g1; at; delta_g1
-          ; beta_g2; bt2; delta_g2
+      let { num_vars; alpha_g1=_; at; delta_g1=_
+          ; beta_g2=_; bt2; delta_g2=_
           ; lt
-          ; bt1; beta_g1
+          ; bt1; beta_g1=_
           ; num_constraints
           ; ht
           ; ca; cb; cc
@@ -991,40 +978,32 @@ module Groth16_QAP_prove = struct
       in
       let a_def =
         sprintf
-          {md|%s + %s%s + \sum_{i=0}^{%s} w[i] \times %s[i]|md}
-          (n alpha_g1)
-          (n r)
-          (n delta_g1)
+          {md|\sum_{i=0}^{%s} w[i] \times %s[i]|md}
           (n num_vars)
           (n at)
         |> latex
         |> latex
       in
       print_endline a_def;
-      let b_def ~beta ~delta ~bt =
+      let b_def_no_latex ~bt =
         sprintf
-          {md|%s + %s%s + \sum_{i=0}^{%s} w[i] \times %s[i]|md}
-          (n beta)
-          (n s)
-          (n delta)
+          {md|\sum_{i=0}^{%s} w[i] \times %s[i]|md}
           (n num_vars)
           (n bt)
-        |> latex
-        |> latex
       in
-      let b1_def = b_def ~beta:beta_g1 ~delta:delta_g1 ~bt:bt1 in
-      let b2_def = b_def ~beta:beta_g2 ~delta:delta_g2 ~bt:bt2 in
+      let b1_def = b_def_no_latex ~bt:bt1 in
+      let b2_def = b_def_no_latex ~bt:bt2 |> latex |> latex in
       let c_def =
         sprintf
 (*           {md| \left( \sum_{i=0}^{%s - 2} w[2 + i] %s[i]\right)  + \left(\sum_{i=0}^{%s - 1} H[i] %s[i] \right) + %s A+ %s B1- (%s %s) %s|md} *)
-          {md|\sum_{i=0}^{%s - 2} w[2 + i] \times %s[i] + \sum_{i=0}^{%s - 1} H[i] \times %s[i] + %s A+ %s B1- (%s %s) %s|md}
+          {md|\sum_{i=2}^{%s} w[i] \times %s[i - 2] + \sum_{i=0}^{%s - 1} H[i] \times %s[i] + %s %s|md}
+
           (n num_vars)
           (n lt)
-          (n num_constraints)
+          (n selected_degree)
           (n ht)
-          (n s)
           (n r)
-          (n r) (n s) (n delta_g1)
+          b1_def
         |> latex
         |> latex
       in
@@ -1043,9 +1022,8 @@ The output should be as follows.
 
 where
 
-- B1 = %s
 - H is an array of the coefficients of the polynomial
-  $h(x) = (a(x) b(x) - c(x)) / z(x)$
+  $h(x) = \frac{a(x) b(x) - c(x)}{z(x)}$
   where $a, b, c$ are the degree %s
   polynomials specified by
 
@@ -1065,8 +1043,7 @@ $$
 a_def
 b2_def
 c_def
-b1_def
-(n num_constraints)
+(n selected_degree)
 (n ca)
 (n cb)
 (n cc)
