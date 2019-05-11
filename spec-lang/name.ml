@@ -44,6 +44,8 @@ let render_declaration name =
 
 let render name = Html.a [Html.href (url name)] [Html.text (to_string name)]
 
+let to_markdown name = sprintf "[%s](%s)" (to_string name) (url name)
+
 module Qualified = struct
   module T = struct
     type t = {in_module: string; ident: string} [@@deriving sexp, compare]

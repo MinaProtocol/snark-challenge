@@ -8,7 +8,8 @@ end
 module Interface = struct
   module F = struct
     type 'a t =
-      | Declare of Parameter_kind.t * string * Type.t * (Name.t -> 'a)
+      | Declare of
+          Parameter_kind.t * string * Type.t * Html.t option * (Name.t -> 'a)
       | Choose_definitional_parameter :
           (Type.t, 'n) Vec.t list
           * (string, 'n) Vec.t
@@ -19,22 +20,22 @@ module Interface = struct
       match t with
       | Choose_definitional_parameter (xs, names, k) ->
           Choose_definitional_parameter (xs, names, fun x -> f (k x))
-      | Declare (p, s, t, k) ->
-          Declare (p, s, t, fun n -> f (k n))
+      | Declare (p, s, t, note, k) ->
+          Declare (p, s, t, note, fun n -> f (k n))
   end
 
   include Free_monad.Make (F)
 
-  let ( ! ) p s t = Free (Declare (p, s, t, return))
+  let ( ! ) ?note p s t = Free (Declare (p, s, t, note, return))
 
   let def names ts = Free (Choose_definitional_parameter (ts, names, return))
 
   module Spec = struct
     type ('a, 'n) spec =
       { definitional_parameters: (string, 'n) Vec.t * (Type.t, 'n) Vec.t list
-      ; batch_parameters: (string * Type.t) list
-      ; input: (string * Type.t) list
-      ; output: (string * Type.t) list
+      ; batch_parameters: (string * Type.t * Html.t option) list
+      ; input: (string * Type.t * Html.t option) list
+      ; output: (string * Type.t * Html.t option) list
       ; description: 'a }
     [@@deriving fields]
 
@@ -62,9 +63,9 @@ module Interface = struct
                ; input= []
                ; output= [] } ))
         ~f:(function
-          | Declare (pk, s, t, k) ->
+          | Declare (pk, s, t, note, k) ->
               let (T spec) = k (Name.local s) in
-              T (update spec pk ~f:(fun xs -> (s, t) :: xs))
+              T (update spec pk ~f:(fun xs -> (s, t, note) :: xs))
           | Choose_definitional_parameter (choices, names, k) ->
               let (T spec) = k (Vec.map names ~f:(fun s -> Name.local s)) in
               T {spec with definitional_parameters= (names, choices)} )
@@ -101,17 +102,22 @@ module Interface = struct
                  given to your program." ]
       in
       let params ?desc ~title xs =
-        div [class_ "parameters"]
+        div [class_ "parameters"; Stationary.Attribute.create "id" (String.lowercase title)]
           ( [h2 [] [text title]]
           @ Option.to_list desc
           @ [ ul [class_ "value-list"]
-                (List.map xs ~f:(fun (ident, ty) ->
-                     li []
+                (List.map xs ~f:(fun (ident, ty, note) ->
+                     li [](
                        [ div []
                            [ span [class_ "identifier"] [text ident]
                            ; text ":"
                            ; span [class_ "type"] [Type.render ty] ]
-                       ; div [class_ "representation"] [] ] )) ] )
+                       ]
+                        @ Option.to_list (Option.map note ~f:(fun note ->
+                        div [ class_ "note" ] [ note ]))
+                        @
+                       [ div [class_ "representation"] [] 
+                       ]) )) ] )
       in
       let batch_parameters =
         params ~title:"Parameters"
@@ -131,13 +137,15 @@ end
 
 type t =
   { title: string
+  ; preamble : Html.t
   ; interface: Html.t Interface.t
   ; reference_implementation_url: string }
 
-let render {title; interface; reference_implementation_url} =
+let render {title; preamble; interface; reference_implementation_url} =
   let open Html in
   div []
     [ h1 [] [text title]
+    ; preamble
     ; Interface.Spec.(render (create ~name:title interface))
     ; div []
         [ h2 [] [text "Submission guidelines"]
@@ -162,10 +170,18 @@ Your submission will be run and evaluated as follows.
 3. Your binary will be invoked with
 
     ```bash
-    ./main compute PATH_TO_INPUTS
+    ./main compute PATH_TO_INPUTS PATH_TO_OUTPUTS
     ```
 
-    and its runtime will be recorded. It can, if it likes, read
+    and its runtime will be recorded. The file PATH_TO_INPUTS will contain
+    a sequence of inputs, each of which is of the form specified in the
+    ["Input"](#input) section. 
+
+    It should create a file called "outputs" at the path PATH_TO_OUTPUTS
+    which contains a sequence of outputs, each of which is of the form
+    specified in the ["Output"](#output) section.
+
+    It can, if it likes, read
     the file "./preprocessed" in order to help it solve the problem.|md}
         ]
     ; hr []

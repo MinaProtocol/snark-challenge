@@ -19,8 +19,12 @@ module Field = struct
         match f with
         | Prime {order} ->
             span [] [text "&#x1D53D;"; sub [Integer.render order]]
-        | Extension _ ->
-            failwith "TODO Extension field" )
+        | Extension { base=Literal (Prime {order}); degree; non_residue=_ }  ->
+          span [] [ text "&#x1D53D;"
+                  ; sub [Integer.render order; sup [text (Int.to_string degree)]]]
+        | _ -> 
+          failwith "TODO" 
+      )
 end
 
 module Polynomial = struct

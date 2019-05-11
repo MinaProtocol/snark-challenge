@@ -24,9 +24,27 @@ let interface =
     Html.markdown
       {md|The output should be the multiexponentiation with the scalars `s`
 on the bases `g`. In other words, the group element
-`s[0] * g[0] + s[1] * g[1] + ... + s[n - 1] * g[n - 1]`.|md}
+`s[0] * g[0] + s[1] * g[1] + ... + s[n - 1] * g[n - 1]`.
+
+
+In pseduocode, something like
+```javascript
+
+var g = [g0, g1, .., gn];
+
+var multiexp = (s) => {
+  var res = G_identity;
+  for (var i = 0; i < s.length; ++i) {
+    var sg = G_scale(s[i], g[i]);
+    res = G_add(res, sg);
+  }
+  return res;
+}
+```
+
+|md}
   in
   return description
 
 let problem : Problem.t =
-  {interface; title= "Multi-exponentiation"; reference_implementation_url= ""}
+  {interface; preamble = Html.text "TODO";title= "Multi-exponentiation"; reference_implementation_url= ""}

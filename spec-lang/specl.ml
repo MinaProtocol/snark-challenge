@@ -119,13 +119,39 @@ let wrap cs =
         </script>|html}
     ; node "body" [] cs ]
 
+let problem_url (p : Problem.t) =sprintf "problem-%s.html" p.title
+
 let site =
   let open Stationary in
   let modules = [Module.mnt4753; Module.mnt6753] in
   let env = List.fold modules ~init:Env.empty ~f:Module.update_env in
-  let problems = [Multiexp.problem; Groth16_prove.problem] in
+  let problems = 
+    [Multiexp.problem; Groth16_prove.problem
+    ; Fft.problem
+    ; Curve_operations.problem
+    ; Field_arithmetic.problem
+    ]
+  in
+  let pages : Pages.t =
+    { intro = Intro.url
+    ; field_arithmetic = problem_url Field_arithmetic.problem
+    ; mnt4 = Name.module_url Module.mnt4753.name
+    ; mnt6 = Name.module_url Module.mnt6753.name
+    ; multi_exponentiation = problem_url Multiexp.problem
+    ; groth16 = problem_url Groth16_prove.problem
+    ; curve_operations = problem_url Curve_operations.problem
+    ; fft = problem_url Fft.problem
+    }
+  in
+  
   Site.create
-    ( List.map modules ~f:(fun m ->
+    ( 
+      [ File_system.file
+          (File.of_html ~name:"intro.html"
+            (wrap [Intro.intro pages]))
+      ; File_system.copy_directory "static"
+    ]
+  @ List.map modules ~f:(fun m ->
           File_system.file
             (File.of_html
                ~name:(Filename.basename (Name.module_url m.name))
@@ -133,7 +159,7 @@ let site =
     @ List.map problems ~f:(fun p ->
           File_system.file
             (File.of_html
-               ~name:(sprintf "problem-%s.html" p.title)
+               ~name:(problem_url p)
                (wrap [Problem.render p])) ) )
 
 let () =
