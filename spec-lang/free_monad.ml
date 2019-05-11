@@ -46,10 +46,8 @@ end = struct
   include T
   include Monad_let.Make (T)
 
-  let rec cata (t : 'b t) ~(f:('b F.t -> 'b)) : 'b =
-    match t with
-    | Pure x -> x
-    | Free t -> f (F.map t ~f:(cata ~f))
+  let rec cata (t : 'b t) ~(f : 'b F.t -> 'b) : 'b =
+    match t with Pure x -> x | Free t -> f (F.map t ~f:(cata ~f))
 end
 
 module Make2 (F : Functor.S2) : sig
