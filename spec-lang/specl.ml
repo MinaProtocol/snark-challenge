@@ -155,7 +155,7 @@ let site =
   Site.create
     ( 
       [ File_system.file
-          (File.of_html ~name:"intro.html"
+          (File.of_html ~name:"index.html"
             (wrap [Intro.page pages]))
       ; File_system.file
           (File.of_html ~name:"stage1.html"
