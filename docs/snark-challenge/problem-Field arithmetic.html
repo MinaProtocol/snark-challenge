@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/static/main.css">
+    <link rel="stylesheet" type="text/css" href="/snark-challenge/static/main.css">
     
 <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
@@ -30,31 +30,30 @@
   <body>
     <div>
       <h1>
-        Multi-exponentiation
+        Field arithmetic
       </h1>
-      TODO
+      <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
+      <h2 id="background">Background</h2>
+      <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span>) respectively.</p>
+      <p>For the SNARK prover though, the integers involved are a lot bigger. For our purposes, the integers are 753 bits and are represented using arrays of native integers. For example, we could represent them using an array of 12 64-bit integers (since <span class="math inline">12 \cdot 64 = 768 &gt; 753</span>) or an array of 24 32-bit integers (since <span class="math inline">24 \cdot 32 = 768 &gt; 753</span>). And instead of computing mod <span class="math inline">2^{753}</span>, we'll compute mod <span class="math inline">q</span> where <span class="math inline">q</span> is either <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>.</p>
+      <h3 id="montgomery-representation">Montgomery representation</h3>
+      <p>The montgomery representation of the nubmer <code>x</code> is</p>
+      <p>Note that <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> = <a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a> and <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a> = <a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a>, so there are only two fields we need to implement arithmetic for across the whole SNARK challenge.</p>
+      <p>For 32 or 64-bit integers, addition and multiplication are primitive operations. For the large integers we're working with however, we need to implement these arithmetic operations ourselves.</p>
+      <p>This challenge will have you implement addition and multiplication mod <span class="math inline">q</span>.</p>
+      <p>There are a few techniques for implementing</p>
+      <p>https://alicebob.cryptoland.net/understanding-the-montgomery-reduction-algorithm/</p>
+      <p>Addition $ This means addition isn't a primitive operation</p>
+      <p>The integers in question are no</p>
+      <p>These two operations</p>
       <div class="problem">
-        <span>The following problem is defined for any choice of (<span id="Rw==">G</span>,<span id="U2NhbGFy">Scalar</span>) in</span>
+        <span>The following problem is defined for any choice of (<span id="cQ==">q</span>) in</span>
         <ul>
           <li>
-            <a href="/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>
-            , 
-            <span>&#x1D53D;<sub><a href="/MNT4753.html#cg==">MNT4753.r</a></sub></span>
+            <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>
           </li>
           <li>
-            <a href="/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>
-            , 
-            <span>&#x1D53D;<sub><a href="/MNT4753.html#cg==">MNT4753.r</a></sub></span>
-          </li>
-          <li>
-            <a href="/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>
-            , 
-            <span>&#x1D53D;<sub><a href="/MNT6753.html#cg==">MNT6753.r</a></sub></span>
-          </li>
-          <li>
-            <a href="/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>
-            , 
-            <span>&#x1D53D;<sub><a href="/MNT6753.html#cg==">MNT6753.r</a></sub></span>
+            <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>
           </li>
         </ul>
         <p>
@@ -68,6 +67,13 @@
             The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
           </p>
           <ul class="value-list">
+          </ul>
+        </div>
+        <div class="parameters" id="input">
+          <h2>
+            Input
+          </h2>
+          <ul class="value-list">
             <li>
               <div>
                 <span class="identifier">n</span>
@@ -79,25 +85,18 @@
             </li>
             <li>
               <div>
-                <span class="identifier">g</span>
+                <span class="identifier">x</span>
                 :
-                <span class="type"><span><a href="#Rw==">G</a>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><span><span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>[<a href="#bg==">n</a>]</span></span>
               </div>
               <div class="representation">
               </div>
             </li>
-          </ul>
-        </div>
-        <div class="parameters" id="input">
-          <h2>
-            Input
-          </h2>
-          <ul class="value-list">
             <li>
               <div>
-                <span class="identifier">s</span>
+                <span class="identifier">y</span>
                 :
-                <span class="type"><span><a href="#U2NhbGFy">Scalar</a>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><span><span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>[<a href="#bg==">n</a>]</span></span>
               </div>
               <div class="representation">
               </div>
@@ -111,28 +110,16 @@
           <ul class="value-list">
             <li>
               <div>
-                <span class="identifier">y</span>
+                <span class="identifier">z</span>
                 :
-                <span class="type"><a href="#Rw==">G</a></span>
+                <span class="type"><span><span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>[<a href="#bg==">n</a>]</span></span>
               </div>
               <div class="representation">
               </div>
             </li>
           </ul>
         </div>
-        <p>The output should be the multiexponentiation with the scalars <code>s</code> on the bases <code>g</code>. In other words, the group element <code>s[0] * g[0] + s[1] * g[1] + ... + s[n - 1] * g[n - 1]</code>.</p>
-        <p>In pseduocode, something like</p>
-        <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">
-        <span class="kw">var</span> g <span class="op">=</span> [g0<span class="op">,</span> g1<span class="op">,</span> ..<span class="op">,</span> gn]<span class="op">;</span>
-        
-        <span class="kw">var</span> multiexp <span class="op">=</span> (s) <span class="op">=&gt;</span> <span class="op">{</span>
-          <span class="kw">var</span> res <span class="op">=</span> G_identity<span class="op">;</span>
-          <span class="cf">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="va">s</span>.<span class="at">length</span><span class="op">;</span> <span class="op">++</span>i) <span class="op">{</span>
-            <span class="kw">var</span> sg <span class="op">=</span> <span class="at">G_scale</span>(s[i]<span class="op">,</span> g[i])<span class="op">;</span>
-            res <span class="op">=</span> <span class="at">G_add</span>(res<span class="op">,</span> sg)<span class="op">;</span>
-          <span class="op">}</span>
-          <span class="cf">return</span> res<span class="op">;</span>
-        <span class="op">}</span></code></pre></div>
+        <p>The output should be <code>[z](#eg==)[i] = [x](#eA==)[i] * [y](#eQ==)[i]</code> where <code>*</code> is multiplication in the field <a href="#cQ==">q</a> as described above.</p>
       </div>
       <div>
         <h2>

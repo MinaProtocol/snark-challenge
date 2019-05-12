@@ -25,7 +25,7 @@ let to_string {qualification; ident} =
   | In_current_scope ->
       ident
 
-let base_url = ""
+let base_url = "/snark-challenge"
 
 let module_url m = sprintf "%s/%s.html" base_url m
 

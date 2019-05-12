@@ -96,7 +96,7 @@ let wrap cs =
   node "html" []
     [ node "head" []
         [ literal {h|<meta charset="UTF-8">|h}
-        ; link ~href:"/static/main.css"
+        ; link ~href:(sprintf "%s/static/main.css" base_url)
         ; literal {h|
 <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
@@ -125,7 +125,7 @@ let wrap cs =
         </script>|html}
     ; node "body" [] cs ]
 
-let problem_url (p : Problem.t) =sprintf "problem-%s.html" p.title
+let problem_url (p : Problem.t) = sprintf "%s/problem-%s.html" base_url p.title
 
 let site =
   let open Stationary in
@@ -153,13 +153,14 @@ let site =
     ; fft = problem_url Fft.problem
     }
   in
-  Site.create
+  Site.create [
+    File_system.directory "snark-challenge" 
     ( 
       [ File_system.file
-          (File.of_html ~name:"index.html"
+          (File.of_html ~name:"intro.html"
             (wrap [Intro.page pages]))
       ; File_system.file
-          (File.of_html ~name:"stage1.html"
+          (File.of_html ~name:"index.html"
             (wrap [Stage1.page pages]))
       ; File_system.copy_directory "static"
     ]
@@ -171,8 +172,8 @@ let site =
     @ List.map problems ~f:(fun p ->
           File_system.file
             (File.of_html
-               ~name:(problem_url p)
-               (wrap [Problem.render ~pages p])) ) )
+               ~name:(Filename.basename (problem_url p))
+               (wrap [Problem.render ~pages p])) ) ) ]
 
 let () =
   let open Async in

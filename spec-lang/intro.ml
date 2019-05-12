@@ -1,7 +1,7 @@
 open Core
 open Util
 
-let url = "intro.html"
+let url = sprintf "%s/intro.html" base_url
 
 let page (pages : Pages.t) =
   ksprintf Html.markdown

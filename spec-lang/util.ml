@@ -7,3 +7,5 @@ let latex s = sprintf "\\(%s\\)" s
 let ( ^. ) scope name = Name (Name.in_scope scope name)
 
 module Html = Html_concise
+
+let base_url = Name.base_url

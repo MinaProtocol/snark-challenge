@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/static/main.css">
+    <link rel="stylesheet" type="text/css" href="/snark-challenge/static/main.css">
     
 <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
@@ -30,33 +30,25 @@
   <body>
     <div>
       <h1>
-        Curve operations
+        Curve operation
       </h1>
-      <p>Once we have multiplication mod <span class="math inline">q</span> in hand (see <a href="">problem</a>), we can begin implementing the group operations needed.</p>
-      <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
-      <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span> respectively.</p>
-      <p>For the SNARK prover though, the integers involved are a lot bigger. For our purposes, the integers are 753 bits and are represented using arrays of native integers. For example, we could represent them using an array of 12 64-bit integers (since <span class="math inline">12 \cdot 64 = 768 &gt; 753</span>) or an array of 24 32-bit integers (since <span class="math inline">24 \cdot 32 = 768 &gt; 753</span>). And instead of computing mod <span class="math inline">2^{753}</span>, we'll compute mod <span class="math inline">q</span> where <span class="math inline">q</span> is either <a href="/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/MNT6753.html#cQ==">MNT6753.q</a>.</p>
-      <p>For 32 or 64-bit integers, addition and multiplication are primitive operations. For the large integers we're working with however, we need to implement these arithmetic operations ourselves.</p>
-      <p>This challenge will have you implement addition and multiplication mod <span class="math inline">q</span>.</p>
-      <p>There are a few techniques for implementing</p>
-      <p>https://alicebob.cryptoland.net/understanding-the-montgomery-reduction-algorithm/</p>
-      <p>Addition $ This means addition isn't a primitive operation</p>
-      <p>The integers in question are no</p>
-      <p>These two operations</p>
+      
       <div class="problem">
-        <span>The following problem is defined for any choice of (<span id="XChHXCk=">\(G\)</span>) in</span>
+        <span>The following problem is defined for any choice of (<span id="XChyXCk=">\(r\)</span>,<span id="XChzXCk=">\(s\)</span>,<span id="XChcb21lZ2FcKQ==">\(\omega\)</span>) in</span>
         <ul>
           <li>
-            <a href="/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>
+            <a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a>
+            , 
+            <a href="/snark-challenge/MNT4753.html#cw==">MNT4753.s</a>
+            , 
+            <a href="/snark-challenge/MNT4753.html#XChcb21lZ2FcKQ==">MNT4753.\(\omega\)</a>
           </li>
           <li>
-            <a href="/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>
-          </li>
-          <li>
-            <a href="/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>
-          </li>
-          <li>
-            <a href="/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>
+            <a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a>
+            , 
+            <a href="/snark-challenge/MNT6753.html#cw==">MNT6753.s</a>
+            , 
+            <a href="/snark-challenge/MNT6753.html#XChcb21lZ2FcKQ==">MNT6753.\(\omega\)</a>
           </li>
         </ul>
         <p>
@@ -70,6 +62,18 @@
             The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
           </p>
           <ul class="value-list">
+            <li>
+              <div>
+                <span class="identifier">n</span>
+                :
+                <span class="type"><span>uint64</span></span>
+              </div>
+              <div class="note">
+                Guaranteed to be a power of 2.
+              </div>
+              <div class="representation">
+              </div>
+            </li>
           </ul>
         </div>
         <div class="parameters" id="input">
@@ -79,27 +83,9 @@
           <ul class="value-list">
             <li>
               <div>
-                <span class="identifier">n</span>
-                :
-                <span class="type"><span>uint64</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
                 <span class="identifier">x</span>
                 :
-                <span class="type"><span><a href="#XChHXCk=">\(G\)</a>[<a href="#bg==">n</a>]</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">y</span>
-                :
-                <span class="type"><span><a href="#XChHXCk=">\(G\)</a>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><span><span>&#x1D53D;<sub><a href="#XChyXCk=">\(r\)</a></sub></span>[<a href="#bg==">n</a>]</span></span>
               </div>
               <div class="representation">
               </div>
@@ -113,16 +99,16 @@
           <ul class="value-list">
             <li>
               <div>
-                <span class="identifier">z</span>
+                <span class="identifier">y</span>
                 :
-                <span class="type"><span><a href="#XChHXCk=">\(G\)</a>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><span><span>&#x1D53D;<sub><a href="#XChyXCk=">\(r\)</a></sub></span>[<a href="#bg==">n</a>]</span></span>
               </div>
               <div class="representation">
               </div>
             </li>
           </ul>
         </div>
-        <p>The output should be <code>[z](#eg==)[i] = [x](#eA==)[i] + [y](#eQ==)[i]</code> where <code>+</code> is the group operation for the curve <a href="#XChHXCk=">(G)</a> as described above.</p>
+        <p>The output should be y[i] = _{j=0}^{n-1} x[i] ^{ij (2^s / n)}</p>
       </div>
       <div>
         <h2>
