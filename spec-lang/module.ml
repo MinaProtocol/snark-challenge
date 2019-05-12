@@ -8,7 +8,12 @@ module Html = Html_concise
 module Declaration = struct
   type t = 
     { name: string
-    ; value: [`Value of Value.t * Type.t | `Type of Type.t | `Field of Type.Field.literal]
+    ; value:
+        [ `Value of Value.t * Type.t 
+        | `Type of Type.t 
+        | `Field of Type.Field.literal
+        | `Html of Html.t
+        ]
     }
 end
 
@@ -17,6 +22,7 @@ type t = {declarations: Declaration.t list; name: string}
 module Page = struct
   module Entry = struct
     type t =
+      | Html of Html.t
       | Value_declaration of {name: string; type_: Type.t; value: Value.t}
       | Field_declaration of
           { field : Type.Field.literal
@@ -33,6 +39,7 @@ module Page = struct
     let open Html in
     let entry (e : Entry.t) =
       match e with
+      | Html h -> h
       | Value_declaration {name; type_; value} ->
           div [class_ "entry value"]
             [ Name.render (Name.local name)
@@ -110,6 +117,7 @@ end
 let to_page env {declarations; name= title} =
   let entry {Declaration.name; value} =
     match value with
+    | `Html h ->Page.Entry.Html h
     | `Field f ->
         let representation =
           match Representation.of_type ~scope:title env (Type.field (Literal f)) with
@@ -147,14 +155,19 @@ let let_type name ty = {Declaration.name; value= `Type ty}
 
 let let_field f = {Declaration.name=""; value= `Field f}
 
+let let_html h = {Declaration.name=""; value= `Html h}
+
 let module_ name ~declarations = {name; declarations}
 
 let mnt4753 : t =
   let var x = Name (Name.local x) in
   let fq = Type.Field.prime (var "q") in
+  let e = 2 in
+  let fqe = Type.Field.Extension { base=fq; degree=e; non_residue=Literal (Value (Bigint.of_int 13)) } in
   module_ "MNT4753"
     ~declarations:
-      [ let_ ("r" ^: Type.integer)
+      [ let_html (Html.markdown {md|This page describes the constants, fields, and groups associated with the MNT4-753 curve.|md})
+      ; let_ ("r" ^: Type.integer)
         = Value.integer
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888458477323173057491593855069696241854796396165721416325350064441470418137846398469611935719059908164220784476160001"
       ; let_ ("q" ^: Type.integer)
@@ -162,7 +175,8 @@ let mnt4753 : t =
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888253786114353726529584385201591605722013126468931404347949840543007986327743462853720628051692141265303114721689601"
       ; let_ ("e" ^: Type.integer)
         = Value.integer
-            "2"
+            (Int.to_string e)
+      ; let_field fqe
       ; let_ ("a" ^: Type.field fq) = Value.integer "2"
       ; let_ ("b" ^: Type.field fq)
         = Value.integer
@@ -173,19 +187,17 @@ let mnt6753 : t =
   let var x = Name (Name.local x) in
   let fq = Type.Field.prime (var "q") in
   let e = 3 in
-  let fqe = Type.Field.Extension { base=fq; degree=e; non_residue=Literal (Value (Bigint.of_int 11))
-                                 }
-  in
+  let fqe = Type.Field.Extension { base=fq; degree=e; non_residue=Literal (Value (Bigint.of_int 11)) } in
   module_ "MNT6753"
     ~declarations:
-      [ let_ ("r" ^: Type.integer)
+      [ let_html (Html.markdown {md|This page describes the constants, fields, and groups associated with the MNT6-753 curve.|md})
+      ; let_ ("r" ^: Type.integer)
         = Value.integer
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888253786114353726529584385201591605722013126468931404347949840543007986327743462853720628051692141265303114721689601"
       ; let_ ("q" ^: Type.integer)
         = Value.integer
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888458477323173057491593855069696241854796396165721416325350064441470418137846398469611935719059908164220784476160001"
-      ; let_ ("e" ^: Type.integer)
-        = Value.integer (Int.to_string e)
+      ; let_ ("e" ^: Type.integer) = Value.integer (Int.to_string e)
       ; let_field fqe
       ; let_ ("a" ^: Type.field fq) = Value.integer "11"
       ; let_ ("b" ^: Type.field fq)
@@ -198,6 +210,7 @@ let mnt6753 : t =
 let update_env (env : Env.t) {name= module_name; declarations} =
   List.fold declarations ~init:env ~f:(fun env {name; value} ->
       match value with
+      | `Html _
       | `Field _ -> env
       | `Value (v, _t) ->
           { env with

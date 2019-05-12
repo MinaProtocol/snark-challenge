@@ -47,4 +47,5 @@ var multiexp = (s) => {
   return description
 
 let problem : Problem.t =
-  {interface; preamble = Html.text "TODO";title= "Multi-exponentiation"; reference_implementation_url= ""}
+  {interface; preamble = Html.text "TODO" |> Fn.const ;title= "Multi-exponentiation"; reference_implementation_url= ""
+  ; postamble = Fn.const (Html.text "TODO")}

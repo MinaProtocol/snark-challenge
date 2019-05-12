@@ -15,14 +15,13 @@ let param name curve_scope =
 let q = param "q"
 let r = param "r"
 
-let preamble =
+let preamble _pages =
   ksprintf Html.markdown
 {md|The basic operations needed for the SNARK prover algorithm are
 multiplication and addition of integers.
-Usually, when programming we're used to working with 32-bit or 64-bit
-integers and addition and multiplication (mod $2^{32}$ or $2^{64}$).
 
-// In fact, once you've implemented these operations, the rest of the prover is 
+Usually when programming we're used to working with 32-bit or 64-bit
+integers and addition and multiplication mod $2^{32}$ or $2^{64}$) respectively.
 
 For the SNARK prover though, the integers involved are a lot bigger.
 For our purposes, the integers are 753 bits and are represented using
@@ -32,10 +31,11 @@ an array of 24 32-bit integers (since $24 \cdot 32 = 768 > 753$).
 And instead of computing mod $2^{753}$, we'll compute mod $q$ where
 $q$ is either %s or %s.
 
-Note that %s = %s and %s = %s.
+Note that %s = %s and %s = %s, so there are only two fields we need to implement
+arithmetic for across the whole SNARK challenge.
 
 For 32 or 64-bit integers, addition and multiplication are primitive operations.
-For larger integers (and computing mod $q$) however, we need to implement
+For the large integers we're working with however, we need to implement
 these arithmetic operations ourselves.
 
 This challenge will have you implement addition and multiplication mod $q$.
@@ -90,4 +90,5 @@ let problem : Problem.t =
   ; preamble
   ; interface
   ; reference_implementation_url = ""
+  ; postamble=Fn.const (Html.text "TODO")
   }

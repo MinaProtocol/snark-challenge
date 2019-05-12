@@ -96,6 +96,12 @@ let wrap cs =
   node "html" []
     [ node "head" []
         [ literal {h|<meta charset="UTF-8">|h}
+        ; link ~href:"/static/main.css"
+        ; literal {h|
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>|h}
         ; literal
             {h|<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
@@ -130,11 +136,13 @@ let site =
     ; Fft.problem
     ; Curve_operations.problem
     ; Field_arithmetic.problem
+    ; Field_extension_arithmetic.problem
     ]
   in
   let pages : Pages.t =
     { intro = Intro.url
     ; field_arithmetic = problem_url Field_arithmetic.problem
+    ; field_extension_arithmetic =problem_url Field_extension_arithmetic.problem
     ; mnt4 = Name.module_url Module.mnt4753.name
     ; mnt6 = Name.module_url Module.mnt6753.name
     ; multi_exponentiation = problem_url Multiexp.problem
@@ -148,7 +156,10 @@ let site =
     ( 
       [ File_system.file
           (File.of_html ~name:"intro.html"
-            (wrap [Intro.intro pages]))
+            (wrap [Intro.page pages]))
+      ; File_system.file
+          (File.of_html ~name:"stage1.html"
+            (wrap [Stage1.page pages]))
       ; File_system.copy_directory "static"
     ]
   @ List.map modules ~f:(fun m ->
@@ -160,7 +171,7 @@ let site =
           File_system.file
             (File.of_html
                ~name:(problem_url p)
-               (wrap [Problem.render p])) ) )
+               (wrap [Problem.render ~pages p])) ) )
 
 let () =
   let open Async in

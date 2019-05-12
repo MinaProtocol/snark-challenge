@@ -233,4 +233,6 @@ $$
   return description
 
 let problem : Problem.t =
-  {title= "Groth16Prove"; preamble = Html.text "TODO"; interface; reference_implementation_url= ""}
+  {title= "Groth16Prove"; preamble = (fun _ -> Html.text "TODO"); interface; reference_implementation_url= ""
+  ; postamble = Fn.const (Html.text "TODO")
+  }

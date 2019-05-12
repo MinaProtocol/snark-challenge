@@ -12,17 +12,16 @@ let p curve_scope =
   in
   Name.in_scope s "q" |> Name.to_markdown
 
-let preamble =
+let preamble _ =
   ksprintf Html.markdown
-    {md|Once we have multiplication mod $q$ in hand, we can 
+    {md|Once we have multiplication mod $q$ in hand (see [problem]()), we can 
 begin implementing the group operations needed.
 
-    The basic operations needed for the SNARK prover algorithm are
+The basic operations needed for the SNARK prover algorithm are
 multiplication and addition of integers.
-Usually, when programming we're used to working with 32-bit or 64-bit
-integers and addition and multiplication (mod $2^{32}$ or $2^{64}$).
 
-// In fact, once you've implemented these operations, the rest of the prover is 
+Usually when programming we're used to working with 32-bit or 64-bit
+integers and addition and multiplication mod $2^{32}$ or $2^{64}$ respectively.
 
 For the SNARK prover though, the integers involved are a lot bigger.
 For our purposes, the integers are 753 bits and are represented using
@@ -33,7 +32,7 @@ And instead of computing mod $2^{753}$, we'll compute mod $q$ where
 $q$ is either %s or %s.
 
 For 32 or 64-bit integers, addition and multiplication are primitive operations.
-For larger integers (and computing mod $q$) however, we need to implement
+For the large integers we're working with however, we need to implement
 these arithmetic operations ourselves.
 
 This challenge will have you implement addition and multiplication mod $q$.
@@ -79,8 +78,9 @@ where `+` is the group operation for the curve %s as described above.|md}
     (Name.to_markdown group)
 
 let problem : Problem.t =
-  { title = "Curve operation"
+  { title = "Curve operations"
   ; preamble
   ; interface
   ; reference_implementation_url = ""
+  ; postamble = Fn.const (Html.literal "TODO")
   }

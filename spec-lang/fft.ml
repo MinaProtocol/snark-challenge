@@ -12,7 +12,7 @@ let q curve_scope =
   in
   Name.in_scope s "q" |> Name.to_markdown
 
-let preamble =
+let preamble _ =
   ksprintf Html.markdown
     {md||md}
 
@@ -53,5 +53,6 @@ let problem : Problem.t =
   ; preamble
   ; interface
   ; reference_implementation_url = ""
+  ; postamble = Fn.const (Html.text "TODO")
   }
 

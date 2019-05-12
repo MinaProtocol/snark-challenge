@@ -137,15 +137,17 @@ end
 
 type t =
   { title: string
-  ; preamble : Html.t
+  ; preamble : Pages.t -> Html.t
   ; interface: Html.t Interface.t
-  ; reference_implementation_url: string }
+  ; postamble : Pages.t -> Html.t
+  ; reference_implementation_url: string 
+  }
 
-let render {title; preamble; interface; reference_implementation_url} =
+let render ~pages {title; preamble; interface; postamble; reference_implementation_url} =
   let open Html in
   div []
     [ h1 [] [text title]
-    ; preamble
+    ; preamble pages
     ; Interface.Spec.(render (create ~name:title interface))
     ; div []
         [ h2 [] [text "Submission guidelines"]
@@ -184,6 +186,7 @@ Your submission will be run and evaluated as follows.
     It can, if it likes, read
     the file "./preprocessed" in order to help it solve the problem.|md}
         ]
+    ; postamble pages
     ; hr []
     ; a [href reference_implementation_url] [text "Reference implementation"]
     ]

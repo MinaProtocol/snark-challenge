@@ -3,22 +3,24 @@ open Util
 
 let url = "intro.html"
 
-let intro (pages : Pages.t) =
+let page (pages : Pages.t) =
   ksprintf Html.markdown
-    {md|The SNARK prover is not such a complicated algorithm, but
+    {md|The Groth16 SNARK prover is not such a complicated algorithm, but
 it does involve several steps, each of which builds on the next.
 The prover must be implemented for two settings of parameters:
 the parameters associated with the curve [MNT4-753](%s) and those
 associated with the curve [MNT6-753](%s).
 
-Once a collection of parameters $(q, r, e, G_1, G_2)$ is fixed, the
-steps (roughly in order of complexity) are
+Once a collection of parameters $(r, q, e, G_1, G_2)$ is fixed, the
+sub-problems making up the SNARK prover are
 
 1.
     a. Addition and multiplication mod $q$.
-    b. Addition and multiplication mod $r$. It is typically possible for
-      the "modulus" (here either $q$ or $r$) to be a parameter in one's
-      code, so typically 1a and 1b will share an implementation.
+    b. Addition and multiplication mod $r$.
+    
+    It is possible for
+    the "modulus" (here either $q$ or $r$) to be a parameter in one's
+    code, so typically 1a and 1b will share an implementation.
 2. Arithmetic in the extension field $\mathbb{F}_{q^e}$. This is pretty
    straightforward to implement once step 1a is complete, though the
    implementation will differ between MNT4 and MNT6.
