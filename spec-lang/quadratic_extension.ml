@@ -15,10 +15,10 @@ let param name curve_scope =
 let q = param "q"
 let r = param "r"
 
-let preamble _pages =
+let preamble (pages : Pages.t) =
   ksprintf Html.markdown
 {md|Now that we've implemented arithmetic in a prime-order field
-in the [previous challenge](), we can implement field extension
+in a [previous challenge](%s), we can implement field extension
 arithmetic, which we'll need for multi-exponentiation.
 
 ## Definitions and review
@@ -47,27 +47,27 @@ the complex numbers are constructed from the real numbers by adding an "imaginar
 $i$ for $-1$ to $\mathbb{R}$.
 
 Like the complex numbers, the elements of $\mathbb{F}_q[x] / (x^2 = 13)$ are sums
-of the form $a + b x$ where $a$ and $b$ are elements of $\mathbb{F}_q$. This is a
+of the form $a_0 + a_1 x$ where $a_0$ and $a_1$ are elements of $\mathbb{F}_q$. This is a
 field extension of $\mathbb{F}_q$ since $\mathbb{F}_q$ is contained in this field as
-the elements with $b = 0$. For short, we call this field $\mathbb{F}_{q^2}$ since it
+the elements with $a_1 = 0$. For short, we call this field $\mathbb{F}_{q^2}$ since it
 has $q^2$ elements.
 
 ## The problem
 
-In code, you can think of an element of $\mathbb{F}_{q^2}$ as a pair $(a, b)$ where
-each of $a, b$ is an element of $\mathbb{F}_q$ or a struct `{ a : Fq, b : Fq }`.
+In code, you can think of an element of $\mathbb{F}_{q^2}$ as a pair `(a0, a1)` where
+each of $a_0, a_1$ is an element of $\mathbb{F}_q$ or a struct `{ a0 : Fq, a1 : Fq }`.
 
 This problem will have you implement addition and multiplication for $\mathbb{F}_{q^2}$.
 Addition and multiplication are defined how you might expect:
 
 $$
 \begin{aligned}
-(a + b x) + (c + d x)
-&= (a + c) + (b + d)x \\
-(a + b x) (c + d x)
-&= ac + bc x + ad x + bd x^2 \\
-&= ac + bc x + ad x + 13 bd \\
-&= (ac + 13 bd) + (bc + ad) x
+(a_0 + a_1 x) + (b_0 + b_1 x)
+&= (a_0 + b_0 ) + (a_1 + b_1 )x \\
+(a_0 + a_1 x) (b_0 + b_1  x)
+&= a_0 b_0 + a_1 b_0 x + a_0 b_1  x + a_1 b_1  x^2 \\
+&= a_0 b_0 + a_1 b_0 x + a_0 b_1  x + 13 a_1 b_1  \\
+&= (a_0 b_0 + 13 a_1 b_1 ) + (a_1 b_0  + a_0 b_1 ) x
 \end{aligned}
 $$
 
@@ -76,28 +76,26 @@ In pseduo-code, this would be
 
 var alpha = fq(13);
 
-var fq2_add = (e1, e2) => {
+var fq2_add = (a, b) => {
   return {
-    a: fq_add(e1.a, e2.a),
-    b: fq_add(e1.b, e2.b)
+    a: fq_add(a.a0, b.a0),
+    b: fq_add(a.a0, b.a0)
   };
 };
 
-var fq2_mul = (e1, e2) => {
-  var a1_a2 = fq_mul(e1.a, e2.a);
-  var b1_b2 = fq_mul(e1.b, e2.b);
-  var b1_a2 = fq_mul(e1.b, e2.a);
-  var a1_b2 = fq_mul(e1.a, e2.b);
+var fq2_mul = (a, b) => {
+  var a0_b0 = fq_mul(a.a0, b.a0);
+  var a1_b1 = fq_mul(a.a1, b.a1);
+  var a1_b0 = fq_mul(a.a1, b.a0);
+  var a0_b1 = fq_mul(a.a0, b.a1);
   return {
-    a: fq_add(a1_a2, fq_mul(b1_b2, alpha)),
-    b: fq_add(b1_a2, a1_b2)
+    a0: fq_add(a0_b0, fq_mul(a1_b1, alpha)),
+    a1: fq_add(a1_b0, a0_b1)
   };
 };
 ```
-
-So it's pretty easy to define given we have arithmetic for $\mathbb{F}_q$.
-You can see this is a field extension
 |md}
+pages.field_arithmetic
 (q MNT4)
 ;;
 
@@ -141,25 +139,25 @@ do more additions and subtractions, but we do one less multiplication, which is 
 In pseudo-code, the trick is
 ```javascript
 
-var fq2_mul = (e1, e2) => {
-  var a1_a2 = fq_mul(e1.a, e2.a);
-  var b1_b2 = fq_mul(e1.b, e2.b);
+var fq2_mul = (a, b) => {
+  var a0_b0 = fq_mul(a.a0, b.a0);
+  var a1_b1 = fq_mul(a.a1, b.a1);
 
-  var a1_plus_b1 = fq_add(e1.a, e1.b);
-  var a2_plus_b2 = fq_add(e2.a, e2.b);
+  var a0_plus_a1 = fq_add(a.a0, a.a1);
+  var b0_plus_b1 = fq_add(b.a0, b.a1);
 
-  var c = fq_mul(a1_plus_b1, a2_plus_b2);
+  var c = fq_mul(a0_plus_a1, b0_plus_b1);
 
   return {
-    a: fq_add(a1_a2, fq_mul(b1_b2, alpha)),
-    b: fq_sub(fq_sub(c, a1_a2), b1_b2)
+    a0: fq_add(a0_b0, fq_mul(a1_b1, alpha)),
+    a1: fq_sub(fq_sub(c, a0_b0), a1_b1)
   };
 };
 ```
 |md}
 
 let problem : Problem.t =
-  { title = "Field extension arithmetic"
+  { title = "Quadratic extension arithmetic"
   ; preamble
   ; interface
   ; reference_implementation_url = ""

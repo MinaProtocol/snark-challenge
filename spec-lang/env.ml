@@ -74,6 +74,8 @@ module Deref = struct
         Bigint.(bigint ~scope t0 x1 + bigint ~scope t0 x2)
     | Sub (x1, x2) ->
         Bigint.(bigint ~scope t0 x1 - bigint ~scope t0 x2)
+    | Pow (x1, x2) ->
+        Bigint.(pow (bigint ~scope t0 x1) ( bigint ~scope t0 x2))
 end
 
 let empty = {types= Single.empty; values= Single.empty}

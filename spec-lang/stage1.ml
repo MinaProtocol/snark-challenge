@@ -30,17 +30,19 @@ which you'll need to implement first. All in all, there are N challenges:
 
 ## The stage 1 challenges
 1. [Finite field arithmetic](%s)
-2. [Field extension arithmetic](%s)
-3. [Elliptic curve operations](%s)
-4. [Multi-exponentiation](%s)
-5. [Fast fourier transform](%s)
+2. [Quadratic extension arithmetic](%s)
+3. [Cubic extension arithmetic](%s)
+4. [Elliptic curve operations](%s)
+5. [Multi-exponentiation](%s)
+6. [Fast fourier transform](%s)
 
 You'll want to get started with the first challenge, [finite field arithmetic](%s)
 and work your way through the others. If you want to get a sense for how all these
 algorithms come together to build the whole prover, check out [this page](%s).
 |md}
   pages.field_arithmetic 
-  pages.field_extension_arithmetic
+  pages.quadratic_extension
+  pages.cubic_extension
   pages.curve_operations
   pages.multi_exponentiation
   pages.fft

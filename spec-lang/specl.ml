@@ -136,13 +136,15 @@ let site =
     ; Fft.problem
     ; Curve_operations.problem
     ; Field_arithmetic.problem
-    ; Field_extension_arithmetic.problem
+    ; Quadratic_extension.problem
+    ; Cubic_extension.problem
     ]
   in
   let pages : Pages.t =
     { intro = Intro.url
     ; field_arithmetic = problem_url Field_arithmetic.problem
-    ; field_extension_arithmetic =problem_url Field_extension_arithmetic.problem
+    ; quadratic_extension =problem_url Quadratic_extension.problem
+    ; cubic_extension =problem_url Cubic_extension.problem
     ; mnt4 = Name.module_url Module.mnt4753.name
     ; mnt6 = Name.module_url Module.mnt6753.name
     ; multi_exponentiation = problem_url Multiexp.problem
@@ -151,7 +153,6 @@ let site =
     ; fft = problem_url Fft.problem
     }
   in
-  
   Site.create
     ( 
       [ File_system.file

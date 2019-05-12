@@ -20,6 +20,7 @@ let preamble _pages =
 {md|The basic operations needed for the SNARK prover algorithm are
 multiplication and addition of integers.
 
+## Background
 Usually when programming we're used to working with 32-bit or 64-bit
 integers and addition and multiplication mod $2^{32}$ or $2^{64}$) respectively.
 
@@ -30,6 +31,9 @@ an array of 12 64-bit integers (since $12 \cdot 64 = 768 > 753$) or
 an array of 24 32-bit integers (since $24 \cdot 32 = 768 > 753$).
 And instead of computing mod $2^{753}$, we'll compute mod $q$ where
 $q$ is either %s or %s.
+
+### Montgomery representation
+The montgomery representation of the nubmer `x` is 
 
 Note that %s = %s and %s = %s, so there are only two fields we need to implement
 arithmetic for across the whole SNARK challenge.
