@@ -1,0 +1,106 @@
+<!DOCTYPE html><html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+    
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  </head>
+  <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            var blocks = document.querySelectorAll(".math.display");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:true});
+            }
+            blocks = document.querySelectorAll(".math.inline");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:false});
+            }
+          });
+        </script>
+  <body>
+    <div class="module">
+      <h1>
+        MNT4753
+      </h1>
+      <div class="entries">
+        <p>This page describes the constants, fields, and groups associated with the MNT4-753 curve.</p>
+        <div class="entry value">
+          <a href="#cg==">r</a>
+          :
+          <span>Integer</span>
+          =
+          0x01C4C62D92C41110229022EEE2CDADB7F997505B8FAFED5EB7E8F96C97D87307FDB925E8A0ED8D99D124D9A15AF79DB26C5C28C859A99B3EEBCA9429212636B9DFF97634993AA4D6C381BC3F0057974EA099170FA13A4FD90776E240000001
+        </div>
+        <div class="entry value">
+          <a href="#cQ==">q</a>
+          :
+          <span>Integer</span>
+          =
+          0x01C4C62D92C41110229022EEE2CDADB7F997505B8FAFED5EB7E8F96C97D87307FDB925E8A0ED8D99D124D9A15AF79DB117E776F218059DB80F0DA5CB537E38685ACCE9767254A4638810719AC425F0E39D54522CDD119F5E9063DE245E8001
+        </div>
+        <div class="entry value">
+          <a href="#ZQ==">e</a>
+          :
+          <span>Integer</span>
+          =
+          2
+        </div>
+        <div class="entry field">
+          <span><span>&#x1D53D; <sub><a href="#cQ==">q</a> <sup>2</sup></sub></span>  is constructed as  \(\mathbb{F}_q[x] / (x^{2} = \alpha)\)  where \(\alpha\) is  13 . </span>
+          Concretely, each element has the form \(a_0 + a_1 \sqrt{\alpha}\) and is represented as the tuple \((a_0, a_1)\)
+          <div class="representation">
+            <h2>
+              Binary representation
+            </h2>
+            <span><span>uint64 [ 12 ]</span> [ 2 ]</span>
+          </div>
+        </div>
+        <div class="entry value">
+          <a href="#YQ==">a</a>
+          :
+          <span>&#x1D53D; <sub><a href="#cQ==">q</a></sub></span>
+          =
+          2
+        </div>
+        <div class="entry value">
+          <a href="#Yg==">b</a>
+          :
+          <span>&#x1D53D; <sub><a href="#cQ==">q</a></sub></span>
+          =
+          0x01373684A8C9DCAE7A016AC5D7748D3313CD8E39051C596560835DF0C9E50A5B59B882A92C78DC537E51A16703EC9855C77FC3D8BB21C8D68BB8CFB9DB4B8C8FBA773111C36C8B1B4E8F1ECE940EF9EAAD265458E06372009C9A0491678EF4
+        </div>
+        <div class="entry type">
+          <a href="#R18x">G_1</a>
+          =
+          <span>{ (x, y) &isin;  <span>&#x1D53D; <sub><a href="#cQ==">q</a></sub></span> &#x2a2f; <span>&#x1D53D; <sub><a href="#cQ==">q</a></sub></span> &#xFF5C; y <sup>2</sup> = x <sup>3</sup>  +  <a href="#YQ==">a</a> x  +  <a href="#Yg==">b</a> }</span>
+          <div class="representation">
+            <h2>
+              Binary representation
+            </h2>
+            <ul>
+              <li>
+                x
+                :
+                <span>uint64 [ 12 ]</span>
+              </li>
+              <li>
+                y
+                :
+                <span>uint64 [ 12 ]</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

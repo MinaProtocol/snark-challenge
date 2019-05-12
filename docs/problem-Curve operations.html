@@ -1,0 +1,150 @@
+<!DOCTYPE html><html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+    
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+  </head>
+  <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            var blocks = document.querySelectorAll(".math.display");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:true});
+            }
+            blocks = document.querySelectorAll(".math.inline");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:false});
+            }
+          });
+        </script>
+  <body>
+    <div>
+      <h1>
+        Curve operations
+      </h1>
+      <p>Once we have multiplication mod <span class="math inline">q</span> in hand (see <a href="">problem</a>), we can begin implementing the group operations needed.</p>
+      <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
+      <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span> respectively.</p>
+      <p>For the SNARK prover though, the integers involved are a lot bigger. For our purposes, the integers are 753 bits and are represented using arrays of native integers. For example, we could represent them using an array of 12 64-bit integers (since <span class="math inline">12 \cdot 64 = 768 &gt; 753</span>) or an array of 24 32-bit integers (since <span class="math inline">24 \cdot 32 = 768 &gt; 753</span>). And instead of computing mod <span class="math inline">2^{753}</span>, we'll compute mod <span class="math inline">q</span> where <span class="math inline">q</span> is either <a href="/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/MNT6753.html#cQ==">MNT6753.q</a>.</p>
+      <p>For 32 or 64-bit integers, addition and multiplication are primitive operations. For the large integers we're working with however, we need to implement these arithmetic operations ourselves.</p>
+      <p>This challenge will have you implement addition and multiplication mod <span class="math inline">q</span>.</p>
+      <p>There are a few techniques for implementing</p>
+      <p>https://alicebob.cryptoland.net/understanding-the-montgomery-reduction-algorithm/</p>
+      <p>Addition $ This means addition isn't a primitive operation</p>
+      <p>The integers in question are no</p>
+      <p>These two operations</p>
+      <div class="problem">
+        <span>The following problem is defined for any choice of ( <span id="XChHXCk=">\(G\)</span> ) in</span>
+        <ul>
+          <li>
+            <a href="/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>
+          </li>
+          <li>
+            <a href="/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>
+          </li>
+          <li>
+            <a href="/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>
+          </li>
+          <li>
+            <a href="/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>
+          </li>
+        </ul>
+        <p>
+          You can click on the types of any of the parameters, inputs, or outputs tosee how they will be represented in the files given to your program.
+        </p>
+        <div class="parameters" id="parameters">
+          <h2>
+            Parameters
+          </h2>
+          <p>
+            The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
+          </p>
+          <ul class="value-list">
+          </ul>
+        </div>
+        <div class="parameters" id="input">
+          <h2>
+            Input
+          </h2>
+          <ul class="value-list">
+            <li>
+              <div>
+                <span class="identifier">n</span>
+                :
+                <span class="type"><span>uint64</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">x</span>
+                :
+                <span class="type"><span><a href="#XChHXCk=">\(G\)</a> [ <a href="#bg==">n</a> ]</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">y</span>
+                :
+                <span class="type"><span><a href="#XChHXCk=">\(G\)</a> [ <a href="#bg==">n</a> ]</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="parameters" id="output">
+          <h2>
+            Output
+          </h2>
+          <ul class="value-list">
+            <li>
+              <div>
+                <span class="identifier">z</span>
+                :
+                <span class="type"><span><a href="#XChHXCk=">\(G\)</a> [ <a href="#bg==">n</a> ]</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+          </ul>
+        </div>
+        <p>The output should be <code>[z](#eg==)[i] = [x](#eA==)[i] + [y](#eQ==)[i]</code> where <code>+</code> is the group operation for the curve <a href="#XChHXCk=">(G)</a> as described above.</p>
+      </div>
+      <div>
+        <h2>
+          Submission guidelines
+        </h2>
+        <p>Your submission will be run and evaluated as follows.</p>
+        <ol start="0" style="list-style-type: decimal">
+        <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
+        <li><p>Your binary <code>main</code> will be run with</p>
+        <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
+        <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
+        <p>Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</p></li>
+        <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+        <li><p>Your binary will be invoked with</p>
+        <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+        <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+        <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+        <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+        </ol>
+      </div>
+      TODO
+      <hr >
+      <a href="">Reference implementation</a>
+    </div>
+  </body>
+</html>
