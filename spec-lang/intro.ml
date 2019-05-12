@@ -54,6 +54,4 @@ The colored boxes illustrate when one can use a generic implementation to implem
 both algorithms. Thus, there are 5 essentially different parts of the
 prover implementation.
 |md}
-pages.mnt4
-pages.mnt6
-
+    pages.mnt4 pages.mnt6

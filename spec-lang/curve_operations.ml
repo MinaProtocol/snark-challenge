@@ -1,15 +1,10 @@
 open Core
 open Util
 
-type curve =
-  | MNT4
-  | MNT6
+type curve = MNT4 | MNT6
 
 let p curve_scope =
-  let s = (match curve_scope with
-    | MNT4 -> "MNT4"
-    | MNT6 -> "MNT6") ^ "753"
-  in
+  let s = (match curve_scope with MNT4 -> "MNT4" | MNT6 -> "MNT6") ^ "753" in
   Name.in_scope s "q" |> Name.to_markdown
 
 let preamble _ =
@@ -47,40 +42,34 @@ This means addition isn't a primitive operation
 The integers in question are no
 
 These two operations |md}
-(p MNT4)
-(p MNT6)
+    (p MNT4) (p MNT6)
 
 let interface : Html.t Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
-  let%bind [ group ] =
-    def [ latex "G" ] List.Let_syntax.(
-        let%map c =["MNT4753"; "MNT6753"]
-        and g = [ latex "G_1"; latex "G_2" ] in
+  let%bind [group] =
+    def [latex "G"]
+      List.Let_syntax.(
+        let%map c = ["MNT4753"; "MNT6753"]
+        and g = [latex "G_1"; latex "G_2"] in
         Vec.[Name (Name.in_scope c g)])
   in
   let%bind n = !Input "n" (Literal UInt64) in
   let arr =
-    Literal (Type.Array { element=Name group; length=Some (Name n) })
+    Literal (Type.Array {element= Name group; length= Some (Name n)})
   in
-  let%map x =
-    !Input "x" arr
-  and y =
-    !Input "y" arr
-  and output  =
-    !Output "z"  arr
-  in
-  ksprintf Html.markdown {md|The output should be `%s[i] = %s[i] + %s[i]`
+  let%map x = !Input "x" arr
+  and y = !Input "y" arr
+  and output = !Output "z" arr in
+  ksprintf Html.markdown
+    {md|The output should be `%s[i] = %s[i] + %s[i]`
 where `+` is the group operation for the curve %s as described above.|md}
-    (Name.to_markdown output)
-    (Name.to_markdown x)
-    (Name.to_markdown y)
+    (Name.to_markdown output) (Name.to_markdown x) (Name.to_markdown y)
     (Name.to_markdown group)
 
 let problem : Problem.t =
-  { title = "Curve operations"
+  { title= "Curve operations"
   ; preamble
   ; interface
-  ; reference_implementation_url = ""
-  ; postamble = Fn.const (Html.literal "TODO")
-  }
+  ; reference_implementation_url= ""
+  ; postamble= Fn.const (Html.literal "TODO") }

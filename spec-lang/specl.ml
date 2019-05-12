@@ -97,7 +97,8 @@ let wrap cs =
     [ node "head" []
         [ literal {h|<meta charset="UTF-8">|h}
         ; link ~href:(sprintf "%s/static/main.css" base_url)
-        ; literal {h|
+        ; literal
+            {h|
 <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
@@ -131,49 +132,44 @@ let site =
   let open Stationary in
   let modules = [Module.mnt4753; Module.mnt6753] in
   let env = List.fold modules ~init:Env.empty ~f:Module.update_env in
-  let problems = 
-    [Multiexp.problem; Groth16_prove.problem
+  let problems =
+    [ Multiexp.problem
+    ; Groth16_prove.problem
     ; Fft.problem
     ; Curve_operations.problem
     ; Field_arithmetic.problem
     ; Quadratic_extension.problem
-    ; Cubic_extension.problem
-    ]
+    ; Cubic_extension.problem ]
   in
   let pages : Pages.t =
-    { intro = Intro.url
-    ; field_arithmetic = problem_url Field_arithmetic.problem
-    ; quadratic_extension =problem_url Quadratic_extension.problem
-    ; cubic_extension =problem_url Cubic_extension.problem
-    ; mnt4 = Name.module_url Module.mnt4753.name
-    ; mnt6 = Name.module_url Module.mnt6753.name
-    ; multi_exponentiation = problem_url Multiexp.problem
-    ; groth16 = problem_url Groth16_prove.problem
-    ; curve_operations = problem_url Curve_operations.problem
-    ; fft = problem_url Fft.problem
-    }
+    { intro= Intro.url
+    ; field_arithmetic= problem_url Field_arithmetic.problem
+    ; quadratic_extension= problem_url Quadratic_extension.problem
+    ; cubic_extension= problem_url Cubic_extension.problem
+    ; mnt4= Name.module_url Module.mnt4753.name
+    ; mnt6= Name.module_url Module.mnt6753.name
+    ; multi_exponentiation= problem_url Multiexp.problem
+    ; groth16= problem_url Groth16_prove.problem
+    ; curve_operations= problem_url Curve_operations.problem
+    ; fft= problem_url Fft.problem }
   in
-  Site.create [
-    File_system.directory "snark-challenge" 
-    ( 
-      [ File_system.file
-          (File.of_html ~name:"intro.html"
-            (wrap [Intro.page pages]))
-      ; File_system.file
-          (File.of_html ~name:"index.html"
-            (wrap [Stage1.page pages]))
-      ; File_system.copy_directory "static"
-    ]
-  @ List.map modules ~f:(fun m ->
-          File_system.file
-            (File.of_html
-               ~name:(Filename.basename (Name.module_url m.name))
-               (wrap [Module.(Page.render (to_page env m))])) )
-    @ List.map problems ~f:(fun p ->
-          File_system.file
-            (File.of_html
-               ~name:(Filename.basename (problem_url p))
-               (wrap [Problem.render ~pages p])) ) ) ]
+  Site.create
+    [ File_system.directory "snark-challenge"
+        ( [ File_system.file
+              (File.of_html ~name:"intro.html" (wrap [Intro.page pages]))
+          ; File_system.file
+              (File.of_html ~name:"index.html" (wrap [Stage1.page pages]))
+          ; File_system.copy_directory "static" ]
+        @ List.map modules ~f:(fun m ->
+              File_system.file
+                (File.of_html
+                   ~name:(Filename.basename (Name.module_url m.name))
+                   (wrap [Module.(Page.render (to_page env m))])) )
+        @ List.map problems ~f:(fun p ->
+              File_system.file
+                (File.of_html
+                   ~name:(Filename.basename (problem_url p))
+                   (wrap [Problem.render ~pages p])) ) ) ]
 
 let () =
   let open Async in

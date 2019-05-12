@@ -6,15 +6,13 @@ let warning fmt = ksprintf (fun s -> eprintf "Warning: %s\n%!" s) fmt
 module Html = Html_concise
 
 module Declaration = struct
-  type t = 
+  type t =
     { name: string
     ; value:
-        [ `Value of Value.t * Type.t 
-        | `Type of Type.t 
+        [ `Value of Value.t * Type.t
+        | `Type of Type.t
         | `Field of Type.Field.literal
-        | `Html of Html.t
-        ]
-    }
+        | `Html of Html.t ] }
 end
 
 type t = {declarations: Declaration.t list; name: string}
@@ -25,7 +23,7 @@ module Page = struct
       | Html of Html.t
       | Value_declaration of {name: string; type_: Type.t; value: Value.t}
       | Field_declaration of
-          { field : Type.Field.literal
+          { field: Type.Field.literal
           ; representation: Representation.t option }
       | Type_declaration of
           { name: string
@@ -39,7 +37,8 @@ module Page = struct
     let open Html in
     let entry (e : Entry.t) =
       match e with
-      | Html h -> h
+      | Html h ->
+          h
       | Value_declaration {name; type_; value} ->
           div [class_ "entry value"]
             [ Name.render (Name.local name)
@@ -47,59 +46,57 @@ module Page = struct
             ; Type.render type_
             ; text "="
             ; Value.render value ]
-      | Field_declaration {field; representation} ->
-        begin match field with
-        | Extension { base=Literal (Prime {order=Name p}); degree; non_residue } ->
-          let elt =
-            let sqrt = if degree = 2 then {h|\sqrt|h} else sprintf {h|\sqrt[%d]|h} degree in
-            List.init degree ~f:(fun i ->
-                if i = 0
-                then "a_0"
-                else if i = 1
-                then sprintf {h|a_1 %s{\alpha}|h} sqrt
-                else sprintf {h|a_%d %s{\alpha}^{%d}|h} i sqrt i)
-            |> String.concat ~sep:" + "
-          in
-          let tup =
-            List.init degree ~f:(fun i -> sprintf "a_%d" i)
-            |> String.concat ~sep:", "
-          in
-          div [class_ "entry field"]
-            ( [
-              span [] 
-                [ Type.Field.render (Literal field)
-                ; text " is constructed as " 
+      | Field_declaration {field; representation} -> (
+        match field with
+        | Extension {base= Literal (Prime {order= Name p}); degree; non_residue}
+          ->
+            let elt =
+              let sqrt =
+                if degree = 2 then {h|\sqrt|h}
+                else sprintf {h|\sqrt[%d]|h} degree
+              in
+              List.init degree ~f:(fun i ->
+                  if i = 0 then "a_0"
+                  else if i = 1 then sprintf {h|a_1 %s{\alpha}|h} sqrt
+                  else sprintf {h|a_%d %s{\alpha}^{%d}|h} i sqrt i )
+              |> String.concat ~sep:" + "
+            in
+            let tup =
+              List.init degree ~f:(fun i -> sprintf "a_%d" i)
+              |> String.concat ~sep:", "
+            in
+            div [class_ "entry field"]
+              ( [ span []
+                    [ Type.Field.render (Literal field)
+                    ; text " is constructed as "
+                    ; ksprintf text
+                        {latex|\(\mathbb{F}_%s[x] / (x^{%s} = \alpha)\)|latex}
+                        (Name.to_string p) (Int.to_string degree)
+                    ; text {h| where \(\alpha\) is |h}
+                    ; Integer.render non_residue
+                    ; text ". " ]
                 ; ksprintf text
-                    {latex|\(\mathbb{F}_%s[x] / (x^{%s} = \alpha)\)|latex}
-                    (Name.to_string p)
-                    (Int.to_string degree)
-                ; text {h| where \(\alpha\) is |h}
-                ; Integer.render non_residue
-                ; text ". "
-                ]
-            ; ksprintf text {h|Concretely, each element has the form \(%s\) and is represented as the tuple \((%s)\)|h}
-                elt
-                tup
-            ]
-            @ Option.(
-                to_list
-                  (map representation ~f:(fun r ->
-                       div [class_ "representation"]
-                         [ h2 [] [text "Binary representation"]
-                         ; Representation.render r ] ))) )
-        | Prime { order } ->
-          div [class_ "entry field"]
-            ( [ Type.Field.render (Literal field)
-              ; text "the field of integers mod "
-              ; Integer.render order ]
-            @ Option.(
-                to_list
-                  (map representation ~f:(fun r ->
-                       div [class_ "representation"]
-                         [ h2 [] [text "Binary representation"]
-                         ; Representation.render r ] ))) )
-        | _ -> failwith "TODO"
-        end
+                    {h|Concretely, each element has the form \(%s\) and is represented as the tuple \((%s)\)|h}
+                    elt tup ]
+              @ Option.(
+                  to_list
+                    (map representation ~f:(fun r ->
+                         div [class_ "representation"]
+                           [ h2 [] [text "Binary representation"]
+                           ; Representation.render r ] ))) )
+        | Prime {order} ->
+            div [class_ "entry field"]
+              ( [ Type.Field.render (Literal field)
+                ; text "the field of integers mod "
+                ; Integer.render order ]
+              @ Option.(
+                  to_list
+                    (map representation ~f:(fun r ->
+                         div [class_ "representation"]
+                           [ h2 [] [text "Binary representation"]
+                           ; Representation.render r ] ))) )
+        | _ ->
+            failwith "TODO" )
       | Type_declaration {name; type_; representation} ->
           div [class_ "entry type"]
             ( [Name.render (Name.local name); text "="; Type.render type_]
@@ -117,19 +114,20 @@ end
 let to_page env {declarations; name= title} =
   let entry {Declaration.name; value} =
     match value with
-    | `Html h ->Page.Entry.Html h
+    | `Html h ->
+        Page.Entry.Html h
     | `Field f ->
         let representation =
-          match Representation.of_type ~scope:title env (Type.field (Literal f)) with
+          match
+            Representation.of_type ~scope:title env (Type.field (Literal f))
+          with
           | Error e ->
               warning !"%{sexp:Error.t}" e ;
               None
           | Ok r ->
               Some r
         in
-        Page.Entry.Field_declaration
-          { field = f
-          ; representation } 
+        Page.Entry.Field_declaration {field= f; representation}
     | `Value (v, t) ->
         Page.Entry.Value_declaration {name; type_= t; value= v}
     | `Type t ->
@@ -153,9 +151,9 @@ let let_ (name, ty) rhs = {Declaration.name; value= `Value (rhs, ty)}
 
 let let_type name ty = {Declaration.name; value= `Type ty}
 
-let let_field f = {Declaration.name=""; value= `Field f}
+let let_field f = {Declaration.name= ""; value= `Field f}
 
-let let_html h = {Declaration.name=""; value= `Html h}
+let let_html h = {Declaration.name= ""; value= `Html h}
 
 let module_ name ~declarations = {name; declarations}
 
@@ -163,10 +161,15 @@ let mnt4753 : t =
   let var x = Name (Name.local x) in
   let fq = Type.Field.prime (var "q") in
   let e = 2 in
-  let fqe = Type.Field.Extension { base=fq; degree=e; non_residue=Literal (Value (Bigint.of_int 13)) } in
+  let fqe =
+    Type.Field.Extension
+      {base= fq; degree= e; non_residue= Literal (Value (Bigint.of_int 13))}
+  in
   module_ "MNT4753"
     ~declarations:
-      [ let_html (Html.markdown {md|This page describes the constants, fields, and groups associated with the MNT4-753 curve.|md})
+      [ let_html
+          (Html.markdown
+             {md|This page describes the constants, fields, and groups associated with the MNT4-753 curve.|md})
       ; let_ ("r" ^: Type.integer)
         = Value.integer
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888458477323173057491593855069696241854796396165721416325350064441470418137846398469611935719059908164220784476160001"
@@ -174,12 +177,8 @@ let mnt4753 : t =
         = Value.integer
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888253786114353726529584385201591605722013126468931404347949840543007986327743462853720628051692141265303114721689601"
       ; let_ ("R" ^: Type.integer)
-        = Literal(
-          Integer.Pow
-            ( Value.integer "2", Value.integer "768"))
-      ; let_ ("e" ^: Type.integer)
-        = Value.integer
-            (Int.to_string e)
+        = Literal (Integer.Pow (Value.integer "2", Value.integer "768"))
+      ; let_ ("e" ^: Type.integer) = Value.integer (Int.to_string e)
       ; let_field fqe
       ; let_ ("a" ^: Type.field fq) = Value.integer "2"
       ; let_ ("b" ^: Type.field fq)
@@ -191,10 +190,15 @@ let mnt6753 : t =
   let var x = Name (Name.local x) in
   let fq = Type.Field.prime (var "q") in
   let e = 3 in
-  let fqe = Type.Field.Extension { base=fq; degree=e; non_residue=Literal (Value (Bigint.of_int 11)) } in
+  let fqe =
+    Type.Field.Extension
+      {base= fq; degree= e; non_residue= Literal (Value (Bigint.of_int 11))}
+  in
   module_ "MNT6753"
     ~declarations:
-      [ let_html (Html.markdown {md|This page describes the constants, fields, and groups associated with the MNT6-753 curve.|md})
+      [ let_html
+          (Html.markdown
+             {md|This page describes the constants, fields, and groups associated with the MNT6-753 curve.|md})
       ; let_ ("r" ^: Type.integer)
         = Value.integer
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888253786114353726529584385201591605722013126468931404347949840543007986327743462853720628051692141265303114721689601"
@@ -207,15 +211,14 @@ let mnt6753 : t =
       ; let_ ("b" ^: Type.field fq)
         = Value.integer
             "11625908999541321152027340224010374716841167701783584648338908235410859267060079819722747939267925389062611062156601938166010098747920378738927832658133625454260115409075816187555055859490253375704728027944315501122723426879114"
-      ; let_type "G_1" = Type.curve fq ~a:(var "a") ~b:(var "b") 
-      ; let_type "G_2" = Type.curve (Literal fqe) ~a:(var "a") ~b:(var "b") 
-      ]
+      ; let_type "G_1" = Type.curve fq ~a:(var "a") ~b:(var "b")
+      ; let_type "G_2" = Type.curve (Literal fqe) ~a:(var "a") ~b:(var "b") ]
 
 let update_env (env : Env.t) {name= module_name; declarations} =
   List.fold declarations ~init:env ~f:(fun env {name; value} ->
       match value with
-      | `Html _
-      | `Field _ -> env
+      | `Html _ | `Field _ ->
+          env
       | `Value (v, _t) ->
           { env with
             values=

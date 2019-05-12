@@ -102,22 +102,22 @@ module Interface = struct
                  given to your program." ]
       in
       let params ?desc ~title xs =
-        div [class_ "parameters"; Stationary.Attribute.create "id" (String.lowercase title)]
+        div
+          [ class_ "parameters"
+          ; Stationary.Attribute.create "id" (String.lowercase title) ]
           ( [h2 [] [text title]]
           @ Option.to_list desc
           @ [ ul [class_ "value-list"]
                 (List.map xs ~f:(fun (ident, ty, note) ->
-                     li [](
-                       [ div []
-                           [ span [class_ "identifier"] [text ident]
-                           ; text ":"
-                           ; span [class_ "type"] [Type.render ty] ]
-                       ]
-                        @ Option.to_list (Option.map note ~f:(fun note ->
-                        div [ class_ "note" ] [ note ]))
-                        @
-                       [ div [class_ "representation"] [] 
-                       ]) )) ] )
+                     li []
+                       ( [ div []
+                             [ span [class_ "identifier"] [text ident]
+                             ; text ":"
+                             ; span [class_ "type"] [Type.render ty] ] ]
+                       @ Option.to_list
+                           (Option.map note ~f:(fun note ->
+                                div [class_ "note"] [note] ))
+                       @ [div [class_ "representation"] []] ) )) ] )
       in
       let batch_parameters =
         params ~title:"Parameters"
@@ -137,13 +137,13 @@ end
 
 type t =
   { title: string
-  ; preamble : Pages.t -> Html.t
+  ; preamble: Pages.t -> Html.t
   ; interface: Html.t Interface.t
-  ; postamble : Pages.t -> Html.t
-  ; reference_implementation_url: string 
-  }
+  ; postamble: Pages.t -> Html.t
+  ; reference_implementation_url: string }
 
-let render ~pages {title; preamble; interface; postamble; reference_implementation_url} =
+let render ~pages
+    {title; preamble; interface; postamble; reference_implementation_url} =
   let open Html in
   div []
     [ h1 [] [text title]

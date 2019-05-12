@@ -1,23 +1,19 @@
 open Core
 open Util
 
-type curve =
-  | MNT4
-  | MNT6
+type curve = MNT4 | MNT6
 
 let param name curve_scope =
-  let s = (match curve_scope with
-    | MNT4 -> "MNT4"
-    | MNT6 -> "MNT6") ^ "753"
-  in
-  Name.in_scope s name|> Name.to_markdown
+  let s = (match curve_scope with MNT4 -> "MNT4" | MNT6 -> "MNT6") ^ "753" in
+  Name.in_scope s name |> Name.to_markdown
 
 let q = param "q"
+
 let r = param "r"
 
 let preamble _pages =
   ksprintf Html.markdown
-{md|The basic operations needed for the SNARK prover algorithm are
+    {md|The basic operations needed for the SNARK prover algorithm are
 multiplication and addition of integers.
 
 ## Background
@@ -54,45 +50,31 @@ This means addition isn't a primitive operation
 The integers in question are no
 
 These two operations |md}
-(q MNT4)
-(q MNT6)
-(q MNT4) (r MNT6)
-(q MNT6) (r MNT4)
-;;
+    (q MNT4) (q MNT6) (q MNT4) (r MNT6) (q MNT6) (r MNT4)
 
 let interface : Html.t Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
-  let%bind [ q ] =
-    def [ "q" ] (
-      List.map ["MNT4753"; "MNT6753"] ~f:(fun c ->
-          Vec.[ Name (Name.in_scope c "q")
-              ])
-    )
+  let%bind [q] =
+    def ["q"]
+      (List.map ["MNT4753"; "MNT6753"] ~f:(fun c ->
+           Vec.[Name (Name.in_scope c "q")] ))
   in
-  let field = Type.field (Type.Field.prime (Name q) ) in
+  let field = Type.field (Type.Field.prime (Name q)) in
   let%bind n = !Input "n" (Literal UInt64) in
-  let arr =
-    Literal (Type.Array { element=field; length=Some (Name n) })
-  in
-  let%map x =
-    !Input "x" arr
-  and y =
-    !Input "y" arr
-  and output  =
-    !Output "z"  arr
-  in
-  ksprintf Html.markdown {md|The output should be `%s[i] = %s[i] * %s[i]`
+  let arr = Literal (Type.Array {element= field; length= Some (Name n)}) in
+  let%map x = !Input "x" arr
+  and y = !Input "y" arr
+  and output = !Output "z" arr in
+  ksprintf Html.markdown
+    {md|The output should be `%s[i] = %s[i] * %s[i]`
 where `*` is multiplication in the field %s as described above.|md}
-    (Name.to_markdown output)
-    (Name.to_markdown x)
-    (Name.to_markdown y)
+    (Name.to_markdown output) (Name.to_markdown x) (Name.to_markdown y)
     (Name.to_markdown q)
 
 let problem : Problem.t =
-  { title = "Field arithmetic"
+  { title= "Field arithmetic"
   ; preamble
   ; interface
-  ; reference_implementation_url = ""
-  ; postamble=Fn.const (Html.text "TODO")
-  }
+  ; reference_implementation_url= ""
+  ; postamble= Fn.const (Html.text "TODO") }

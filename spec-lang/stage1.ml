@@ -1,9 +1,9 @@
 open Core
 open Util
 
-let page (pages : Pages.t)=
+let page (pages : Pages.t) =
   ksprintf Html.markdown
-  {md|Welcome to stage 1 of the SNARK challenge!
+    {md|Welcome to stage 1 of the SNARK challenge!
 Think of this stage as a paid training for the ultimate challenge
 of writing a super-fast SNARK prover.
 Want to learn cutting edge cryptography, GPU programming and get
@@ -40,11 +40,6 @@ You'll want to get started with the first challenge, [finite field arithmetic](%
 and work your way through the others. If you want to get a sense for how all these
 algorithms come together to build the whole prover, check out [this page](%s).
 |md}
-  pages.field_arithmetic 
-  pages.quadratic_extension
-  pages.cubic_extension
-  pages.curve_operations
-  pages.multi_exponentiation
-  pages.fft
-  pages.field_arithmetic
-  pages.intro
+    pages.field_arithmetic pages.quadratic_extension pages.cubic_extension
+    pages.curve_operations pages.multi_exponentiation pages.fft
+    pages.field_arithmetic pages.intro

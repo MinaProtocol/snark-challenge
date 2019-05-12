@@ -1,23 +1,19 @@
 open Core
 open Util
 
-type curve =
-  | MNT4
-  | MNT6
+type curve = MNT4 | MNT6
 
 let param name curve_scope =
-  let s = (match curve_scope with
-    | MNT4 -> "MNT4"
-    | MNT6 -> "MNT6") ^ "753"
-  in
-  Name.in_scope s name|> Name.to_markdown
+  let s = (match curve_scope with MNT4 -> "MNT4" | MNT6 -> "MNT6") ^ "753" in
+  Name.in_scope s name |> Name.to_markdown
 
 let q = param "q"
+
 let r = param "r"
 
 let preamble (pages : Pages.t) =
   ksprintf Html.markdown
-{md|Now that we've implemented arithmetic in a prime-order field
+    {md|Now that we've implemented arithmetic in a prime-order field
 in a [previous challenge](%s), we can implement field extension
 arithmetic, which we'll need for multi-exponentiation.
 
@@ -95,35 +91,36 @@ var fq2_mul = (a, b) => {
 };
 ```
 |md}
-pages.field_arithmetic
-(q MNT4)
-;;
+    pages.field_arithmetic (q MNT4)
 
 let interface : Html.t Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
-  let fq = Type.Field.Prime { order = (Name (Name.in_scope "MNT4753" "q") ) } in
-  let fqe = Type.Field.Extension { base=Literal fq; degree=2; non_residue=Literal (Value (Bigint.of_int 13)) } in
+  let fq = Type.Field.Prime {order= Name (Name.in_scope "MNT4753" "q")} in
+  let fqe =
+    Type.Field.Extension
+      { base= Literal fq
+      ; degree= 2
+      ; non_residue= Literal (Value (Bigint.of_int 13)) }
+  in
   let%bind n = !Input "n" (Literal UInt64) in
   let arr =
-    Literal (Type.Array { element=Type.field (Literal fqe); length=Some (Name n) })
+    Literal
+      (Type.Array {element= Type.field (Literal fqe); length= Some (Name n)})
   in
-  let%map _x =
-    !Input "x" arr
-  and _y =
-    !Input "y" arr
-  and _output  =
-    !Output "z"  arr
-  in
-  ksprintf Html.markdown {md|The output should be `z[i] = x[i] * y[i]`
+  let%map _x = !Input "x" arr
+  and _y = !Input "y" arr
+  and _output = !Output "z" arr in
+  ksprintf Html.markdown
+    {md|The output should be `z[i] = x[i] * y[i]`
 where `*` is multiplication in the field %s as described above.
 |md}
-    ((fun () -> Type.Field.render (Literal fqe)
-     |> Html.to_string ) |> Async.Thread_safe.block_on_async_exn)
-;;
+    ( (fun () -> Type.Field.render (Literal fqe) |> Html.to_string)
+    |> Async.Thread_safe.block_on_async_exn )
 
 let postamble _ =
-  Html.markdown {md|## Efficiency tricks
+  Html.markdown
+    {md|## Efficiency tricks
 
 The pseduocode above does 4 $\mathbb{F}_q$ multiplications, 1 multiplication
 by $13$ (which can be made much cheaper than a general multiplication if it is
@@ -157,10 +154,8 @@ var fq2_mul = (a, b) => {
 |md}
 
 let problem : Problem.t =
-  { title = "Quadratic extension arithmetic"
+  { title= "Quadratic extension arithmetic"
   ; preamble
   ; interface
-  ; reference_implementation_url = ""
-  ; postamble
-  }
-
+  ; reference_implementation_url= ""
+  ; postamble }

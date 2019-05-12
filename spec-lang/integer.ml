@@ -71,4 +71,4 @@ let rec render : t -> Html.t = function
       span [] [render t1; text "+"; render t2]
   | Literal (Pow (t1, t2)) ->
       let open Html in
-      span [] [render t1; sup [ render t2 ] ]
+      span [] [render t1; sup [render t2]]
