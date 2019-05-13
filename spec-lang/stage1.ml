@@ -23,10 +23,12 @@ consists of two sub-algorithms:
 
 The cool thing about both of these algorithms is that they're massively
 parallel and ideally suited to implementation on GPU, which we expect to
-help take the top prize in the challenge.
+help take the top prize in the challenge. The multi-exponentiation in
+particular is just a big [reduction](https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf),
+although the reduction function requires some work to describe.
 
-But before we get there, those 2 algorithms themselves have sub-algorithms
-which you'll need to implement first. All in all, there are N challenges:
+These 2 algorithms themselves have sub-algorithms which you'll need to implement first.
+All in all, there are N challenges:
 
 ## The stage 1 challenges
 1. [Finite field arithmetic](%s)

@@ -33,6 +33,15 @@ module Page = struct
 
   type t = {title: string; entries: Entry.t list}
 
+  let render_representation = function
+    | None ->
+        []
+    | Some r ->
+        let open Html in
+        [ hr []
+        ; div [class_ "representation"]
+            [h3 [] [text "Binary representation"]; Representation.render r] ]
+
   let render {title; entries} =
     let open Html in
     let entry (e : Entry.t) =
@@ -76,36 +85,21 @@ module Page = struct
                     ; Integer.render non_residue
                     ; text ". " ]
                 ; ksprintf text
-                    {h|Concretely, each element has the form \(%s\) and is represented as the tuple \((%s)\)|h}
+                    {h|Concretely, each element has the form \(%s\) and is represented as the tuple \((%s)\).|h}
                     elt tup ]
-              @ Option.(
-                  to_list
-                    (map representation ~f:(fun r ->
-                         div [class_ "representation"]
-                           [ h2 [] [text "Binary representation"]
-                           ; Representation.render r ] ))) )
+              @ render_representation representation )
         | Prime {order} ->
             div [class_ "entry field"]
               ( [ Type.Field.render (Literal field)
-                ; text "the field of integers mod "
+                ; text "is the field of integers mod "
                 ; Integer.render order ]
-              @ Option.(
-                  to_list
-                    (map representation ~f:(fun r ->
-                         div [class_ "representation"]
-                           [ h2 [] [text "Binary representation"]
-                           ; Representation.render r ] ))) )
+              @ render_representation representation )
         | _ ->
             failwith "TODO" )
       | Type_declaration {name; type_; representation} ->
           div [class_ "entry type"]
             ( [Name.render (Name.local name); text "="; Type.render type_]
-            @ Option.(
-                to_list
-                  (map representation ~f:(fun r ->
-                       div [class_ "representation"]
-                         [ h2 [] [text "Binary representation"]
-                         ; Representation.render r ] ))) )
+            @ render_representation representation )
     in
     div [class_ "module"]
       [h1 [] [text title]; div [class_ "entries"] (List.map entries ~f:entry)]
@@ -159,7 +153,8 @@ let module_ name ~declarations = {name; declarations}
 
 let mnt4753 : t =
   let var x = Name (Name.local x) in
-  let fq = Type.Field.prime (var "q") in
+  let fq_field = Type.Field.Prime {order= var "q"} in
+  let fq = Literal fq_field in
   let e = 2 in
   let fqe =
     Type.Field.Extension
@@ -176,9 +171,12 @@ let mnt4753 : t =
       ; let_ ("q" ^: Type.integer)
         = Value.integer
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888253786114353726529584385201591605722013126468931404347949840543007986327743462853720628051692141265303114721689601"
+        (*
       ; let_ ("R" ^: Type.integer)
         = Literal (Integer.Pow (Value.integer "2", Value.integer "768"))
+*)
       ; let_ ("e" ^: Type.integer) = Value.integer (Int.to_string e)
+      ; let_field fq_field
       ; let_field fqe
       ; let_ ("a" ^: Type.field fq) = Value.integer "2"
       ; let_ ("b" ^: Type.field fq)
@@ -188,7 +186,8 @@ let mnt4753 : t =
 
 let mnt6753 : t =
   let var x = Name (Name.local x) in
-  let fq = Type.Field.prime (var "q") in
+  let fq_field = Type.Field.Prime {order= var "q"} in
+  let fq = Literal fq_field in
   let e = 3 in
   let fqe =
     Type.Field.Extension
@@ -206,6 +205,7 @@ let mnt6753 : t =
         = Value.integer
             "41898490967918953402344214791240637128170709919953949071783502921025352812571106773058893763790338921418070971888458477323173057491593855069696241854796396165721416325350064441470418137846398469611935719059908164220784476160001"
       ; let_ ("e" ^: Type.integer) = Value.integer (Int.to_string e)
+      ; let_field fq_field
       ; let_field fqe
       ; let_ ("a" ^: Type.field fq) = Value.integer "11"
       ; let_ ("b" ^: Type.field fq)

@@ -49,6 +49,8 @@ module Interface = struct
 
     type 'a t = T : ('a, 'n) spec -> 'a t
 
+    let has_batch_parameters (T t) = not (List.is_empty t.batch_parameters)
+
     let update s pk ~f =
       let field = field pk in
       Field.fset field s (f (Field.get field s))
@@ -85,11 +87,13 @@ module Interface = struct
             []
         | _ ->
             [ span []
-                ( text "The following problem is defined for any choice of ("
-                  :: List.intersperse ~sep:(text ",")
-                       (List.map (Vec.to_list names) ~f:(fun name ->
-                            Name.render_declaration name ))
-                @ [text ") in"] )
+                ( [text "The following problem is defined for any choice of "]
+                @ (if Vec.length names > 1 then [text "("] else [])
+                @ List.intersperse ~sep:(text ",")
+                    (List.map (Vec.to_list names) ~f:(fun name ->
+                         Name.render_declaration name ))
+                @ (if Vec.length names > 1 then [text ")"] else [])
+                @ [text " in"] )
             ; ul []
                 (List.map choices ~f:(fun choice ->
                      li []
@@ -98,7 +102,7 @@ module Interface = struct
                           ~sep:(text ", ")) ))
             ; p
                 "You can click on the types of any of the parameters, inputs, \
-                 or outputs tosee how they will be represented in the files \
+                 or outputs to see how they will be represented in the files \
                  given to your program." ]
       in
       let params ?desc ~title xs =
@@ -120,18 +124,22 @@ module Interface = struct
                        @ [div [class_ "representation"] []] ) )) ] )
       in
       let batch_parameters =
-        params ~title:"Parameters"
-          ~desc:
-            (p
-               "The parameters will be generated once and your submission \
-                will be allowed to preprocess them in any way you like before \
-                being invoked on multiple inputs.")
-          batch_parameters
+        if List.is_empty batch_parameters then []
+        else
+          [ params ~title:"Parameters"
+              ~desc:
+                (p
+                   "The parameters will be generated once and your submission \
+                    will be allowed to preprocess them in any way you like \
+                    before being invoked on multiple inputs.")
+              batch_parameters ]
       in
       let input = params ~title:"Input" input in
       let output = params ~title:"Output" output in
       div [class_ "problem"]
-        (definitional_preamble @ [batch_parameters; input; output; description])
+        ( [h2 [] [text "Problem specification"]]
+        @ definitional_preamble @ batch_parameters
+        @ [input; output; description] )
   end
 end
 
@@ -145,18 +153,11 @@ type t =
 let render ~pages
     {title; preamble; interface; postamble; reference_implementation_url} =
   let open Html in
-  div []
-    [ h1 [] [text title]
-    ; preamble pages
-    ; Interface.Spec.(render (create ~name:title interface))
-    ; div []
-        [ h2 [] [text "Submission guidelines"]
-        ; markdown
-            {md|
-Your submission will be run and evaluated as follows.
-
+  let spec = Interface.Spec.create ~name:title interface in
+  let batch_params_description =
+    {md|
 0. The submission-runner will randomly generate the parameters and save them to a file `PATH_TO_PARAMETERS`
-1. Your binary `main` will be run with 
+0. Your binary `main` will be run with 
 
     ```bash
     ./main preprocess PATH_TO_PARAMETERS
@@ -164,9 +165,20 @@ Your submission will be run and evaluated as follows.
     where `PATH_TO_PARAMETERS` will be replaced by the acutal path.
 
     Your binary can at this point, if you like, do some preprocessing of the parameters and
-    save any state it would like to a file `./preprocessed`.
+    save any state it would like to a file `./preprocessed`.|md}
+  in
+  div []
+    [ h1 [] [text title]
+    ; preamble pages
+    ; Interface.Spec.render spec
+    ; div []
+        [ h2 [] [text "Submission guidelines"]
+        ; ksprintf markdown
+            {md|
+Your submission will be run and evaluated as follows.
 
-2. The submission runner will generate a random sequence of inputs, saved to a file
+%s
+0. The submission runner will generate a random sequence of inputs, saved to a file
    `PATH_TO_INPUTS`.
 
 3. Your binary will be invoked with
@@ -185,7 +197,9 @@ Your submission will be run and evaluated as follows.
 
     It can, if it likes, read
     the file "./preprocessed" in order to help it solve the problem.|md}
-        ]
+            ( if Interface.Spec.has_batch_parameters spec then
+              batch_params_description
+            else "" ) ]
     ; postamble pages
     ; hr []
     ; a [href reference_implementation_url] [text "Reference implementation"]
