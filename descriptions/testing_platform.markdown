@@ -3,35 +3,31 @@
 This document is meant to capture general details on the testing platform used for snark-challenge performance measurements.
 
 ### Host Hardware
-- **CPU:** Intel Core i9-9900K (3.6GHz 8C/16T)
+- **CPU:** Intel Core i9-9900K (9th Generation, Coffee Lake, 14nm, 3.6GHz 8C/16T)
 - **Motherboard:** Asus ROG Strix Z390-E Gaming
-- **RAM:** Corsair 2 x 16GB
+- **RAM:** Corsair 2 x 16GB DDR4 2666 (PC4-21300) C16
 - **Storage:** Samsung 1TB 860 EVO SATA III
 - **NVIDIA GPU:** EVGA RTX 2080 Ti XC Gaming 11GB GDDR6
-- **AMD GPU:** Sapphire Radeon Nitro+ RX Vega 64 8GB DDR5 (Note: Radeon VII consider too new to use)
+- **AMD GPU:** Sapphire Radeon Nitro+ RX Vega 64 8GB DDR5
 - **PSU:** Corsair RM1000X 1000W
 
 ### Host Software:
 - **OS:** Ubuntu Server 18.04.02 LTS
 - **NVIDIA Dev:** CudaDrivers 418.40.04-1 (10.1)
 - **AMD Dev:** AMD GPU PRo 19.10
-- **Containers:** Docker CE 5:18.09.5~3-0~ubuntu-bionic + nvidia-docker2 container runtime
-
-### Container Resources:
-- [NVIDIA CUDA DEV 10.1-devel](https://hub.docker.com/r/nvidia/cuda)
-- [AMD ROCm DEV (WIP)](https://hub.docker.com/r/rocm/dev-ubuntu-18.04)
+- **Container System:** Docker CE 5:18.09.5~3-0~ubuntu-bionic
+- **GPU Enhanced Containers:**
+    - [NVIDIA CUDA DEV 10.1-devel](https://hub.docker.com/r/nvidia/cuda)
+    - [AMD ROCm DEV (WIP)](https://hub.docker.com/r/rocm/dev-ubuntu-18.04)
 
 ### Other Resources:
 - [General GPU Benchmark (compiles for cuda AND ocl)](https://github.com/ekondis/mixbench)
 
-
 ### Notes:
-
-
 
 #### OS Install Notes
 
-```
+```bash
 # Start with stock Ubuntu 18.04.2 LTS Server Install
 
 ##################################################
@@ -102,8 +98,36 @@ docker run --runtime=nvidia --rm nvidia/cuda:10.1-base nvidia-smi
 
 ```
 
+#### RE AMD GPU
+At time of purchase, Radeon VII GPU was consider too new to use.
+
 #### Mixbench Makefile paths
 ```
 CUDA_INSTALL_PATH = /usr/local/cuda
 OCL_INSTALL_PATH = /opt/amdgpu-pro
 ```
+
+#### Running GPU Enhanced Docker containers
+
+```bash
+export MAXRUNTIME='10s'
+
+# NVIDIA METHOD
+timeout --signal=SIGKILL ${MAXRUNTIME} \
+    docker run --network none \
+        -it --rm \
+        --runtime=nvidia \
+        nvidia/cuda:10.1-devel \
+        /bin/bash
+
+# AMD METHOD
+timeout --signal=SIGKILL ${MAXRUNTIME} \
+    docker run --network none  \
+        -it --rm \
+        --device=/dev/kfd \
+        --device=/dev/dri \
+        --group-add video \
+        rocm/rocm-terminal \
+        /bin/bash
+```
+
