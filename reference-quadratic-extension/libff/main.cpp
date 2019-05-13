@@ -30,10 +30,13 @@ Fqe<mnt4753_pp> read_mnt4_fq2(FILE* input) {
 // The actual code for doing Fq2 multiplication lives in libff/algebra/fields/fp2.tcc
 int main(void)
 {
+    // argv should be
+    // { "main", "compute", inputs, outputs }
+
     mnt4753_pp::init_public_params();
 
-    auto inputs = fopen("inputs", "r");
-    auto outputs = fopen("outputs", "w");
+    auto inputs = fopen(argv[2], "r");
+    auto outputs = fopen(argv[3], "w");
 
     while (true) {
       size_t n;

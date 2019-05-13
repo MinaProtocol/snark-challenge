@@ -28,15 +28,19 @@ Fq<mnt6753_pp> read_mnt6_fq(FILE* input) {
   return x;
 }
 
-int main(void)
+// The actual code for doing Fq multiplication lives in libff/algebra/fields/fp.tcc
+int main(int argc, char *argv[])
 {
+    // argv should be
+    // { "main", "compute", inputs, outputs }
+
     mnt4753_pp::init_public_params();
     mnt6753_pp::init_public_params();
 
     size_t n;
 
-    auto inputs = fopen("inputs", "r");
-    auto outputs = fopen("outputs", "w");
+    auto inputs = fopen(argv[2], "r");
+    auto outputs = fopen(argv[3], "w");
 
     while (true) {
       size_t elts_read = fread((void *) &n, sizeof(size_t), 1, inputs);
