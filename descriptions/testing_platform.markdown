@@ -25,12 +25,9 @@ This document is meant to capture general details on the testing platform used f
 
 ### Notes:
 
-#### RE AMG GPU
-At time of purchase, Radeon VII GPU was consider too new to use.
-
 #### OS Install Notes
 
-```
+```bash
 # Start with stock Ubuntu 18.04.2 LTS Server Install
 
 ##################################################
@@ -100,6 +97,9 @@ docker run --runtime=nvidia --rm nvidia/cuda:10.1-base nvidia-smi
 
 
 ```
+
+#### RE AMD GPU
+At time of purchase, Radeon VII GPU was consider too new to use.
 
 #### Mixbench Makefile paths
 ```
