@@ -32,6 +32,21 @@
       <h1>
         Field arithmetic
       </h1>
+      <div>
+        <h2>
+          Quick details
+        </h2>
+        <ul>
+          <li>
+            <p><strong>Problem:</strong></p>
+            Multiply together an array of elements of a prime-order field.
+          </li>
+          <li>
+            <p><strong>Prize:</strong></p>
+            $1,000
+          </li>
+        </ul>
+      </div>
       <h2 id="background">Background</h2>
       <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
       <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span>) respectively.</p>
@@ -40,10 +55,12 @@
       <p>We call the set of numbers <span class="math inline">0, \dots, q - 1</span> by the name <span class="math inline">\mathbb{F}_q</span>. This set forms a field, which means we can add, multiply, and divide numbers in the set. Addition and multiplication happen mod q. It might seem weird that we can divide, but it turns out for any <span class="math inline">a, b</span> in <span class="math inline">\mathbb{F}_q</span>, there is a number <span class="math inline">c</span> in <span class="math inline">\mathbb{F}_q</span> such that <span class="math inline">(c b) \mod q = a</span>. In this case we say <span class="math inline">a / b = c</span> so that <span class="math inline">(a / b) b \mod q = c b \mod q = a</span> as you'd expect.</p>
       <h3 id="montgomery-representation">Montgomery representation</h3>
       <p>Montgomery representation is an alternative way of representing elements of <span class="math inline">\mathbb{F}_q</span> so that multiplication mod <span class="math inline">q</span> can be computed more efficiently.</p>
-      <p>So let <span class="math inline">q</span> be a prime and let <span class="math inline">R = 2^{768}</span>. The Montgomery representation of the nubmer <span class="math inline">x</span> is <span class="math inline">(x R) \mod q</span>. So for example, when <span class="math inline">q</span> is <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>, the number 5 is represented as <span class="math inline">(5 \cdot 2^{768}) \mod q</span> which happens to be</p>
+      <p>Let <span class="math inline">q</span> be one of <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a> and let <span class="math inline">R = 2^{768}</span>. The Montgomery representation of the nubmer <span class="math inline">x</span> is <span class="math inline">(x R) \mod q</span>. So for example, when <span class="math inline">q</span> is <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>, the number 5 is represented as <span class="math inline">(5 \cdot 2^{768}) \mod q</span> which happens to be</p>
       <pre><code>15141386232259939182423724568694911114488003694957216858820448966622494022908702997737632032507442391226452946698823665470952711443326537357991482811741996884665155234620507693793230633117754640516203527639390490866666926222409</code></pre>
-      <p>This number then is represented as a TODO-ENDIANNESS length 12 array of 64-bit integers.</p>
-      <p>Let us see how multplication works in this setting. We'll use pseudocode with <code>%</code> for <span class="math inline">\mod</span>.</p>
+      <p>This number then is represented as a little-endian length 12 array of 64-bit integers.</p>
+      <p>In summary, we represent the number <code>x</code> as an array <code>a</code> with</p>
+      <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">sum</span>(a, (i, ai) <span class="op">=&gt;</span> (<span class="dv">2</span><span class="op">**</span>i) <span class="op">*</span> ai) <span class="op">==</span> (x <span class="op">*</span> R) <span class="op">%</span> q </code></pre></div>
+      <p>Let us see how multplication works in this setting. We'll use pseudocode with <code>%</code> for <span class="math inline">\mathrm{mod}</span>.</p>
       <p>Given the Montgomery representation <code>X = (x * R) % q</code> of <code>x</code> and <code>Y = (y * R) % q</code> of <code>y</code>, we want to compute the Montgomery representation of <code>(x * y) % q</code>, which is <code>(x * y * R) % q</code>.</p>
       <p>We have</p>
       <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">X <span class="op">*</span> Y
@@ -62,7 +79,12 @@
       == (x * y * R * 1) % q
       == (x * y * R) % q</code></pre>
       <p>which is the Montgomery representation of the product of the inputs, exactly as we wanted.</p>
-      <p>Algorithms for big-integer multiplication and <code>div_R</code> (often called Montgomery reduction) are given <a href="http://cacr.uwaterloo.ca/hac/about/chap14.pdf">here</a>, where our <span class="math inline">q</span> is called <span class="math inline">m</span>.</p>
+      <h3 id="resources">Resources</h3>
+      <ul>
+      <li><strong>Algorithms</strong> for big-integer multiplication and <code>div_R</code> (often called Montgomery reduction) are given <a href="http://cacr.uwaterloo.ca/hac/about/chap14.pdf">here</a>, where our <span class="math inline">q</span> is called <span class="math inline">m</span>.</li>
+      <li>A C++ implementation of Montgomery reduction can be found <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp.tcc#L161">here</a>.</li>
+      <li><a href="https://cryptojedi.org/peter/data/pairing-20131122.pdf">These slides</a> may have useful insights for squeezing out extra performance.</li>
+      </ul>
       <h3 id="note">Note</h3>
       <p>Note that <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> = <a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a> and <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a> = <a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a>, so there are only two fields we need to implement arithmetic for across the whole SNARK challenge.</p>
       <div class="problem">
@@ -99,7 +121,10 @@
               <div>
                 <span class="identifier">x</span>
                 :
-                <span class="type"><span><span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>, <a href="#bg==">n</a>)</span></span>
+              </div>
+              <div class="note">
+                <p>The elements of <code>x</code> are represented using the montgomery representation as described above.</p>
               </div>
               <div class="representation">
               </div>
@@ -122,7 +147,7 @@
             </li>
           </ul>
         </div>
-        <p>The output <a href="#eQ==">y</a> should be <code>[x](#eA==)[0] * [x](#eA==)[1] * ... * [x](#eA==)[n - 1]</code> where <code>*</code> is multiplication in the field <a href="#cQ==">q</a> as described above.</p>
+        <p>The output <code>y</code> should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <a href="#cQ==">q</a> as described above.</p>
       </div>
       <div>
         <h2>

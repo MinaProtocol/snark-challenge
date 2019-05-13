@@ -32,6 +32,21 @@
       <h1>
         Multi-exponentiation
       </h1>
+      <div>
+        <h2>
+          Quick details
+        </h2>
+        <ul>
+          <li>
+            <p><strong>Problem:</strong></p>
+            Compute the multi-exponentiation of an array of (scalar, curve-point) pairs for the 4 relevant groups.
+          </li>
+          <li>
+            <p><strong>Prize:</strong></p>
+            $1,000
+          </li>
+        </ul>
+      </div>
       TODO
       <div class="problem">
         <h2>
@@ -84,7 +99,7 @@
               <div>
                 <span class="identifier">g</span>
                 :
-                <span class="type"><span><a href="#Rw==">G</a>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><span>Array(<a href="#Rw==">G</a>, <a href="#bg==">n</a>)</span></span>
               </div>
               <div class="representation">
               </div>
@@ -100,7 +115,10 @@
               <div>
                 <span class="identifier">s</span>
                 :
-                <span class="type"><span><a href="#U2NhbGFy">Scalar</a>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><span>Array(<a href="#U2NhbGFy">Scalar</a>, <a href="#bg==">n</a>)</span></span>
+              </div>
+              <div class="note">
+                <p>Elements of <code>s</code> will be represented in <strong>standard</strong> form as a little-endian array of 12 64-bit unsigned limbs. This form is more likely to be useful than Montgomery representation for this problem.</p>
               </div>
               <div class="representation">
               </div>
