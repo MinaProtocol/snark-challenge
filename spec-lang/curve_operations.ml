@@ -98,7 +98,9 @@ let interface : Html.t Problem.Interface.t =
       k j k j k j k j
       (group_md g i |> Name.to_markdown)
   in
-  String.concat ~sep:"\n\n" (List.map ~f:desc params) |> Html.markdown
+  sprintf "%s\n\n%s" Gpu_message.t
+    (String.concat ~sep:"\n\n" (List.map ~f:desc params))
+  |> Html.markdown
 
 let postamble (_pages : Pages.t) =
   ksprintf Html.markdown

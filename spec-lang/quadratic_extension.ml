@@ -111,9 +111,12 @@ let interface : Html.t Problem.Interface.t =
   let%map _x = !Input "x" arr
   and _output = !Output "y" (Type.field (Literal fqe)) in
   ksprintf Html.markdown
-    {md|The output should be `x[0] * x[1] * ... * x[n - 1]`
+    {md|%s
+
+The output should be `x[0] * x[1] * ... * x[n - 1]`
 where `*` is multiplication in the field %s as described above.
 |md}
+    Gpu_message.t
     ( (fun () -> Type.Field.render (Literal fqe) |> Html.to_string)
     |> Async.Thread_safe.block_on_async_exn )
 

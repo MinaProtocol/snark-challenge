@@ -143,12 +143,15 @@ let interface : Html.t Problem.Interface.t =
   and _ = !Output "out_x" (fq MNT4)
   and _ = !Output "out_y" (fq MNT6) in
   ksprintf Html.markdown
-    {md|The output `out_x` should be `x[0] * x[1] * ... * x[n - 1]`
+    {md|%s
+    
+The output `out_x` should be `x[0] * x[1] * ... * x[n - 1]`
 where `*` is multiplication in the field %s.
 
 The output `out_y` should be `y[0] * y[1] * ... * y[n - 1]`
 where `*` is multiplication in the field %s.
 |md}
+    Gpu_message.t
     (html_to_string (Type.render (fq MNT4)))
     (html_to_string (Type.render (fq MNT6)))
 
@@ -157,7 +160,8 @@ let problem : Problem.t =
   ; quick_details=
       { description=
           Html.text
-            "Multiply together an array of elements of a prime-order field."
+            "Use a GPU to multiply together an array of elements of a \
+             prime-order field."
       ; prize= Prize.stage1 50 }
   ; preamble
   ; interface
