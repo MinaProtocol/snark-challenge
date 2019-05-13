@@ -28,7 +28,7 @@
           });
         </script>
   <body>
-    <p>The Groth16 SNARK prover is not such a complicated algorithm, but it does involve several steps, each of which builds on the next. The prover must be implemented for two settings of parameters: the parameters associated with the curve <a href="/snark-challenge/MNT4753.html">MNT4-753</a> and those associated with the curve <a href="/snark-challenge/MNT6753.html">MNT6-753</a>.</p>
+    <p>The Groth16 SNARK prover is not such a complicated algorithm, but it does involve several steps, each of which builds on the next. The prover must be implemented for two settings of parameters: the parameters associated with the curve <a href="/snark-challenge">MNT4-753</a> and those associated with the curve <a href="/snark-challenge/MNT4753.html">MNT6-753</a>.</p>
     <p>Once a collection of parameters <span class="math inline">(r, q, e, G_1, G_2)</span> is fixed, the sub-problems making up the SNARK prover are</p>
     <ol style="list-style-type: decimal">
     <li><ol style="list-style-type: lower-alpha">
@@ -50,7 +50,7 @@
     <p>Finally, the Groth16 SNARK prover itself simply performs 4 multi-exponentiations in <span class="math inline">G_1</span>, 1 multi-exponentiation in <span class="math inline">G_2</span>, and a few FFTs, combining the results together in a [simple way].</p>
     The dependencies between all these algorithms are illustrated in this image:
     <div>
-    <p><img src='/static/ladder.png'></p>
+    <p><img src='/snark-challenge/MNT6753.html/static/ladder.png'></p>
     </div>
     <p>The colored boxes illustrate when one can use a generic implementation to implement both algorithms. Thus, there are 5 essentially different parts of the prover implementation.</p>
   </body>

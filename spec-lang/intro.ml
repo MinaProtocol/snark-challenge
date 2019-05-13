@@ -48,10 +48,10 @@ together in a [simple way].
 The dependencies between all these algorithms are illustrated in this
 image:
 <div>
-  <img src='/static/ladder.png'>
+  <img src='%s/static/ladder.png'>
 </div>
 The colored boxes illustrate when one can use a generic implementation to implement
 both algorithms. Thus, there are 5 essentially different parts of the
 prover implementation.
 |md}
-    pages.mnt4 pages.mnt6
+    base_url pages.mnt4 pages.mnt6
