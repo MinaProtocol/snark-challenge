@@ -37,7 +37,7 @@
     <li>Fast fourier transform (FFT) over a finite field.</li>
     </ol>
     <p>The cool thing about both of these algorithms is that they're massively parallel and ideally suited to implementation on GPU, which we expect to help take the top prize in the challenge. The multi-exponentiation in particular is just a big <a href="https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf">reduction</a>, although the reduction function requires some work to describe.</p>
-    <p>These 2 algorithms themselves have sub-algorithms which you'll need to implement first. All in all, there are N challenges:</p>
+    <p>These 2 algorithms themselves have sub-algorithms which you'll need to implement first. In total, the first stage has 4 challenges. After implementing these challenges you'll be well on your way to having a complete GPU implementation of the SNARK prover itself.</p>
     <h2 id="the-stage-1-challenges">The stage 1 challenges</h2>
     <ol style="list-style-type: decimal">
     <li><a href="/snark-challenge/problem-Field%20arithmetic.html">Finite field arithmetic</a>. Reward of $50.</li>

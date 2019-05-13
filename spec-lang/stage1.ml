@@ -32,7 +32,8 @@ particular is just a big [reduction](https://developer.download.nvidia.com/asset
 although the reduction function requires some work to describe.
 
 These 2 algorithms themselves have sub-algorithms which you'll need to implement first.
-All in all, there are N challenges:
+In total, the first stage has 4 challenges. After implementing these challenges you'll
+be well on your way to having a complete GPU implementation of the SNARK prover itself.
 
 ## The stage 1 challenges
 1. [Finite field arithmetic](%s). Reward of $50.
