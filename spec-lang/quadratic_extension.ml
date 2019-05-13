@@ -159,7 +159,7 @@ let problem : Problem.t =
           Html.text
             "Multiply together an array of elements of a quadratic extension \
              field."
-      ; prize= {dollars= 1000} }
+      ; prize= Prize.stage1 25 }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

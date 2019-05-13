@@ -3,9 +3,9 @@ open Util
 
 type curve = MNT4 | MNT6
 
-let p curve_scope =
-  let s = (match curve_scope with MNT4 -> "MNT4" | MNT6 -> "MNT6") ^ "753" in
-  Name.in_scope s "q" |> Name.to_markdown
+let curve_scope c = (match c with MNT4 -> "MNT4" | MNT6 -> "MNT6") ^ "753"
+
+let p c = Name.in_scope (curve_scope c) "q" |> Name.to_markdown
 
 let preamble (pages : Pages.t) =
   ksprintf Html.markdown
@@ -48,9 +48,24 @@ the techniques section below.
     pages.field_arithmetic pages.quadratic_extension pages.cubic_extension
     pages.mnt4 pages.mnt6
 
+type two = One | Two
+
+let int_of_two = function One -> 1 | Two -> 2
+
+let embedding_degree = function MNT4 -> 4 | MNT6 -> 6
+
+let group' f curve i =
+  let i = int_of_two i in
+  Name.in_scope (curve_scope curve) (ksprintf f "G_%d" i)
+
+let group = group' latex
+
+let group_md = group' (sprintf "$%s$")
+
 let interface : Html.t Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
+  (*
   let%bind [group] =
     def [latex "G"]
       List.Let_syntax.(
@@ -58,14 +73,32 @@ let interface : Html.t Problem.Interface.t =
         and g = [latex "G_1"; latex "G_2"] in
         Vec.[Name (Name.in_scope c g)])
   in
+*)
   let%bind n = !Input "n" (Literal UInt64) in
-  let arr =
-    Literal (Type.Array {element= Name group; length= Some (Name n)})
+  let input (c, i) =
+    let arr =
+      Literal (Type.Array {element= Name (group c i); length= Some (Name n)})
+    in
+    !Input (sprintf "g%d_%d" (embedding_degree c) (int_of_two i)) arr
   in
-  let%map _x = !Input "x" arr and _output = !Output "y" (Name group) in
-  ksprintf Html.markdown
-    {md|The output should be `x[0] + x[1] + ... + x[n - 1]`
-where `+` is the group operation for the curve $G$ as described above.|md}
+  let output (c, i) =
+    !Output
+      (sprintf "h%d_%d" (embedding_degree c) (int_of_two i))
+      (Name (group c i))
+  in
+  let params = [(MNT4, One); (MNT4, Two); (MNT6, One); (MNT6, Two)] in
+  let%map _input = all (List.map ~f:input params)
+  and _output = all (List.map ~f:output params) in
+  let desc (g, i) =
+    let k = embedding_degree g in
+    let j = int_of_two i in
+    sprintf
+      "`h%d_%d` should be `g%d_%d[0] + g%d_%d[1] + ... + g%d_%d[n - 1]` where \
+       `+` is the group operation for the curve %s."
+      k j k j k j k j
+      (group_md g i |> Name.to_markdown)
+  in
+  String.concat ~sep:"\n\n" (List.map ~f:desc params) |> Html.markdown
 
 let postamble (_pages : Pages.t) =
   ksprintf Html.markdown
@@ -101,7 +134,7 @@ let problem : Problem.t =
           Html.text
             "Add together an array of elements of each of the four relevant \
              elliptic curves."
-      ; prize= {dollars= 1000} }
+      ; prize= Prize.stage1 100 }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

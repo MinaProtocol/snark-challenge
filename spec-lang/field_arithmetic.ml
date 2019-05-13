@@ -3,9 +3,11 @@ open Util
 
 type curve = MNT4 | MNT6
 
-let param name curve_scope =
+let param_name name curve_scope =
   let s = (match curve_scope with MNT4 -> "MNT4" | MNT6 -> "MNT6") ^ "753" in
-  Name.in_scope s name |> Name.to_markdown
+  Name.in_scope s name
+
+let param name curve_scope = param_name name curve_scope |> Name.to_markdown
 
 let q = param "q"
 
@@ -54,7 +56,7 @@ This number then is represented as a little-endian length 12 array of 64-bit int
 
 In summary, we represent the number `x` as an array `a` with
 ```python
-sum(a, (i, ai) => (2**i) * ai) == (x * R) %% q 
+a.map((ai, i) => (2**i) * ai).sum() == (x * R) %% q
 ```
 
 Let us see how multplication works in this setting. We'll
@@ -97,39 +99,58 @@ which is the Montgomery representation of the product of the inputs, exactly as 
 
 ### Resources
 
-- **Algorithms** for big-integer multiplication and `div_R` (often called Montgomery reduction)
+- Algorithms for big-integer multiplication and `div_R` (often called Montgomery reduction)
 are given [here](http://cacr.uwaterloo.ca/hac/about/chap14.pdf), where our $q$ is called $m$.
 - A C++ implementation of Montgomery reduction can be found [here](https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp.tcc#L161).
 - [These slides](https://cryptojedi.org/peter/data/pairing-20131122.pdf) may have useful insights for squeezing out extra performance.
+- This problem is sometimes called big integer multiplication, multi-precision multiplication,
+  or more specifically "modular multiplication". You can find lots of great resources by
+  searching for these terms along with "GPU".|md}
+    (q MNT4) (q MNT6) (q MNT4) (q MNT6) (q MNT4)
 
-### Note
-Note that %s = %s and %s = %s, so there are only two fields we need to implement
-arithmetic for across the whole SNARK challenge.|md}
-    (q MNT4) (q MNT6) (q MNT4) (q MNT6) (q MNT4) (q MNT4) (r MNT6) (q MNT6)
-    (r MNT4)
+let html_to_string x =
+  Async.Thread_safe.block_on_async_exn (fun () -> Html.to_string x)
 
 let interface : Html.t Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
+  (*
   let%bind [q] =
     def ["q"]
       (List.map ["MNT4753"; "MNT6753"] ~f:(fun c ->
            Vec.[Name (Name.in_scope c "q")] ))
-  in
-  let field = Type.field (Type.Field.prime (Name q)) in
+  in *)
+  let q = param_name "q" in
+  let fq name = Type.field (Type.Field.prime (Name (q name))) in
   let%bind n = !Input "n" (Literal UInt64) in
-  let arr = Literal (Type.Array {element= field; length= Some (Name n)}) in
+  let arr field =
+    Literal (Type.Array {element= field; length= Some (Name n)})
+  in
   let%map _x =
-    ( ! ) Input "x" arr
+    ( ! ) Input "x"
+      (arr (fq MNT4))
       ~note:
         (Html.markdown
            "The elements of `x` are represented using the montgomery\n\
             representation as described above.")
-  and _output = !Output "y" field in
+  and _y =
+    ( ! ) Input "y"
+      (arr (fq MNT6))
+      ~note:
+        (Html.markdown
+           "The elements of `y` are represented using the montgomery\n\
+            representation as described above.")
+  and _ = !Output "out_x" (fq MNT4)
+  and _ = !Output "out_y" (fq MNT6) in
   ksprintf Html.markdown
-    {md|The output `y` should be `x[0] * x[1] * ... * x[n - 1]`
-where `*` is multiplication in the field %s as described above.|md}
-    (Name.to_markdown q)
+    {md|The output `out_x` should be `x[0] * x[1] * ... * x[n - 1]`
+where `*` is multiplication in the field %s.
+
+The output `out_y` should be `y[0] * y[1] * ... * y[n - 1]`
+where `*` is multiplication in the field %s.
+|md}
+    (html_to_string (Type.render (fq MNT4)))
+    (html_to_string (Type.render (fq MNT6)))
 
 let problem : Problem.t =
   { title= "Field arithmetic"
@@ -137,7 +158,7 @@ let problem : Problem.t =
       { description=
           Html.text
             "Multiply together an array of elements of a prime-order field."
-      ; prize= {dollars= 1000} }
+      ; prize= Prize.stage1 50 }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

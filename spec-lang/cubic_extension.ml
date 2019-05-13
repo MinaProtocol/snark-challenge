@@ -158,7 +158,7 @@ let problem : Problem.t =
       { description=
           Html.text
             "Multiply together an array of elements of a cubic extension field."
-      ; prize= {dollars= 1000} }
+      ; prize= Prize.stage1 25 }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

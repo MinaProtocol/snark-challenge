@@ -39,9 +39,8 @@ let problem : Problem.t =
   ; quick_details=
       { description=
           Html.markdown
-            "Perform a fast-fourier transform on an array of elements of one \
-             of the scalar fields $\mathbb{F}_r$."
-      ; prize= {dollars= 1000} }
+            {m|Perform a fast-fourier transform on an array of elements of one of the scalar fields $\mathbb{F}_r$.|m}
+      ; prize= Prize.stage1 0 }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

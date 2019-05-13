@@ -235,8 +235,7 @@ $$
 let problem : Problem.t =
   { title= "Groth16Prove"
   ; quick_details=
-      { description= Html.text "The full Groth16 prover."
-      ; prize= {dollars= 1000} }
+      {description= Html.text "The full Groth16 prover."; prize= Prize.stage1 0}
   ; preamble= (fun _ -> Html.text "TODO")
   ; interface
   ; reference_implementation_url= ""
