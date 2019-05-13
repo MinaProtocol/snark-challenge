@@ -43,7 +43,14 @@
           </li>
           <li>
             <p><strong>Prize:</strong></p>
-            $1,000
+            <ul>
+              <li>
+                <p><strong>First 25 submissions</strong>: $50</p>
+              </li>
+              <li>
+                <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -59,7 +66,7 @@
       <pre><code>15141386232259939182423724568694911114488003694957216858820448966622494022908702997737632032507442391226452946698823665470952711443326537357991482811741996884665155234620507693793230633117754640516203527639390490866666926222409</code></pre>
       <p>This number then is represented as a little-endian length 12 array of 64-bit integers.</p>
       <p>In summary, we represent the number <code>x</code> as an array <code>a</code> with</p>
-      <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="bu">sum</span>(a, (i, ai) <span class="op">=&gt;</span> (<span class="dv">2</span><span class="op">**</span>i) <span class="op">*</span> ai) <span class="op">==</span> (x <span class="op">*</span> R) <span class="op">%</span> q </code></pre></div>
+      <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">a.<span class="bu">map</span>((ai, i) <span class="op">=&gt;</span> (<span class="dv">2</span><span class="op">**</span>i) <span class="op">*</span> ai).<span class="bu">sum</span>() <span class="op">==</span> (x <span class="op">*</span> R) <span class="op">%</span> q</code></pre></div>
       <p>Let us see how multplication works in this setting. We'll use pseudocode with <code>%</code> for <span class="math inline">\mathrm{mod}</span>.</p>
       <p>Given the Montgomery representation <code>X = (x * R) % q</code> of <code>x</code> and <code>Y = (y * R) % q</code> of <code>y</code>, we want to compute the Montgomery representation of <code>(x * y) % q</code>, which is <code>(x * y * R) % q</code>.</p>
       <p>We have</p>
@@ -81,28 +88,15 @@
       <p>which is the Montgomery representation of the product of the inputs, exactly as we wanted.</p>
       <h3 id="resources">Resources</h3>
       <ul>
-      <li><strong>Algorithms</strong> for big-integer multiplication and <code>div_R</code> (often called Montgomery reduction) are given <a href="http://cacr.uwaterloo.ca/hac/about/chap14.pdf">here</a>, where our <span class="math inline">q</span> is called <span class="math inline">m</span>.</li>
+      <li>Algorithms for big-integer multiplication and <code>div_R</code> (often called Montgomery reduction) are given <a href="http://cacr.uwaterloo.ca/hac/about/chap14.pdf">here</a>, where our <span class="math inline">q</span> is called <span class="math inline">m</span>.</li>
       <li>A C++ implementation of Montgomery reduction can be found <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp.tcc#L161">here</a>.</li>
       <li><a href="https://cryptojedi.org/peter/data/pairing-20131122.pdf">These slides</a> may have useful insights for squeezing out extra performance.</li>
+      <li>This problem is sometimes called big integer multiplication, multi-precision multiplication, or more specifically &quot;modular multiplication&quot;. You can find lots of great resources by searching for these terms along with &quot;GPU&quot;.</li>
       </ul>
-      <h3 id="note">Note</h3>
-      <p>Note that <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> = <a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a> and <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a> = <a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a>, so there are only two fields we need to implement arithmetic for across the whole SNARK challenge.</p>
       <div class="problem">
         <h2>
           Problem specification
         </h2>
-        <span>The following problem is defined for any choice of <span id="cQ==">q</span> in</span>
-        <ul>
-          <li>
-            <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>
-          </li>
-          <li>
-            <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>
-          </li>
-        </ul>
-        <p>
-          You can click on the types of any of the parameters, inputs, or outputs to see how they will be represented in the files given to your program.
-        </p>
         <div class="parameters" id="input">
           <h2>
             Input
@@ -121,10 +115,22 @@
               <div>
                 <span class="identifier">x</span>
                 :
-                <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>, <a href="#bg==">n</a>)</span></span>
+                <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span></span>
               </div>
               <div class="note">
                 <p>The elements of <code>x</code> are represented using the montgomery representation as described above.</p>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">y</span>
+                :
+                <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span></span>
+              </div>
+              <div class="note">
+                <p>The elements of <code>y</code> are represented using the montgomery representation as described above.</p>
               </div>
               <div class="representation">
               </div>
@@ -138,16 +144,26 @@
           <ul class="value-list">
             <li>
               <div>
-                <span class="identifier">y</span>
+                <span class="identifier">out_x</span>
                 :
-                <span class="type"><span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span></span>
+                <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">out_y</span>
+                :
+                <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span></span>
               </div>
               <div class="representation">
               </div>
             </li>
           </ul>
         </div>
-        <p>The output <code>y</code> should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <a href="#cQ==">q</a> as described above.</p>
+        <p>The output <code>out_x</code> should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>.</p>
+        <p>The output <code>out_y</code> should be <code>y[0] * y[1] * ... * y[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>.</p>
       </div>
       <div>
         <h2>

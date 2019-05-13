@@ -43,7 +43,14 @@
           </li>
           <li>
             <p><strong>Prize:</strong></p>
-            $1,000
+            <ul>
+              <li>
+                <p><strong>First 25 submissions</strong>: $100</p>
+              </li>
+              <li>
+                <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -66,24 +73,6 @@
         <h2>
           Problem specification
         </h2>
-        <span>The following problem is defined for any choice of <span id="XChHXCk=">\(G\)</span> in</span>
-        <ul>
-          <li>
-            <a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>
-          </li>
-          <li>
-            <a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>
-          </li>
-          <li>
-            <a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>
-          </li>
-          <li>
-            <a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>
-          </li>
-        </ul>
-        <p>
-          You can click on the types of any of the parameters, inputs, or outputs to see how they will be represented in the files given to your program.
-        </p>
         <div class="parameters" id="input">
           <h2>
             Input
@@ -100,9 +89,36 @@
             </li>
             <li>
               <div>
-                <span class="identifier">x</span>
+                <span class="identifier">g4_1</span>
                 :
-                <span class="type"><span>Array(<a href="#XChHXCk=">\(G\)</a>, <a href="#bg==">n</a>)</span></span>
+                <span class="type"><span>Array(<a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>, <a href="#bg==">n</a>)</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">g4_2</span>
+                :
+                <span class="type"><span>Array(<a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>, <a href="#bg==">n</a>)</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">g6_1</span>
+                :
+                <span class="type"><span>Array(<a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>, <a href="#bg==">n</a>)</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">g6_2</span>
+                :
+                <span class="type"><span>Array(<a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>, <a href="#bg==">n</a>)</span></span>
               </div>
               <div class="representation">
               </div>
@@ -116,16 +132,46 @@
           <ul class="value-list">
             <li>
               <div>
-                <span class="identifier">y</span>
+                <span class="identifier">h4_1</span>
                 :
-                <span class="type"><a href="#XChHXCk=">\(G\)</a></span>
+                <span class="type"><a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">h4_2</span>
+                :
+                <span class="type"><a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">h6_1</span>
+                :
+                <span class="type"><a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">h6_2</span>
+                :
+                <span class="type"><a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a></span>
               </div>
               <div class="representation">
               </div>
             </li>
           </ul>
         </div>
-        <p>The output should be <code>x[0] + x[1] + ... + x[n - 1]</code> where <code>+</code> is the group operation for the curve <span class="math inline">G</span> as described above.</p>
+        <p><code>h4_1</code> should be <code>g4_1[0] + g4_1[1] + ... + g4_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>.</p>
+        <p><code>h4_2</code> should be <code>g4_2[0] + g4_2[1] + ... + g4_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a>.</p>
+        <p><code>h6_1</code> should be <code>g6_1[0] + g6_1[1] + ... + g6_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>.</p>
+        <p><code>h6_2</code> should be <code>g6_2[0] + g6_2[1] + ... + g6_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a>.</p>
       </div>
       <div>
         <h2>
