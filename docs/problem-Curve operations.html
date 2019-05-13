@@ -32,19 +32,26 @@
       <h1>
         Curve operations
       </h1>
-      <p>Once we have multiplication mod <span class="math inline">q</span> in hand (see <a href="">problem</a>), we can begin implementing the group operations needed.</p>
-      <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
-      <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span> respectively.</p>
-      <p>For the SNARK prover though, the integers involved are a lot bigger. For our purposes, the integers are 753 bits and are represented using arrays of native integers. For example, we could represent them using an array of 12 64-bit integers (since <span class="math inline">12 \cdot 64 = 768 &gt; 753</span>) or an array of 24 32-bit integers (since <span class="math inline">24 \cdot 32 = 768 &gt; 753</span>). And instead of computing mod <span class="math inline">2^{753}</span>, we'll compute mod <span class="math inline">q</span> where <span class="math inline">q</span> is either <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>.</p>
-      <p>For 32 or 64-bit integers, addition and multiplication are primitive operations. For the large integers we're working with however, we need to implement these arithmetic operations ourselves.</p>
-      <p>This challenge will have you implement addition and multiplication mod <span class="math inline">q</span>.</p>
-      <p>There are a few techniques for implementing</p>
-      <p>https://alicebob.cryptoland.net/understanding-the-montgomery-reduction-algorithm/</p>
-      <p>Addition $ This means addition isn't a primitive operation</p>
-      <p>The integers in question are no</p>
-      <p>These two operations</p>
+      <p>In this challenge you'll use the field arithmetic built up in <a href="/snark-challenge/problem-Field%20arithmetic.html">this</a>, <a href="/snark-challenge/problem-Quadratic%20extension%20arithmetic.html">this</a> and <a href="/snark-challenge/problem-Cubic%20extension%20arithmetic.html">this challenge</a> to implement the group operation for several elliptic curves.</p>
+      <h2 id="background">Background</h2>
+      <p>Fix a field <span class="math inline">\mathbb{F}</span>. For example, one of the fields described on the parameter pages for <a href="/snark-challenge/MNT4753.html">MNT4-753</a> and <a href="/snark-challenge/MNT6753.html">MNT6-753</a>. Then fix numbers <span class="math inline">a, b</span> in <span class="math inline">\mathbb{F}</span>. The set of points <span class="math inline">(x, y)</span> such that <span class="math inline">y^2 = x^3 + a x + b</span> is called an elliptic curve over the field <span class="math inline">\mathbb{F}</span>.</p>
+      <p>Elliptic curves are the essential tool powering SNARKs. They're useful because we can define a kind of &quot;addition&quot; of points on a given curve. This is also called the &quot;group operation&quot; for the curve. Let's define this &quot;addition&quot; as follows using pseudocode, where <code>+, *, /</code> are all taking place in the field <span class="math inline">\mathbb{F}</span>.</p>
+      <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">
+      <span class="kw">var</span> curve_add <span class="op">=</span> (p<span class="op">,</span> q) <span class="op">=&gt;</span> <span class="op">{</span>
+        <span class="kw">var</span> s <span class="op">=</span> (<span class="va">p</span>.<span class="at">y</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">y</span>) / (<span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">x</span>)<span class="op">;</span>
+        <span class="kw">var</span> x <span class="op">=</span> s<span class="op">*</span>s <span class="op">-</span> <span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">x</span><span class="op">;</span>
+        <span class="cf">return</span> <span class="op">{</span>
+          <span class="dt">x</span><span class="op">:</span> x<span class="op">,</span>
+          <span class="dt">y</span><span class="op">:</span> s<span class="op">*</span>(<span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> x) <span class="op">-</span> <span class="va">p</span>.<span class="at">y</span>
+        <span class="op">};</span>
+      <span class="op">};</span></code></pre></div>
+      <p>Note that this definition doesn't work in the case that <code>p.x = q.x</code>. This case splits into the case <code>p.y = q.y</code> (in which case its called &quot;doubling&quot; and there is a separate formula) and the case <code>p.y = -q.y</code> in which case a special &quot;identity&quot; value should be returned.</p>
+      <p>For efficiency, one uses a different, more complicated formula for adding curve points. This will be discussed in the techniques section below.</p>
       <div class="problem">
-        <span>The following problem is defined for any choice of (<span id="XChHXCk=">\(G\)</span>) in</span>
+        <h2>
+          Problem specification
+        </h2>
+        <span>The following problem is defined for any choice of <span id="XChHXCk=">\(G\)</span> in</span>
         <ul>
           <li>
             <a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>
@@ -60,18 +67,8 @@
           </li>
         </ul>
         <p>
-          You can click on the types of any of the parameters, inputs, or outputs tosee how they will be represented in the files given to your program.
+          You can click on the types of any of the parameters, inputs, or outputs to see how they will be represented in the files given to your program.
         </p>
-        <div class="parameters" id="parameters">
-          <h2>
-            Parameters
-          </h2>
-          <p>
-            The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
-          </p>
-          <ul class="value-list">
-          </ul>
-        </div>
         <div class="parameters" id="input">
           <h2>
             Input
@@ -95,15 +92,6 @@
               <div class="representation">
               </div>
             </li>
-            <li>
-              <div>
-                <span class="identifier">y</span>
-                :
-                <span class="type"><span><a href="#XChHXCk=">\(G\)</a>[<a href="#bg==">n</a>]</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
           </ul>
         </div>
         <div class="parameters" id="output">
@@ -113,16 +101,16 @@
           <ul class="value-list">
             <li>
               <div>
-                <span class="identifier">z</span>
+                <span class="identifier">y</span>
                 :
-                <span class="type"><span><a href="#XChHXCk=">\(G\)</a>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><a href="#XChHXCk=">\(G\)</a></span>
               </div>
               <div class="representation">
               </div>
             </li>
           </ul>
         </div>
-        <p>The output should be <code>[z](#eg==)[i] = [x](#eA==)[i] + [y](#eQ==)[i]</code> where <code>+</code> is the group operation for the curve <a href="#XChHXCk=">(G)</a> as described above.</p>
+        <p>The output should be <code>x[0] + x[1] + ... + x[n - 1]</code> where <code>+</code> is the group operation for the curve <span class="math inline">G</span> as described above.</p>
       </div>
       <div>
         <h2>
@@ -130,11 +118,6 @@
         </h2>
         <p>Your submission will be run and evaluated as follows.</p>
         <ol start="0" style="list-style-type: decimal">
-        <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
-        <li><p>Your binary <code>main</code> will be run with</p>
-        <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
-        <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
-        <p>Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</p></li>
         <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
         <li><p>Your binary will be invoked with</p>
         <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
@@ -143,7 +126,13 @@
         <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
         </ol>
       </div>
-      TODO
+      <h1 id="techniques">Techniques</h1>
+      <h2 id="coordinate-systems">Coordinate systems</h2>
+      <p>Points in the form <span class="math inline">(x, y)</span> as above are said to be represented using <em>affine coordinates</em> and the above definition is <em>affine</em> curve addition.</p>
+      <p>There are more efficient ways of adding curve points which use different coordinate systems. The most efficient of these is called <em>Jacobian coordinates</em>. Formulas for addition and doubling in Jacobian coordinates can be found <a href="https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#doubling-dbl-2007-bl">here</a> and a Rust implementation <a href="https://github.com/CodaProtocol/pairing/blob/mnt46-753/src/mnt4_753/ec.rs#L374">here</a>.</p>
+      <p>There is a further technique called &quot;mixed addition&quot; which allows one to add a point in Jacobian coordinates to a point in affine coordinates even more efficiently than adding two points in Jacobian coordinates. This technique can yield large efficiency gains but makes taking advantage of parallelism more complicated.</p>
+      <h2 id="parallelism">Parallelism</h2>
+      <p>This problem is an instance of a <em>reduction</em> and is inherently parallel.</p>
       <hr >
       <a href="">Reference implementation</a>
     </div>

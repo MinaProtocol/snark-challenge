@@ -32,22 +32,44 @@
       <h1>
         Field arithmetic
       </h1>
-      <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
       <h2 id="background">Background</h2>
+      <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
       <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span>) respectively.</p>
       <p>For the SNARK prover though, the integers involved are a lot bigger. For our purposes, the integers are 753 bits and are represented using arrays of native integers. For example, we could represent them using an array of 12 64-bit integers (since <span class="math inline">12 \cdot 64 = 768 &gt; 753</span>) or an array of 24 32-bit integers (since <span class="math inline">24 \cdot 32 = 768 &gt; 753</span>). And instead of computing mod <span class="math inline">2^{753}</span>, we'll compute mod <span class="math inline">q</span> where <span class="math inline">q</span> is either <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>.</p>
+      <p>Each element of such an array is called a &quot;limb&quot;. For example, we would say that we can represent a <span class="math inline">2^{768}</span> bit integer using 12 64-bit limbs.</p>
+      <p>We call the set of numbers <span class="math inline">0, \dots, q - 1</span> by the name <span class="math inline">\mathbb{F}_q</span>. This set forms a field, which means we can add, multiply, and divide numbers in the set. Addition and multiplication happen mod q. It might seem weird that we can divide, but it turns out for any <span class="math inline">a, b</span> in <span class="math inline">\mathbb{F}_q</span>, there is a number <span class="math inline">c</span> in <span class="math inline">\mathbb{F}_q</span> such that <span class="math inline">(c b) \mod q = a</span>. In this case we say <span class="math inline">a / b = c</span> so that <span class="math inline">(a / b) b \mod q = c b \mod q = a</span> as you'd expect.</p>
       <h3 id="montgomery-representation">Montgomery representation</h3>
-      <p>The montgomery representation of the nubmer <code>x</code> is</p>
+      <p>Montgomery representation is an alternative way of representing elements of <span class="math inline">\mathbb{F}_q</span> so that multiplication mod <span class="math inline">q</span> can be computed more efficiently.</p>
+      <p>So let <span class="math inline">q</span> be a prime and let <span class="math inline">R = 2^{768}</span>. The Montgomery representation of the nubmer <span class="math inline">x</span> is <span class="math inline">(x R) \mod q</span>. So for example, when <span class="math inline">q</span> is <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>, the number 5 is represented as <span class="math inline">(5 \cdot 2^{768}) \mod q</span> which happens to be</p>
+      <pre><code>15141386232259939182423724568694911114488003694957216858820448966622494022908702997737632032507442391226452946698823665470952711443326537357991482811741996884665155234620507693793230633117754640516203527639390490866666926222409</code></pre>
+      <p>This number then is represented as a TODO-ENDIANNESS length 12 array of 64-bit integers.</p>
+      <p>Let us see how multplication works in this setting. We'll use pseudocode with <code>%</code> for <span class="math inline">\mod</span>.</p>
+      <p>Given the Montgomery representation <code>X = (x * R) % q</code> of <code>x</code> and <code>Y = (y * R) % q</code> of <code>y</code>, we want to compute the Montgomery representation of <code>(x * y) % q</code>, which is <code>(x * y * R) % q</code>.</p>
+      <p>We have</p>
+      <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">X <span class="op">*</span> Y
+      <span class="op">==</span> ((x <span class="op">*</span> R) <span class="op">%</span> q) <span class="op">*</span> ((y <span class="op">*</span> R) <span class="op">%</span> q)
+      <span class="op">==</span> (x <span class="op">*</span> y <span class="op">*</span> R <span class="op">*</span> R) <span class="op">%</span> q</code></pre></div>
+      <p>So, if we had a function <code>div_R</code> for letting us divide by <code>R</code> mod <code>q</code>, we would be able to compute the Montgomery representation of <code>x * y</code> from <code>X</code> and <code>Y</code> as <code>div_R(X * Y)</code>.</p>
+      <p>To recap, to implement multiplication mod <span class="math inline">q</span>, we need to implement two functions:</p>
+      <ol style="list-style-type: decimal">
+      <li>Big integer multiplication, which takes two <code>k</code> limb integers and returns the <code>2 * k</code>-limb integer which is their product.</li>
+      <li><code>div_R</code>, which takes a <code>2 * k</code>-limb integer <code>Z</code> and returns the <code>k</code>-limb integer equal to <code>(Z * r) % q</code>, where <code>r</code> is the inverse of <code>R</code>. That is, the number with <code>(R * r) % q = 1</code>.</li>
+      </ol>
+      <p>We will then have</p>
+      <pre><code>div_R(X * Y)
+      == div_R((x * y * R * R) % q)
+      == (x * y * R * R * r) % q
+      == (x * y * R * 1) % q
+      == (x * y * R) % q</code></pre>
+      <p>which is the Montgomery representation of the product of the inputs, exactly as we wanted.</p>
+      <p>Algorithms for big-integer multiplication and <code>div_R</code> (often called Montgomery reduction) are given <a href="http://cacr.uwaterloo.ca/hac/about/chap14.pdf">here</a>, where our <span class="math inline">q</span> is called <span class="math inline">m</span>.</p>
+      <h3 id="note">Note</h3>
       <p>Note that <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> = <a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a> and <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a> = <a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a>, so there are only two fields we need to implement arithmetic for across the whole SNARK challenge.</p>
-      <p>For 32 or 64-bit integers, addition and multiplication are primitive operations. For the large integers we're working with however, we need to implement these arithmetic operations ourselves.</p>
-      <p>This challenge will have you implement addition and multiplication mod <span class="math inline">q</span>.</p>
-      <p>There are a few techniques for implementing</p>
-      <p>https://alicebob.cryptoland.net/understanding-the-montgomery-reduction-algorithm/</p>
-      <p>Addition $ This means addition isn't a primitive operation</p>
-      <p>The integers in question are no</p>
-      <p>These two operations</p>
       <div class="problem">
-        <span>The following problem is defined for any choice of (<span id="cQ==">q</span>) in</span>
+        <h2>
+          Problem specification
+        </h2>
+        <span>The following problem is defined for any choice of <span id="cQ==">q</span> in</span>
         <ul>
           <li>
             <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>
@@ -57,18 +79,8 @@
           </li>
         </ul>
         <p>
-          You can click on the types of any of the parameters, inputs, or outputs tosee how they will be represented in the files given to your program.
+          You can click on the types of any of the parameters, inputs, or outputs to see how they will be represented in the files given to your program.
         </p>
-        <div class="parameters" id="parameters">
-          <h2>
-            Parameters
-          </h2>
-          <p>
-            The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
-          </p>
-          <ul class="value-list">
-          </ul>
-        </div>
         <div class="parameters" id="input">
           <h2>
             Input
@@ -92,15 +104,6 @@
               <div class="representation">
               </div>
             </li>
-            <li>
-              <div>
-                <span class="identifier">y</span>
-                :
-                <span class="type"><span><span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>[<a href="#bg==">n</a>]</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
           </ul>
         </div>
         <div class="parameters" id="output">
@@ -110,16 +113,16 @@
           <ul class="value-list">
             <li>
               <div>
-                <span class="identifier">z</span>
+                <span class="identifier">y</span>
                 :
-                <span class="type"><span><span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>[<a href="#bg==">n</a>]</span></span>
+                <span class="type"><span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span></span>
               </div>
               <div class="representation">
               </div>
             </li>
           </ul>
         </div>
-        <p>The output should be <code>[z](#eg==)[i] = [x](#eA==)[i] * [y](#eQ==)[i]</code> where <code>*</code> is multiplication in the field <a href="#cQ==">q</a> as described above.</p>
+        <p>The output <a href="#eQ==">y</a> should be <code>[x](#eA==)[0] * [x](#eA==)[1] * ... * [x](#eA==)[n - 1]</code> where <code>*</code> is multiplication in the field <a href="#cQ==">q</a> as described above.</p>
       </div>
       <div>
         <h2>
@@ -127,11 +130,6 @@
         </h2>
         <p>Your submission will be run and evaluated as follows.</p>
         <ol start="0" style="list-style-type: decimal">
-        <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
-        <li><p>Your binary <code>main</code> will be run with</p>
-        <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
-        <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
-        <p>Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</p></li>
         <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
         <li><p>Your binary will be invoked with</p>
         <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
