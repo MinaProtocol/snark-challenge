@@ -27,6 +27,7 @@ Fqe<mnt4753_pp> read_mnt4_fq2(FILE* input) {
   return Fqe<mnt4753_pp>(c0, c1);
 }
 
+// The actual code for doing Fq2 multiplication lives in libff/algebra/fields/fp2.tcc
 int main(void)
 {
     mnt4753_pp::init_public_params();
