@@ -109,10 +109,9 @@ let interface : Html.t Problem.Interface.t =
       (Type.Array {element= Type.field (Literal fqe); length= Some (Name n)})
   in
   let%map _x = !Input "x" arr
-  and _y = !Input "y" arr
-  and _output = !Output "z" arr in
+  and _output = !Output "y" (Type.field (Literal fqe)) in
   ksprintf Html.markdown
-    {md|The output should be `z[i] = x[i] * y[i]`
+    {md|The output should be `x[0] * x[1] * ... * x[n - 1]`
 where `*` is multiplication in the field %s as described above.
 |md}
     ( (fun () -> Type.Field.render (Literal fqe) |> Html.to_string)
@@ -155,6 +154,12 @@ var fq2_mul = (a, b) => {
 
 let problem : Problem.t =
   { title= "Quadratic extension arithmetic"
+  ; quick_details=
+      { description=
+          Html.text
+            "Multiply together an array of elements of a quadratic extension \
+             field."
+      ; prize= {dollars= 1000} }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

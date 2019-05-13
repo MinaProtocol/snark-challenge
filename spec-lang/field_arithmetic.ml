@@ -43,17 +43,22 @@ as you'd expect.
 Montgomery representation is an alternative way of representing elements of $\mathbb{F}_q$ so that
 multiplication mod $q$ can be computed more efficiently.
 
-So let $q$ be a prime and let $R = 2^{768}$.
+Let $q$ be one of %s or %s and let $R = 2^{768}$.
 The Montgomery representation of the nubmer $x$ is $(x R) \mod q$. So for example,
 when $q$ is %s, the number 5 is represented as $(5 \cdot 2^{768}) \mod q$ which
 happens to be
 ```
 15141386232259939182423724568694911114488003694957216858820448966622494022908702997737632032507442391226452946698823665470952711443326537357991482811741996884665155234620507693793230633117754640516203527639390490866666926222409
 ```
-This number then is represented as a TODO-ENDIANNESS length 12 array of 64-bit integers.
+This number then is represented as a little-endian length 12 array of 64-bit integers.
+
+In summary, we represent the number `x` as an array `a` with
+```python
+sum(a, (i, ai) => (2**i) * ai) == (x * R) %% q 
+```
 
 Let us see how multplication works in this setting. We'll
-use pseudocode with `%%` for $\mod$.
+use pseudocode with `%%` for $\mathrm{mod}$.
 
 Given the Montgomery representation
 `X = (x * R) %% q` of `x` and
@@ -90,13 +95,18 @@ div_R(X * Y)
 ```
 which is the Montgomery representation of the product of the inputs, exactly as we wanted.
 
-Algorithms for big-integer multiplication and `div_R` (often called Montgomery reduction)
+### Resources
+
+- **Algorithms** for big-integer multiplication and `div_R` (often called Montgomery reduction)
 are given [here](http://cacr.uwaterloo.ca/hac/about/chap14.pdf), where our $q$ is called $m$.
+- A C++ implementation of Montgomery reduction can be found [here](https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp.tcc#L161).
+- [These slides](https://cryptojedi.org/peter/data/pairing-20131122.pdf) may have useful insights for squeezing out extra performance.
 
 ### Note
 Note that %s = %s and %s = %s, so there are only two fields we need to implement
 arithmetic for across the whole SNARK challenge.|md}
-    (q MNT4) (q MNT6) (q MNT4) (q MNT4) (r MNT6) (q MNT6) (r MNT4)
+    (q MNT4) (q MNT6) (q MNT4) (q MNT6) (q MNT4) (q MNT4) (r MNT6) (q MNT6)
+    (r MNT4)
 
 let interface : Html.t Problem.Interface.t =
   let open Problem.Interface in
@@ -109,15 +119,25 @@ let interface : Html.t Problem.Interface.t =
   let field = Type.field (Type.Field.prime (Name q)) in
   let%bind n = !Input "n" (Literal UInt64) in
   let arr = Literal (Type.Array {element= field; length= Some (Name n)}) in
-  let%map x = !Input "x" arr and output = !Output "y" field in
+  let%map _x =
+    ( ! ) Input "x" arr
+      ~note:
+        (Html.markdown
+           "The elements of `x` are represented using the montgomery\n\
+            representation as described above.")
+  and _output = !Output "y" field in
   ksprintf Html.markdown
-    {md|The output %s should be `%s[0] * %s[1] * ... * %s[n - 1]`
+    {md|The output `y` should be `x[0] * x[1] * ... * x[n - 1]`
 where `*` is multiplication in the field %s as described above.|md}
-    (Name.to_markdown output) (Name.to_markdown x) (Name.to_markdown x)
-    (Name.to_markdown x) (Name.to_markdown q)
+    (Name.to_markdown q)
 
 let problem : Problem.t =
   { title= "Field arithmetic"
+  ; quick_details=
+      { description=
+          Html.text
+            "Multiply together an array of elements of a prime-order field."
+      ; prize= {dollars= 1000} }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

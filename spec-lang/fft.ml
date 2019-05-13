@@ -36,6 +36,12 @@ let interface : Html.t Problem.Interface.t =
 
 let problem : Problem.t =
   { title= "Curve operation"
+  ; quick_details=
+      { description=
+          Html.markdown
+            "Perform a fast-fourier transform on an array of elements of one \
+             of the scalar fields $\mathbb{F}_r$."
+      ; prize= {dollars= 1000} }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

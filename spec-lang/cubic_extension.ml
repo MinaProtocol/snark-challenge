@@ -129,12 +129,10 @@ let interface : Html.t Problem.Interface.t =
       (Type.Array {element= Type.field (Literal fqe); length= Some (Name n)})
   in
   let%map _x = !Input "x" arr
-  and _y = !Input "y" arr
-  and _output = !Output "z" arr in
+  and _output = !Output "y" (Type.field (Literal fqe)) in
   ksprintf Html.markdown
-    {md|The output should be `z[i] = x[i] * y[i]`
-where `*` is multiplication in the field %s as described above.
-|md}
+    {md|The output should be `x[0] * x[1] * ... * x[n - 1]`
+where `*` is multiplication in the field %s as described above.|md}
     ( (fun () -> Type.Field.render (Literal fqe) |> Html.to_string)
     |> Async.Thread_safe.block_on_async_exn )
 
@@ -156,6 +154,11 @@ The Toom-Cook method should be faster, but it's slightly more complicated to imp
 
 let problem : Problem.t =
   { title= "Cubic extension arithmetic"
+  ; quick_details=
+      { description=
+          Html.text
+            "Multiply together an array of elements of a cubic extension field."
+      ; prize= {dollars= 1000} }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

@@ -17,7 +17,12 @@ let interface =
       (Literal (Array {element= Name group; length= Some (Name n)}))
   in
   let%bind _s =
-    !Input "s" (Literal (Array {element= Name scalar; length= Some (Name n)}))
+    ( ! ) Input "s"
+      (Literal (Array {element= Name scalar; length= Some (Name n)}))
+      ~note:
+        (Html.markdown
+           {m|Elements of `s` will be represented in **standard** form as a little-endian array of 12 64-bit unsigned limbs. This
+form is more likely to be useful than Montgomery representation for this problem.|m})
   in
   let%bind _y = !Output "y" (Name group) in
   let description =
@@ -48,6 +53,12 @@ var multiexp = (s) => {
 
 let problem : Problem.t =
   { interface
+  ; quick_details=
+      { description=
+          Html.text
+            "Compute the multi-exponentiation of an array of (scalar, \
+             curve-point) pairs for the 4 relevant groups."
+      ; prize= {dollars= 1000} }
   ; preamble= Html.text "TODO" |> Fn.const
   ; title= "Multi-exponentiation"
   ; reference_implementation_url= ""

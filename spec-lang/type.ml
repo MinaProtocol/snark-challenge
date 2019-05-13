@@ -114,4 +114,9 @@ let rec render =
         | None ->
             span [] [element; text "[]"]
         | Some length ->
-            span [] [element; text "["; Integer.render length; text "]"] ) )
+            span []
+              [ text "Array("
+              ; element
+              ; text ", "
+              ; Integer.render length
+              ; text ")" ] ) )

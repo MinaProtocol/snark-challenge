@@ -5,6 +5,18 @@ module Parameter_kind = struct
   type t = Batch_parameter | Input | Output
 end
 
+module Quick_details = struct
+  type t = {description: Html.t; prize: Prize.t}
+
+  let render {description; prize} =
+    let open Html in
+    div []
+      [ h2 [] [text "Quick details"]
+      ; ul []
+          [ li [] [Html.markdown "**Problem:** "; description]
+          ; li [] [Html.markdown "**Prize:** "; Prize.render prize] ] ]
+end
+
 module Interface = struct
   module F = struct
     type 'a t =
@@ -145,13 +157,19 @@ end
 
 type t =
   { title: string
+  ; quick_details: Quick_details.t
   ; preamble: Pages.t -> Html.t
   ; interface: Html.t Interface.t
   ; postamble: Pages.t -> Html.t
   ; reference_implementation_url: string }
 
 let render ~pages
-    {title; preamble; interface; postamble; reference_implementation_url} =
+    { title
+    ; quick_details
+    ; preamble
+    ; interface
+    ; postamble
+    ; reference_implementation_url } =
   let open Html in
   let spec = Interface.Spec.create ~name:title interface in
   let batch_params_description =
@@ -169,6 +187,7 @@ let render ~pages
   in
   div []
     [ h1 [] [text title]
+    ; Quick_details.render quick_details
     ; preamble pages
     ; Interface.Spec.render spec
     ; div []

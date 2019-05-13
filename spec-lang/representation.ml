@@ -83,7 +83,8 @@ let rec render =
         (List.map ts ~f:(fun (name, t) -> li [] [text name; text ":"; render t]))
   | Array {element; length} ->
       let element = render element in
-      span [] [element; text "["; Integer.render length; text "]"]
+      span []
+        [text "Array("; element; text ", "; Integer.render length; text ")"]
   | Sequence (t1, name1, t2) ->
       let t1 = render t1 in
       let t2 = render t2 in

@@ -96,6 +96,12 @@ parallel.
 
 let problem : Problem.t =
   { title= "Curve operations"
+  ; quick_details=
+      { description=
+          Html.text
+            "Add together an array of elements of each of the four relevant \
+             elliptic curves."
+      ; prize= {dollars= 1000} }
   ; preamble
   ; interface
   ; reference_implementation_url= ""
