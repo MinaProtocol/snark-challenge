@@ -60,9 +60,9 @@
           </li>
         </ul>
       </div>
-      <p>This page has suggestions for how to implement the best Groth16 SNARK prover (<a href="/snark-challenge/problem-groth16prove.html">described here</a>) to take home up to $75,000 in prizes.</p>
+      <p>This page has suggestions for how to implement the best Groth16 SNARK prover (<a href="/snark-challenge/problem-07-groth16prove.html">described here</a>) to take home up to $75,000 in prizes.</p>
       <h2 id="splitting-computation-between-the-cpu-and-gpu">Splitting computation between the CPU and GPU</h2>
-      <p>The Groth16 prover consists of 4 <span class="math inline">G_1</span> multiexponentiations, 1 <span class="math inline">G_2</span> multiexponentiation, and 7 FFTs, as described <a href="/snark-challenge/problem-groth16prove.html">here</a>.</p>
+      <p>The Groth16 prover consists of 4 <span class="math inline">G_1</span> multiexponentiations, 1 <span class="math inline">G_2</span> multiexponentiation, and 7 FFTs, as described <a href="/snark-challenge/problem-07-groth16prove.html">here</a>.</p>
       <p>1 of the <span class="math inline">G_1</span> multiexponentiations cannot be computed until all of the FFTs. The other 3 <span class="math inline">G_1</span> multiexponentiations and the <span class="math inline">G_2</span> multiexponentiation however don't have any dependencies between each other or on any other computation.</p>
       <p>So, some of them can be computed on the CPU while at the same time others are computed on the GPU. For example, you could first the FFTs first on the CPU, while simultaneously performing 2 of the <span class="math inline">G_1</span> multi-exponentiations on the GPU. After those completed, you could then compute the final <span class="math inline">G_1</span> multi-exponentiation on the CPU and the <span class="math inline">G_2</span> multi-exponentiation on the GPU.</p>
       <h2 id="parallelism">Parallelism</h2>

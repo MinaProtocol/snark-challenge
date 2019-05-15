@@ -131,40 +131,41 @@ let html_wrap cs =
 
 let wrap = html_wrap
 
-let problem_url (p : Problem.t) =
-  sprintf "%s/problem-%s.html" base_url (Problem.slug p)
+let problem_url i (p : Problem.t) =
+  sprintf "%s/problem-%02d-%s.html" base_url i (Problem.slug p)
 
 let site =
   let open Stationary in
   let modules = [Module.mnt4753; Module.mnt6753] in
   let env = List.fold modules ~init:Env.empty ~f:Module.update_env in
   let problems =
-    [ Multiexp.problem
-    ; Simple_groth16_prove.problem
-    ; Fft.problem
-    ; Curve_operations.problem
-    ; Field_arithmetic.problem
+    [ Field_arithmetic.problem
     ; Quadratic_extension.problem
-    ; Cubic_extension.problem ]
+    ; Cubic_extension.problem
+    ; Curve_operations.problem
+    ; Multiexp.problem
+    ; Fft.problem
+    ; Simple_groth16_prove.problem ]
   in
   let pages : Pages.t =
     { intro= Intro.url
     ; implementation_strategies= Implementation_strategies.url
-    ; field_arithmetic= problem_url Field_arithmetic.problem
-    ; quadratic_extension= problem_url Quadratic_extension.problem
-    ; cubic_extension= problem_url Cubic_extension.problem
+    ; field_arithmetic= problem_url 1 Field_arithmetic.problem
+    ; quadratic_extension= problem_url 2 Quadratic_extension.problem
+    ; cubic_extension= problem_url 3 Cubic_extension.problem
+    ; curve_operations= problem_url 4 Curve_operations.problem
+    ; multi_exponentiation= problem_url 5 Multiexp.problem
+    ; fft= problem_url 6 Fft.problem
+    ; groth16= problem_url 7 Simple_groth16_prove.problem
     ; mnt4= Name.module_url Module.mnt4753.name
-    ; mnt6= Name.module_url Module.mnt6753.name
-    ; multi_exponentiation= problem_url Multiexp.problem
-    ; groth16= problem_url Simple_groth16_prove.problem
-    ; curve_operations= problem_url Curve_operations.problem
-    ; fft= problem_url Fft.problem }
+    ; mnt6= Name.module_url Module.mnt6753.name }
   in
   let page name x = File_system.file (File.of_html ~name (wrap [x])) in
   Site.create
     [ File_system.directory "snark-challenge"
         ( [ page "intro.html" (Intro.page pages)
           ; page "index.html" (Stage1.page pages)
+          ; File_system.file (File.of_text ~name:".nojekyll" "")
           ; page "strategies.html" (Implementation_strategies.page pages)
           ; File_system.copy_directory "static" ]
         @ List.map modules ~f:(fun m ->
@@ -172,10 +173,10 @@ let site =
                 (File.of_html
                    ~name:(Filename.basename (Name.module_url m.name))
                    (wrap [Module.(Page.render (to_page env m))])) )
-        @ List.map problems ~f:(fun p ->
+        @ List.mapi problems ~f:(fun i p ->
               File_system.file
                 (File.of_html
-                   ~name:(Filename.basename (problem_url p))
+                   ~name:(Filename.basename (problem_url (i + 1) p))
                    (wrap [Problem.render ~pages p])) ) ) ]
 
 let () =
