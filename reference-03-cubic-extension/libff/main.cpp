@@ -30,7 +30,7 @@ Fqe<mnt6753_pp> read_mnt6_fq3(FILE* input) {
 }
 
 // The actual code for doing Fq3 multiplication lives in libff/algebra/fields/fp3.tcc
-int main(void)
+int main(int argc, char *argv[])
 {
     // argv should be
     // { "main", "compute", inputs, outputs }
