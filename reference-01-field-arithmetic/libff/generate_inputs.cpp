@@ -23,14 +23,13 @@ int main(void)
 
     setbuf(stdout, NULL);
 
-    printf("0\n");
-
     size_t n;
 
     auto output = fopen("inputs", "w");
 
     size_t num_instances = 10;
 
+    srand(time(NULL));
     for (size_t j = 0; j < num_instances; ++j) {
       size_t n = 1 << (10 + j);
 
@@ -46,33 +45,5 @@ int main(void)
         write_mnt6_fq(output, SHA512_rng<Fq<mnt6753_pp>>(offset + i));
       }
     }
-
-    /*
-    while (true) {
-      size_t bytes_read = fread((void *) &n, sizeof(size_t), 1, inputs);
-      if (bytes_read < sizeof(size_t)) { break; }
-
-      std::vector<Fq<mnt4753_pp>> x;
-      for (size_t i = 0; i < n; ++i) {
-        x.emplace_back(read_mnt4_fq(inputs));
-      }
-
-      std::vector<Fq<mnt6753_pp>> y;
-      for (size_t i = 0; i < n; ++i) {
-        y.emplace_back(read_mnt6_fq(inputs));
-      }
-
-      Fq<mnt4753_pp> out_x = Fq<mnt4753_pp>::one();
-      for (size_t i = 0; i < n; ++i) {
-        out_x *= x[i];
-      }
-
-      Fq<mnt6753_pp> out_y = Fq<mnt6753_pp>::one();
-      for (size_t i = 0; i < n; ++i) {
-        out_y *= y[i];
-      }
-    }
-
-    return 0; */
 }
 

@@ -58,14 +58,13 @@ int main(void)
 
     setbuf(stdout, NULL);
 
-    printf("0\n");
-
     size_t n;
 
     auto output = fopen("inputs", "w");
 
     size_t num_instances = 1;
 
+    srand(time(NULL));
     for (size_t j = 0; j < num_instances; ++j) {
       size_t n = 1 << (16 + j);
 

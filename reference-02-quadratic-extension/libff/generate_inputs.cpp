@@ -24,6 +24,7 @@ int main(void)
 
     size_t num_instances = 10;
 
+    srand(time(NULL));
     for (size_t j = 0; j < num_instances; ++j) {
       size_t n = 1 << (10 + j);
 
