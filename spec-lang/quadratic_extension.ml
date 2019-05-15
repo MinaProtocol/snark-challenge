@@ -165,5 +165,6 @@ let problem : Problem.t =
       ; prize= Prize.stage1 25 }
   ; preamble
   ; interface
-  ; reference_implementation_url= ""
+  ; reference_implementation_url=
+      "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-02-quadratic-extension"
   ; postamble }

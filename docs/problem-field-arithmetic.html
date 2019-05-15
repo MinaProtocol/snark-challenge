@@ -32,29 +32,144 @@
       <h1>
         Field arithmetic
       </h1>
-      <div>
-        <h2>
-          Quick details
-        </h2>
+      <div class="table-of-contents">
         <ul>
           <li>
-            <p><strong>Problem:</strong></p>
-            Use a GPU to multiply together an array of elements of a prime-order field.
+            <a href="#quick-details">1: Quick details</a>
           </li>
           <li>
-            <p><strong>Prize:</strong></p>
-            <ul>
-              <li>
-                <p><strong>First 25 submissions</strong>: $50</p>
-              </li>
-              <li>
-                <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
-              </li>
-            </ul>
+            <a href="#problem-specification">2: Problem specification</a>
+          </li>
+          <li>
+            <a href="#input">2.1: Input</a>
+          </li>
+          <li>
+            <a href="#output">2.2: Output</a>
+          </li>
+          <li>
+            <a href="#expected-behavior">2.3: Expected behavior</a>
+          </li>
+          <li>
+            <a href="#submission-guidelines">3: Submission guidelines</a>
+          </li>
+          <li>
+            <a href="#reference-implementation">4: Reference implementation</a>
+          </li>
+          <li>
+            <a href="#further-discussion-and-background">5: Further discussion and background</a>
           </li>
         </ul>
       </div>
-      <h2 id="background">Background</h2>
+      <h2 id="quick-details">
+        Quick details
+      </h2>
+      <ul>
+        <li>
+          <p><strong>Problem:</strong></p>
+          Use a GPU to multiply together an array of elements of a prime-order field.
+        </li>
+        <li>
+          <p><strong>Prize:</strong></p>
+          <ul>
+            <li>
+              <p><strong>First 25 submissions</strong>: $50</p>
+            </li>
+            <li>
+              <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
+            </li>
+          </ul>
+        </li>
+      </ul>
+      
+      <h2 id="problem-specification">
+        Problem specification
+      </h2>
+      <h3 id="input">
+        Input
+      </h3>
+      <ul class="value-list">
+        <li>
+          <div>
+            <span class="identifier">n</span>
+            :
+            <span class="type"><span>uint64</span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">x</span>
+            :
+            <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span></span>
+          </div>
+          <div class="note">
+            <p>The elements of <code>x</code> are represented using the montgomery representation as described below.</p>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">y</span>
+            :
+            <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span></span>
+          </div>
+          <div class="note">
+            <p>The elements of <code>y</code> are represented using the montgomery representation as described below.</p>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+      </ul>
+      <h3 id="output">
+        Output
+      </h3>
+      <ul class="value-list">
+        <li>
+          <div>
+            <span class="identifier">out_x</span>
+            :
+            <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">out_y</span>
+            :
+            <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+      </ul>
+      <h3 id="expected-behavior">
+        Expected behavior
+      </h3>
+      <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
+      <p>The output <code>out_x</code> should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>.</p>
+      <p>The output <code>out_y</code> should be <code>y[0] * y[1] * ... * y[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>.</p>
+      <h2 id="submission-guidelines">
+        Submission guidelines
+      </h2>
+      <p>Your submission will be run and evaluated as follows.</p>
+      <ol start="0" style="list-style-type: decimal">
+      <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+      <li><p>Your binary will be invoked with</p>
+      <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+      <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+      <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+      <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+      </ol>
+      <h2 id="reference-implementation">
+        Reference implementation
+      </h2>
+      <span>The output of your program submission will be checked against the reference implementation <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic">here</a>.</span>
+      <h2 id="further-discussion-and-background">
+        Further discussion and background
+      </h2>
       <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
       <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span>) respectively.</p>
       <p>For the SNARK prover though, the integers involved are a lot bigger. For our purposes, the integers are 753 bits and are represented using arrays of native integers. For example, we could represent them using an array of 12 64-bit integers (since <span class="math inline">12 \cdot 64 = 768 &gt; 753</span>) or an array of 24 32-bit integers (since <span class="math inline">24 \cdot 32 = 768 &gt; 753</span>). And instead of computing mod <span class="math inline">2^{753}</span>, we'll compute mod <span class="math inline">q</span> where <span class="math inline">q</span> is either <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>.</p>
@@ -93,96 +208,6 @@
       <li><a href="https://cryptojedi.org/peter/data/pairing-20131122.pdf">These slides</a> may have useful insights for squeezing out extra performance.</li>
       <li>This problem is sometimes called big integer multiplication, multi-precision multiplication, or more specifically &quot;modular multiplication&quot;. You can find lots of great resources by searching for these terms along with &quot;GPU&quot;.</li>
       </ul>
-      <div class="problem">
-        <h2>
-          Problem specification
-        </h2>
-        <div class="parameters" id="input">
-          <h2>
-            Input
-          </h2>
-          <ul class="value-list">
-            <li>
-              <div>
-                <span class="identifier">n</span>
-                :
-                <span class="type"><span>uint64</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">x</span>
-                :
-                <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span></span>
-              </div>
-              <div class="note">
-                <p>The elements of <code>x</code> are represented using the montgomery representation as described above.</p>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">y</span>
-                :
-                <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span></span>
-              </div>
-              <div class="note">
-                <p>The elements of <code>y</code> are represented using the montgomery representation as described above.</p>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="parameters" id="output">
-          <h2>
-            Output
-          </h2>
-          <ul class="value-list">
-            <li>
-              <div>
-                <span class="identifier">out_x</span>
-                :
-                <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">out_y</span>
-                :
-                <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-          </ul>
-        </div>
-        <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
-        <p>The output <code>out_x</code> should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>.</p>
-        <p>The output <code>out_y</code> should be <code>y[0] * y[1] * ... * y[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>.</p>
-      </div>
-      <div>
-        <h2>
-          Submission guidelines
-        </h2>
-        <p>Your submission will be run and evaluated as follows.</p>
-        <ol start="0" style="list-style-type: decimal">
-        <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
-        <li><p>Your binary will be invoked with</p>
-        <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
-        <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
-        <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
-        <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
-        </ol>
-      </div>
-      TODO
-      <hr >
-      <a href="">Reference implementation</a>
     </div>
   </body>
 </html>

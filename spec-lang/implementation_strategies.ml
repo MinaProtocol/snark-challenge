@@ -1,53 +1,6 @@
 open Core
 open Util
-
-type section = {heading: string; body: t}
-
-and item = Section of section | Text of string
-
-and t = item list
-
-let rec render_item level = function
-  | Text md ->
-      md
-  | Section {heading; body} ->
-      sprintf "%s %s\n\n%s"
-        (String.init level ~f:(fun _ -> '#'))
-        heading
-        (render (level + 1) body)
-
-and render level t =
-  String.concat (List.map ~f:(render_item level) t) ~sep:"\n\n"
-
-let render t = render 2 t
-
-let title_to_id s =
-  String.lowercase s |> String.map ~f:(fun c -> if c = ' ' then '-' else c)
-
-let table_of_contents =
-  let rec go_t prefix t =
-    List.filter_map t ~f:(function Section s -> Some s | Text _ -> None)
-    |> List.concat_mapi ~f:(fun i sec ->
-           let toc_text =
-             let i = i + 1 in
-             if prefix = "" then Int.to_string i else sprintf "%s.%d" prefix i
-           in
-           (toc_text, sec.heading) :: go_t toc_text sec.body )
-  in
-  fun t ->
-    let open Html in
-    div
-      [class_ "table-of-contents"]
-      [ ul []
-          (List.map (go_t "" t) ~f:(fun (s, title) ->
-               li []
-                 [ a
-                     [ksprintf href "#%s" (title_to_id title)]
-                     [ksprintf text "%s: %s" s title] ] )) ]
-
-let sec ~title body = Section {heading= title; body}
-
-let text s = Text s
+open Sectioned_page
 
 let page_t (pages : Pages.t) =
   [ ksprintf text
@@ -183,6 +136,6 @@ There are many techniques for speeding up exponentiation and multi-exponentiatio
 let page pages =
   let t = page_t pages in
   let toc = table_of_contents t in
-  let content = render t in
+  let content = render_to_markdown t in
   let open Html in
   div [] [h2 [] [text "Implementation strategies"]; toc; Html.markdown content]

@@ -139,5 +139,6 @@ let problem : Problem.t =
       ; prize= Prize.stage1 100 }
   ; preamble
   ; interface
-  ; reference_implementation_url= ""
+  ; reference_implementation_url=
+      "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations"
   ; postamble }

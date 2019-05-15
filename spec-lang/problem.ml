@@ -9,12 +9,23 @@ module Quick_details = struct
   type t = {description: Html.t; prize: Prize.t}
 
   let render {description; prize} =
+    let open Sectioned_page in
+    sec ~title:"Quick details"
+      [ leaf
+          [ (let open Html in
+            ul []
+              [ li [] [Html.markdown "**Problem:** "; description]
+              ; li [] [Html.markdown "**Prize:** "; Prize.render prize] ]) ] ]
+
+  (*
+  let render {description; prize} =
     let open Html in
     div []
       [ h2 [] [text "Quick details"]
       ; ul []
           [ li [] [Html.markdown "**Problem:** "; description]
           ; li [] [Html.markdown "**Prize:** "; Prize.render prize] ] ]
+*)
 end
 
 module Interface = struct
@@ -121,6 +132,22 @@ module Interface = struct
                  represented this way." ]
       in
       let params ?desc ~title xs =
+        let open Sectioned_page in
+        sec ~title
+          ( Option.(to_list (map desc ~f:(fun d -> leaf [d])))
+          @ [ [ ul [class_ "value-list"]
+                  (List.map xs ~f:(fun (ident, ty, note) ->
+                       li []
+                         ( [ div []
+                               [ span [class_ "identifier"] [Html.text ident]
+                               ; Html.text ":"
+                               ; span [class_ "type"] [Type.render ty] ] ]
+                         @ Option.to_list
+                             (Option.map note ~f:(fun note ->
+                                  div [class_ "note"] [note] ))
+                         @ [div [class_ "representation"] []] ) )) ]
+              |> leaf ] )
+        (*
         div
           [ class_ "parameters"
           ; Stationary.Attribute.create "id" (String.lowercase title) ]
@@ -137,6 +164,7 @@ module Interface = struct
                            (Option.map note ~f:(fun note ->
                                 div [class_ "note"] [note] ))
                        @ [div [class_ "representation"] []] ) )) ] )
+*)
       in
       let batch_parameters =
         if List.is_empty batch_parameters then []
@@ -151,10 +179,20 @@ module Interface = struct
       in
       let input = params ~title:"Input" input in
       let output = params ~title:"Output" output in
+      let open Sectioned_page in
+      sec ~title:"Problem specification"
+        ( [leaf definitional_preamble]
+        @ batch_parameters
+        @ [input; output; sec ~title:"Expected behavior" [leaf [description]]]
+        )
+
+    (*
       div [class_ "problem"]
         ( [h2 [] [text "Problem specification"]]
-        @ definitional_preamble @ batch_parameters
-        @ [input; output; description] )
+          @ definitional_preamble
+          @ batch_parameters
+          @ [input; output; description] )
+*)
   end
 end
 
@@ -191,13 +229,61 @@ let render ~pages
     Your binary can at this point, if you like, do some preprocessing of the parameters and
     save any state it would like to a file `./preprocessed`.|md}
   in
+  let t : _ Sectioned_page.t =
+    let open Sectioned_page in
+    [ Quick_details.render quick_details
+    ; leaf [preamble pages]
+    ; Interface.Spec.render spec
+    ; sec ~title:"Submission guidelines"
+        [ ksprintf Html.markdown
+            {md|Your submission will be run and evaluated as follows.
+
+%s
+0. The submission runner will generate a random sequence of inputs, saved to a file
+   `PATH_TO_INPUTS`.
+
+3. Your binary will be invoked with
+
+    ```bash
+    ./main compute PATH_TO_INPUTS PATH_TO_OUTPUTS
+    ```
+
+    and its runtime will be recorded. The file PATH_TO_INPUTS will contain
+    a sequence of inputs, each of which is of the form specified in the
+    ["Input"](#input) section. 
+
+    It should create a file called "outputs" at the path PATH_TO_OUTPUTS
+    which contains a sequence of outputs, each of which is of the form
+    specified in the ["Output"](#output) section.
+
+    It can, if it likes, read
+    the file "./preprocessed" in order to help it solve the problem.|md}
+            ( if Interface.Spec.has_batch_parameters spec then
+              batch_params_description
+            else "" )
+          |> List.return |> leaf ]
+    ; sec ~title:"Reference implementation"
+        [ leaf
+            [ span []
+                [ Html.text
+                    "The output of your program submission will be checked \
+                     against the reference implementation "
+                ; a [href reference_implementation_url] [Html.text "here"]
+                ; Html.text "." ] ] ]
+    ; sec ~title:"Further discussion and background" [leaf [postamble pages]]
+    ]
+  in
+  let content = Sectioned_page.render_to_html t in
+  div [] ([h1 [] [text title]] @ [Sectioned_page.table_of_contents t] @ content)
+
+(*
   div []
     [ h1 [] [text title]
     ; Quick_details.render quick_details
     ; preamble pages
     ; Interface.Spec.render spec
     ; div []
-        [ h2 [] [text "Submission guidelines"]
+        [ h2 [] [text]
         ; ksprintf markdown
             {md|
 Your submission will be run and evaluated as follows.
@@ -229,3 +315,4 @@ Your submission will be run and evaluated as follows.
     ; hr []
     ; a [href reference_implementation_url] [text "Reference implementation"]
     ]
+*)

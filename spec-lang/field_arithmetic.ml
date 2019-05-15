@@ -15,8 +15,7 @@ let r = param "r"
 
 let preamble _pages =
   ksprintf Html.markdown
-    {md|## Background
-The basic operations needed for the SNARK prover algorithm are
+    {md|The basic operations needed for the SNARK prover algorithm are
 multiplication and addition of integers.
 
 Usually when programming we're used to working with 32-bit or 64-bit
@@ -132,14 +131,14 @@ let interface : Html.t Problem.Interface.t =
       ~note:
         (Html.markdown
            "The elements of `x` are represented using the montgomery\n\
-            representation as described above.")
+            representation as described below.")
   and _y =
     ( ! ) Input "y"
       (arr (fq MNT6))
       ~note:
         (Html.markdown
            "The elements of `y` are represented using the montgomery\n\
-            representation as described above.")
+            representation as described below.")
   and _ = !Output "out_x" (fq MNT4)
   and _ = !Output "out_y" (fq MNT6) in
   ksprintf Html.markdown
@@ -163,7 +162,9 @@ let problem : Problem.t =
             "Use a GPU to multiply together an array of elements of a \
              prime-order field."
       ; prize= Prize.stage1 50 }
-  ; preamble
+  ; preamble= Fn.const (Html.text "")
+  ; postamble= preamble
   ; interface
-  ; reference_implementation_url= ""
-  ; postamble= Fn.const (Html.text "TODO") }
+  ; reference_implementation_url=
+      "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic"
+  }

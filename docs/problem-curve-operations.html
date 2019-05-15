@@ -32,28 +32,54 @@
       <h1>
         Curve operations
       </h1>
-      <div>
-        <h2>
-          Quick details
-        </h2>
+      <div class="table-of-contents">
         <ul>
           <li>
-            <p><strong>Problem:</strong></p>
-            Add together an array of elements of each of the four relevant elliptic curves.
+            <a href="#quick-details">1: Quick details</a>
           </li>
           <li>
-            <p><strong>Prize:</strong></p>
-            <ul>
-              <li>
-                <p><strong>First 25 submissions</strong>: $100</p>
-              </li>
-              <li>
-                <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
-              </li>
-            </ul>
+            <a href="#problem-specification">2: Problem specification</a>
+          </li>
+          <li>
+            <a href="#input">2.1: Input</a>
+          </li>
+          <li>
+            <a href="#output">2.2: Output</a>
+          </li>
+          <li>
+            <a href="#expected-behavior">2.3: Expected behavior</a>
+          </li>
+          <li>
+            <a href="#submission-guidelines">3: Submission guidelines</a>
+          </li>
+          <li>
+            <a href="#reference-implementation">4: Reference implementation</a>
+          </li>
+          <li>
+            <a href="#further-discussion-and-background">5: Further discussion and background</a>
           </li>
         </ul>
       </div>
+      <h2 id="quick-details">
+        Quick details
+      </h2>
+      <ul>
+        <li>
+          <p><strong>Problem:</strong></p>
+          Add together an array of elements of each of the four relevant elliptic curves.
+        </li>
+        <li>
+          <p><strong>Prize:</strong></p>
+          <ul>
+            <li>
+              <p><strong>First 25 submissions</strong>: $100</p>
+            </li>
+            <li>
+              <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
+            </li>
+          </ul>
+        </li>
+      </ul>
       <p>In this challenge you'll use the field arithmetic built up in <a href="/snark-challenge/problem-field-arithmetic.html">this</a>, <a href="/snark-challenge/problem-quadratic-extension-arithmetic.html">this</a> and <a href="/snark-challenge/problem-cubic-extension-arithmetic.html">this challenge</a> to implement the group operation for several elliptic curves.</p>
       <h2 id="background">Background</h2>
       <p>Fix a field <span class="math inline">\mathbb{F}</span>. For example, one of the fields described on the parameter pages for <a href="/snark-challenge/MNT4753.html">MNT4-753</a> and <a href="/snark-challenge/MNT6753.html">MNT6-753</a>. Then fix numbers <span class="math inline">a, b</span> in <span class="math inline">\mathbb{F}</span>. The set of points <span class="math inline">(x, y)</span> such that <span class="math inline">y^2 = x^3 + a x + b</span> is called an elliptic curve over the field <span class="math inline">\mathbb{F}</span>.</p>
@@ -69,125 +95,127 @@
       <span class="op">};</span></code></pre></div>
       <p>Note that this definition doesn't work in the case that <code>p.x = q.x</code>. This case splits into the case <code>p.y = q.y</code> (in which case its called &quot;doubling&quot; and there is a separate formula) and the case <code>p.y = -q.y</code> in which case a special &quot;identity&quot; value should be returned.</p>
       <p>For efficiency, one uses a different, more complicated formula for adding curve points. This will be discussed in the techniques section below.</p>
-      <div class="problem">
-        <h2>
-          Problem specification
-        </h2>
-        <div class="parameters" id="input">
-          <h2>
-            Input
-          </h2>
-          <ul class="value-list">
-            <li>
-              <div>
-                <span class="identifier">n</span>
-                :
-                <span class="type"><span>uint64</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">g4_1</span>
-                :
-                <span class="type"><span>Array(<a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>, <a href="#bg==">n</a>)</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">g4_2</span>
-                :
-                <span class="type"><span>Array(<a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>, <a href="#bg==">n</a>)</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">g6_1</span>
-                :
-                <span class="type"><span>Array(<a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>, <a href="#bg==">n</a>)</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">g6_2</span>
-                :
-                <span class="type"><span>Array(<a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>, <a href="#bg==">n</a>)</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="parameters" id="output">
-          <h2>
-            Output
-          </h2>
-          <ul class="value-list">
-            <li>
-              <div>
-                <span class="identifier">h4_1</span>
-                :
-                <span class="type"><a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">h4_2</span>
-                :
-                <span class="type"><a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">h6_1</span>
-                :
-                <span class="type"><a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">h6_2</span>
-                :
-                <span class="type"><a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-          </ul>
-        </div>
-        <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
-        <p><code>h4_1</code> should be <code>g4_1[0] + g4_1[1] + ... + g4_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>.</p>
-        <p><code>h4_2</code> should be <code>g4_2[0] + g4_2[1] + ... + g4_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a>.</p>
-        <p><code>h6_1</code> should be <code>g6_1[0] + g6_1[1] + ... + g6_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>.</p>
-        <p><code>h6_2</code> should be <code>g6_2[0] + g6_2[1] + ... + g6_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a>.</p>
-      </div>
-      <div>
-        <h2>
-          Submission guidelines
-        </h2>
-        <p>Your submission will be run and evaluated as follows.</p>
-        <ol start="0" style="list-style-type: decimal">
-        <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
-        <li><p>Your binary will be invoked with</p>
-        <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
-        <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
-        <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
-        <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
-        </ol>
-      </div>
+      <h2 id="problem-specification">
+        Problem specification
+      </h2>
+      <h3 id="input">
+        Input
+      </h3>
+      <ul class="value-list">
+        <li>
+          <div>
+            <span class="identifier">n</span>
+            :
+            <span class="type"><span>uint64</span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">g4_1</span>
+            :
+            <span class="type"><span>Array(<a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>, <a href="#bg==">n</a>)</span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">g4_2</span>
+            :
+            <span class="type"><span>Array(<a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>, <a href="#bg==">n</a>)</span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">g6_1</span>
+            :
+            <span class="type"><span>Array(<a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>, <a href="#bg==">n</a>)</span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">g6_2</span>
+            :
+            <span class="type"><span>Array(<a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>, <a href="#bg==">n</a>)</span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+      </ul>
+      <h3 id="output">
+        Output
+      </h3>
+      <ul class="value-list">
+        <li>
+          <div>
+            <span class="identifier">h4_1</span>
+            :
+            <span class="type"><a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">h4_2</span>
+            :
+            <span class="type"><a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">h6_1</span>
+            :
+            <span class="type"><a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">h6_2</span>
+            :
+            <span class="type"><a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+      </ul>
+      <h3 id="expected-behavior">
+        Expected behavior
+      </h3>
+      <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
+      <p><code>h4_1</code> should be <code>g4_1[0] + g4_1[1] + ... + g4_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>.</p>
+      <p><code>h4_2</code> should be <code>g4_2[0] + g4_2[1] + ... + g4_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a>.</p>
+      <p><code>h6_1</code> should be <code>g6_1[0] + g6_1[1] + ... + g6_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>.</p>
+      <p><code>h6_2</code> should be <code>g6_2[0] + g6_2[1] + ... + g6_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a>.</p>
+      <h2 id="submission-guidelines">
+        Submission guidelines
+      </h2>
+      <p>Your submission will be run and evaluated as follows.</p>
+      <ol start="0" style="list-style-type: decimal">
+      <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+      <li><p>Your binary will be invoked with</p>
+      <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+      <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+      <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+      <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+      </ol>
+      <h2 id="reference-implementation">
+        Reference implementation
+      </h2>
+      <span>The output of your program submission will be checked against the reference implementation <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations">here</a>.</span>
+      <h2 id="further-discussion-and-background">
+        Further discussion and background
+      </h2>
       <h1 id="techniques">Techniques</h1>
       <h2 id="coordinate-systems">Coordinate systems</h2>
       <p>Points in the form <span class="math inline">(x, y)</span> as above are said to be represented using <em>affine coordinates</em> and the above definition is <em>affine</em> curve addition.</p>
@@ -195,8 +223,6 @@
       <p>There is a further technique called &quot;mixed addition&quot; which allows one to add a point in Jacobian coordinates to a point in affine coordinates even more efficiently than adding two points in Jacobian coordinates. This technique can yield large efficiency gains but makes taking advantage of parallelism more complicated.</p>
       <h2 id="parallelism">Parallelism</h2>
       <p>This problem is an instance of a <em>reduction</em> and is inherently parallel.</p>
-      <hr >
-      <a href="">Reference implementation</a>
     </div>
   </body>
 </html>

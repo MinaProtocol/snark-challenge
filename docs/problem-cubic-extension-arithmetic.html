@@ -32,28 +32,54 @@
       <h1>
         Cubic extension arithmetic
       </h1>
-      <div>
-        <h2>
-          Quick details
-        </h2>
+      <div class="table-of-contents">
         <ul>
           <li>
-            <p><strong>Problem:</strong></p>
-            Multiply together an array of elements of a cubic extension field.
+            <a href="#quick-details">1: Quick details</a>
           </li>
           <li>
-            <p><strong>Prize:</strong></p>
-            <ul>
-              <li>
-                <p><strong>First 25 submissions</strong>: $25</p>
-              </li>
-              <li>
-                <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
-              </li>
-            </ul>
+            <a href="#problem-specification">2: Problem specification</a>
+          </li>
+          <li>
+            <a href="#input">2.1: Input</a>
+          </li>
+          <li>
+            <a href="#output">2.2: Output</a>
+          </li>
+          <li>
+            <a href="#expected-behavior">2.3: Expected behavior</a>
+          </li>
+          <li>
+            <a href="#submission-guidelines">3: Submission guidelines</a>
+          </li>
+          <li>
+            <a href="#reference-implementation">4: Reference implementation</a>
+          </li>
+          <li>
+            <a href="#further-discussion-and-background">5: Further discussion and background</a>
           </li>
         </ul>
       </div>
+      <h2 id="quick-details">
+        Quick details
+      </h2>
+      <ul>
+        <li>
+          <p><strong>Problem:</strong></p>
+          Multiply together an array of elements of a cubic extension field.
+        </li>
+        <li>
+          <p><strong>Prize:</strong></p>
+          <ul>
+            <li>
+              <p><strong>First 25 submissions</strong>: $25</p>
+            </li>
+            <li>
+              <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
+            </li>
+          </ul>
+        </li>
+      </ul>
       <p>Now that we've implemented arithmetic in a prime-order field in a <a href="/snark-challenge/problem-field-arithmetic.html">previous challenge</a>, we can implement field extension arithmetic, which we'll need for multi-exponentiation.</p>
       <h2 id="definitions-and-review">Definitions and review</h2>
       <p>Let's review what exactly a field extension is. The actual operations needed are actually pretty simple, so if you just want to get started coding, you can safely skip this section.</p>
@@ -112,73 +138,73 @@
           <span class="dt">a2</span><span class="op">:</span> <span class="at">fq_add</span>(a0_b2<span class="op">,</span> <span class="at">fq_add</span>(a1_b1<span class="op">,</span> a2_b0))
         <span class="op">};</span>
       <span class="op">};</span></code></pre></div>
-      <div class="problem">
-        <h2>
-          Problem specification
-        </h2>
-        <div class="parameters" id="input">
-          <h2>
-            Input
-          </h2>
-          <ul class="value-list">
-            <li>
-              <div>
-                <span class="identifier">n</span>
-                :
-                <span class="type"><span>uint64</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-            <li>
-              <div>
-                <span class="identifier">x</span>
-                :
-                <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span>, <a href="#bg==">n</a>)</span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-          </ul>
-        </div>
-        <div class="parameters" id="output">
-          <h2>
-            Output
-          </h2>
-          <ul class="value-list">
-            <li>
-              <div>
-                <span class="identifier">y</span>
-                :
-                <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span></span>
-              </div>
-              <div class="representation">
-              </div>
-            </li>
-          </ul>
-        </div>
-        <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
-        <p>The output should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span> as described above.</p>
-      </div>
-      <div>
-        <h2>
-          Submission guidelines
-        </h2>
-        <p>Your submission will be run and evaluated as follows.</p>
-        <ol start="0" style="list-style-type: decimal">
-        <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
-        <li><p>Your binary will be invoked with</p>
-        <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
-        <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
-        <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
-        <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
-        </ol>
-      </div>
+      <h2 id="problem-specification">
+        Problem specification
+      </h2>
+      <h3 id="input">
+        Input
+      </h3>
+      <ul class="value-list">
+        <li>
+          <div>
+            <span class="identifier">n</span>
+            :
+            <span class="type"><span>uint64</span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+        <li>
+          <div>
+            <span class="identifier">x</span>
+            :
+            <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span>, <a href="#bg==">n</a>)</span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+      </ul>
+      <h3 id="output">
+        Output
+      </h3>
+      <ul class="value-list">
+        <li>
+          <div>
+            <span class="identifier">y</span>
+            :
+            <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span></span>
+          </div>
+          <div class="representation">
+          </div>
+        </li>
+      </ul>
+      <h3 id="expected-behavior">
+        Expected behavior
+      </h3>
+      <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
+      <p>The output should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span> as described above.</p>
+      <h2 id="submission-guidelines">
+        Submission guidelines
+      </h2>
+      <p>Your submission will be run and evaluated as follows.</p>
+      <ol start="0" style="list-style-type: decimal">
+      <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+      <li><p>Your binary will be invoked with</p>
+      <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+      <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+      <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+      <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+      </ol>
+      <h2 id="reference-implementation">
+        Reference implementation
+      </h2>
+      <span>The output of your program submission will be checked against the reference implementation <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-03-cubic-extension">here</a>.</span>
+      <h2 id="further-discussion-and-background">
+        Further discussion and background
+      </h2>
       <h2 id="efficiency-tricks">Efficiency tricks</h2>
       <p>The pseduocode above does 9 <span class="math inline">\mathbb{F}_q</span> multiplications, 2 multiplications by <span class="math inline">11</span> (which can be made much cheaper than a general multiplication if it is special-cased), and 6 additions.</p>
       <p>If you want to get the most efficiency, it's good to reduce the number of multiplications, as they are much more costly than additions. There a two methods to do so, called the Karatsuba and Toom-Cook methods, , described in <a href="https://pdfs.semanticscholar.org/3e01/de88d7428076b2547b60072088507d881bf1.pdf">section 4 of this paper</a>. They require 6 and 5 multiplications respectively. The Toom-Cook method should be faster, but it's slightly more complicated to implement.</p>
-      <hr >
-      <a href="">Reference implementation</a>
     </div>
   </body>
 </html>
