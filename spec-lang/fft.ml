@@ -7,7 +7,7 @@ let q curve_scope =
   let s = (match curve_scope with MNT4 -> "MNT4" | MNT6 -> "MNT6") ^ "753" in
   Name.in_scope s "q" |> Name.to_markdown
 
-let preamble _ = ksprintf Html.markdown {md||md}
+let preamble _ = [Sectioned_page.leaf [ksprintf Html.markdown {md||md}]]
 
 let interface : Html.t Problem.Interface.t =
   let open Html in
@@ -44,4 +44,4 @@ let problem : Problem.t =
   ; preamble
   ; interface
   ; reference_implementation_url= ""
-  ; postamble= Fn.const (Html.text "TODO") }
+  ; postamble= Fn.const [] }

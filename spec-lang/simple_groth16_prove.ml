@@ -242,6 +242,7 @@ It requires performing 7 [FFTs](%s), 4 [multiexponentiations](%s) in $G_1$ and 1
 exactly is described below.
 The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.|md}
     pages.fft pages.multi_exponentiation
+  |> List.return |> Sectioned_page.leaf |> List.return
 
 let problem : Problem.t =
   { title= "Groth16Prove"
@@ -250,4 +251,4 @@ let problem : Problem.t =
   ; preamble
   ; interface
   ; reference_implementation_url= ""
-  ; postamble= Fn.const (Html.text "TODO") }
+  ; postamble= Fn.const [] }

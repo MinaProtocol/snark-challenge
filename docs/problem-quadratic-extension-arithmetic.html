@@ -38,25 +38,34 @@
             <a href="#quick-details">1: Quick details</a>
           </li>
           <li>
-            <a href="#problem-specification">2: Problem specification</a>
+            <a href="#definitions-and-review">2: Definitions and review</a>
           </li>
           <li>
-            <a href="#input">2.1: Input</a>
+            <a href="#the-problem">3: The problem</a>
           </li>
           <li>
-            <a href="#output">2.2: Output</a>
+            <a href="#problem-specification">4: Problem specification</a>
           </li>
           <li>
-            <a href="#expected-behavior">2.3: Expected behavior</a>
+            <a href="#input">4.1: Input</a>
           </li>
           <li>
-            <a href="#submission-guidelines">3: Submission guidelines</a>
+            <a href="#output">4.2: Output</a>
           </li>
           <li>
-            <a href="#reference-implementation">4: Reference implementation</a>
+            <a href="#expected-behavior">4.3: Expected behavior</a>
           </li>
           <li>
-            <a href="#further-discussion-and-background">5: Further discussion and background</a>
+            <a href="#submission-guidelines">5: Submission guidelines</a>
+          </li>
+          <li>
+            <a href="#reference-implementation">6: Reference implementation</a>
+          </li>
+          <li>
+            <a href="#further-discussion-and-background">7: Further discussion and background</a>
+          </li>
+          <li>
+            <a href="#efficiency-tricks">7.1: Efficiency tricks</a>
           </li>
         </ul>
       </div>
@@ -81,14 +90,18 @@
         </li>
       </ul>
       <p>Now that we've implemented arithmetic in a prime-order field in a <a href="/snark-challenge/problem-field-arithmetic.html">previous challenge</a>, we can implement field extension arithmetic, which we'll need for multi-exponentiation.</p>
-      <h2 id="definitions-and-review">Definitions and review</h2>
+      <h2 id="definitions-and-review">
+        Definitions and review
+      </h2>
       <p>Let's review what exactly a field extension is. The actual operations needed are actually pretty simple, so if you just want to get started coding, you can safely skip this section.</p>
       <p>A field extension of a field <span class="math inline">\mathbb{F}</span> is another field <span class="math inline">\mathbb{F}&#39;</span> which contains <span class="math inline">\mathbb{F}</span>. To use a familiar example, <span class="math inline">\mathbb{R}</span>, the field of real numbers is a field extension of the field <span class="math inline">\mathbb{Q}</span> of rational numbers.</p>
       <p>In the SNARK challenge and in cryptography in general, we work with finite fields, and the extension fields we'll consider will be finite fields as well.</p>
       <p>The simplest kind of field extension and the one we'll implement here is called a quadratic extension. The idea is the following. First we'll start with our prime order field <span class="math inline">\mathbb{F}_q</span> where <span class="math inline">q</span> is <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>. Then, we'll pick a number in <span class="math inline">\mathbb{F}_q</span> which does not have a square root in <span class="math inline">\mathbb{F}_q</span>. In our case, we'll use <span class="math inline">13</span>.</p>
       <p>Now we can define the field we call <span class="math inline">\mathbb{F}_q[x] / (x^2 = 13)</span>. This is the field obtained by adding an &quot;imaginary&quot; square root <span class="math inline">x</span> for <span class="math inline">13</span> to <span class="math inline">\mathbb{F}_q</span>. It's a lot like how the complex numbers are constructed from the real numbers by adding an &quot;imaginary&quot; square root <span class="math inline">i</span> for <span class="math inline">-1</span> to <span class="math inline">\mathbb{R}</span>.</p>
       <p>Like the complex numbers, the elements of <span class="math inline">\mathbb{F}_q[x] / (x^2 = 13)</span> are sums of the form <span class="math inline">a_0 + a_1 x</span> where <span class="math inline">a_0</span> and <span class="math inline">a_1</span> are elements of <span class="math inline">\mathbb{F}_q</span>. This is a field extension of <span class="math inline">\mathbb{F}_q</span> since <span class="math inline">\mathbb{F}_q</span> is contained in this field as the elements with <span class="math inline">a_1 = 0</span>. For short, we call this field <span class="math inline">\mathbb{F}_{q^2}</span> since it has <span class="math inline">q^2</span> elements.</p>
-      <h2 id="the-problem">The problem</h2>
+      <h2 id="the-problem">
+        The problem
+      </h2>
       <p>In code, you can think of an element of <span class="math inline">\mathbb{F}_{q^2}</span> as a pair <code>(a0, a1)</code> where each of <span class="math inline">a_0, a_1</span> is an element of <span class="math inline">\mathbb{F}_q</span> or a struct <code>{ a0 : Fq, a1 : Fq }</code>.</p>
       <p>This problem will have you implement addition and multiplication for <span class="math inline">\mathbb{F}_{q^2}</span>. Addition and multiplication are defined how you might expect:</p>
       <p><span class="math display">\displaystyle 
@@ -186,7 +199,9 @@
       <h2 id="further-discussion-and-background">
         Further discussion and background
       </h2>
-      <h2 id="efficiency-tricks">Efficiency tricks</h2>
+      <h3 id="efficiency-tricks">
+        Efficiency tricks
+      </h3>
       <p>The pseduocode above does 4 <span class="math inline">\mathbb{F}_q</span> multiplications, 1 multiplication by <span class="math inline">13</span> (which can be made much cheaper than a general multiplication if it is special-cased), and 2 additions.</p>
       <p>If you want to get the most efficiency, it's good to reduce the number of multiplications, as they are much more costly than additions. There is a trick to do so, described in <a href="https://pdfs.semanticscholar.org/3e01/de88d7428076b2547b60072088507d881bf1.pdf">section 3 of this paper</a> but let's go through it here. The net result of the trick is that we'll get down to 3 multiplications, 1 multiplication by <span class="math inline">13</span>, and 5 additions/subtractions. So we need to do more additions and subtractions, but we do one less multiplication, which is a big win.</p>
       <p>In pseudo-code, the trick is</p>

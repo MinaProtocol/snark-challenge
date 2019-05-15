@@ -149,6 +149,7 @@ let site =
   in
   let pages : Pages.t =
     { intro= Intro.url
+    ; implementation_strategies= Implementation_strategies.url
     ; field_arithmetic= problem_url Field_arithmetic.problem
     ; quadratic_extension= problem_url Quadratic_extension.problem
     ; cubic_extension= problem_url Cubic_extension.problem

@@ -59,7 +59,7 @@ let problem : Problem.t =
             "Compute the multi-exponentiation of an array of (scalar, \
              curve-point) pairs for the 4 relevant groups."
       ; prize= Prize.stage1 0 }
-  ; preamble= Html.text "TODO" |> Fn.const
+  ; preamble= [] |> Fn.const
   ; title= "Multi-exponentiation"
   ; reference_implementation_url= ""
-  ; postamble= Fn.const (Html.text "TODO") }
+  ; postamble= Fn.const [] }

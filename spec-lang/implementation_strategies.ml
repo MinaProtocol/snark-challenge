@@ -2,6 +2,8 @@ open Core
 open Util
 open Sectioned_page
 
+let url = sprintf "%s/strategies.html" base_url
+
 let page_t (pages : Pages.t) =
   [ ksprintf text
       {md|This page has suggestions for how to implement the best Groth16 SNARK

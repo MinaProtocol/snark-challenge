@@ -199,9 +199,9 @@ end
 type t =
   { title: string
   ; quick_details: Quick_details.t
-  ; preamble: Pages.t -> Html.t
+  ; preamble: Pages.t -> Html.t list Sectioned_page.t
   ; interface: Html.t Interface.t
-  ; postamble: Pages.t -> Html.t
+  ; postamble: Pages.t -> Html.t list Sectioned_page.t
   ; reference_implementation_url: string }
 
 let slug t =
@@ -231,12 +231,12 @@ let render ~pages
   in
   let t : _ Sectioned_page.t =
     let open Sectioned_page in
-    [ Quick_details.render quick_details
-    ; leaf [preamble pages]
-    ; Interface.Spec.render spec
-    ; sec ~title:"Submission guidelines"
-        [ ksprintf Html.markdown
-            {md|Your submission will be run and evaluated as follows.
+    [Quick_details.render quick_details]
+    @ preamble pages
+    @ [ Interface.Spec.render spec
+      ; sec ~title:"Submission guidelines"
+          [ ksprintf Html.markdown
+              {md|Your submission will be run and evaluated as follows.
 
 %s
 0. The submission runner will generate a random sequence of inputs, saved to a file
@@ -258,20 +258,19 @@ let render ~pages
 
     It can, if it likes, read
     the file "./preprocessed" in order to help it solve the problem.|md}
-            ( if Interface.Spec.has_batch_parameters spec then
-              batch_params_description
-            else "" )
-          |> List.return |> leaf ]
-    ; sec ~title:"Reference implementation"
-        [ leaf
-            [ span []
-                [ Html.text
-                    "The output of your program submission will be checked \
-                     against the reference implementation "
-                ; a [href reference_implementation_url] [Html.text "here"]
-                ; Html.text "." ] ] ]
-    ; sec ~title:"Further discussion and background" [leaf [postamble pages]]
-    ]
+              ( if Interface.Spec.has_batch_parameters spec then
+                batch_params_description
+              else "" )
+            |> List.return |> leaf ]
+      ; sec ~title:"Reference implementation"
+          [ leaf
+              [ span []
+                  [ Html.text
+                      "The output of your program submission will be checked \
+                       against the reference implementation "
+                  ; a [href reference_implementation_url] [Html.text "here"]
+                  ; Html.text "." ] ] ]
+      ; sec ~title:"Further discussion and background" (postamble pages) ]
   in
   let content = Sectioned_page.render_to_html t in
   div [] ([h1 [] [text title]] @ [Sectioned_page.table_of_contents t] @ content)

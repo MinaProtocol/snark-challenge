@@ -2,6 +2,7 @@ type url = string
 
 type t =
   { intro: url
+  ; implementation_strategies: url
   ; mnt4: url
   ; mnt6: url
   ; field_arithmetic: url
