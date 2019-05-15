@@ -112,10 +112,13 @@ module Interface = struct
                        (List.intersperse
                           (List.map (Vec.to_list choice) ~f:Type.render)
                           ~sep:(text ", ")) ))
-            ; p
-                "You can click on the types of any of the parameters, inputs, \
-                 or outputs to see how they will be represented in the files \
-                 given to your program." ]
+            ; markdown
+                "You can click on the above types to see how they will be \
+                 represented in the files given to your program. `uint64` \
+                 values are represented in little-endian byte order. Arrays \
+                 are represented as sequences of values, with no length \
+                 prefix and no separators between elements. Structs are also \
+                 represented this way." ]
       in
       let params ?desc ~title xs =
         div

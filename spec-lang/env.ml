@@ -67,15 +67,21 @@ module Deref = struct
 
   let rec bigint : scope:string -> t -> Integer.t -> Bigint.t =
    fun ~scope t0 x0 ->
-    match named ~scope t0 x0 ~f:find_value_exn with
-    | Value n ->
+    match
+      named ~scope t0
+        (Or_name.map x0 ~f:(fun x -> Value.Integer x))
+        ~f:find_value_exn
+    with
+    | Integer (Value n) ->
         n
-    | Add (x1, x2) ->
+    | Integer (Add (x1, x2)) ->
         Bigint.(bigint ~scope t0 x1 + bigint ~scope t0 x2)
-    | Sub (x1, x2) ->
+    | Integer (Sub (x1, x2)) ->
         Bigint.(bigint ~scope t0 x1 - bigint ~scope t0 x2)
-    | Pow (x1, x2) ->
+    | Integer (Pow (x1, x2)) ->
         Bigint.(pow (bigint ~scope t0 x1) (bigint ~scope t0 x2))
+    | _ ->
+        failwith "Expected Integer value"
 end
 
 let empty = {types= Single.empty; values= Single.empty}

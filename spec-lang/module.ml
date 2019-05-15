@@ -1,5 +1,5 @@
 open Core
-open Or_name
+open Util
 
 let warning fmt = ksprintf (fun s -> eprintf "Warning: %s\n%!" s) fmt
 
@@ -50,7 +50,7 @@ module Page = struct
           h
       | Value_declaration {name; type_; value} ->
           div [class_ "entry value"]
-            [ Name.render (Name.local name)
+            [ Name.render_declaration name
             ; text ":"
             ; Type.render type_
             ; text "="
@@ -82,7 +82,7 @@ module Page = struct
                         {latex|\(\mathbb{F}_%s[x] / (x^{%s} = \alpha)\)|latex}
                         (Name.to_string p) (Int.to_string degree)
                     ; text {h| where \(\alpha\) is |h}
-                    ; Integer.render non_residue
+                    ; Value.render non_residue
                     ; text ". " ]
                 ; ksprintf text
                     {h|Concretely, each element has the form \(%s\) and is represented as the tuple \((%s)\).|h}
@@ -98,7 +98,7 @@ module Page = struct
             failwith "TODO" )
       | Type_declaration {name; type_; representation} ->
           div [class_ "entry type"]
-            ( [Name.render (Name.local name); text "="; Type.render type_]
+            ( [Name.render_declaration name; text "="; Type.render type_]
             @ render_representation representation )
     in
     div [class_ "module"]
@@ -151,14 +151,17 @@ let let_html h = {Declaration.name= ""; value= `Html h}
 
 let module_ name ~declarations = {name; declarations}
 
+let twist_coeff x = ksprintf latex "\\tilde{%s}" x
+
 let mnt4753 : t =
   let var x = Name (Name.local x) in
   let fq_field = Type.Field.Prime {order= var "q"} in
   let fq = Literal fq_field in
   let e = 2 in
+  let non_residue = Integer.Value (Bigint.of_int 13) in
   let fqe =
     Type.Field.Extension
-      {base= fq; degree= e; non_residue= Literal (Value (Bigint.of_int 13))}
+      {base= fq; degree= e; non_residue= Literal (Value.Integer non_residue)}
   in
   module_ "MNT4753"
     ~declarations:
@@ -182,16 +185,33 @@ let mnt4753 : t =
       ; let_ ("b" ^: Type.field fq)
         = Value.integer
             "28798803903456388891410036793299405764940372360099938340752576406393880372126970068421383312482853541572780087363938442377933706865252053507077543420534380486492786626556269083255657125025963825610840222568694137138741554679540"
-      ; let_type "G_1" = Type.curve fq ~a:(var "a") ~b:(var "b") ]
+      ; let_type (latex "G_1") = Type.curve fq ~a:(var "a") ~b:(var "b")
+      ; let_
+          (twist_coeff "a" ^: Type.field (Literal fqe))
+          (Literal
+             (Value.Tuple
+                [ Literal (Integer (Mul (Literal non_residue, var "a")))
+                ; Literal (Integer (Value Bigint.zero)) ]))
+      ; let_
+          (twist_coeff "b" ^: Type.field (Literal fqe))
+          (Literal
+             (Value.Tuple
+                [ Literal (Integer (Value Bigint.zero))
+                ; Literal (Integer (Mul (Literal non_residue, var "b"))) ]))
+      ; let_type (latex "G_2")
+        = Type.curve (Literal fqe)
+            ~a:(var (twist_coeff "a"))
+            ~b:(var (twist_coeff "b")) ]
 
 let mnt6753 : t =
   let var x = Name (Name.local x) in
   let fq_field = Type.Field.Prime {order= var "q"} in
   let fq = Literal fq_field in
   let e = 3 in
+  let non_residue = Integer.Value (Bigint.of_int 11) in
   let fqe =
     Type.Field.Extension
-      {base= fq; degree= e; non_residue= Literal (Value (Bigint.of_int 11))}
+      {base= fq; degree= e; non_residue= Literal (Integer non_residue)}
   in
   module_ "MNT6753"
     ~declarations:
@@ -211,8 +231,25 @@ let mnt6753 : t =
       ; let_ ("b" ^: Type.field fq)
         = Value.integer
             "11625908999541321152027340224010374716841167701783584648338908235410859267060079819722747939267925389062611062156601938166010098747920378738927832658133625454260115409075816187555055859490253375704728027944315501122723426879114"
-      ; let_type "G_1" = Type.curve fq ~a:(var "a") ~b:(var "b")
-      ; let_type "G_2" = Type.curve (Literal fqe) ~a:(var "a") ~b:(var "b") ]
+      ; let_type (latex "G_1") = Type.curve fq ~a:(var "a") ~b:(var "b")
+      ; let_
+          (twist_coeff "a" ^: Type.field (Literal fqe))
+          (Literal
+             (Value.Tuple
+                [ Literal (Integer (Value Bigint.zero))
+                ; Literal (Integer (Value Bigint.zero))
+                ; var "a" ]))
+      ; let_
+          (twist_coeff "b" ^: Type.field (Literal fqe))
+          (Literal
+             (Value.Tuple
+                [ Literal (Integer (Mul (Literal non_residue, var "b")))
+                ; Literal (Integer (Value Bigint.zero))
+                ; Literal (Integer (Value Bigint.zero)) ]))
+      ; let_type (latex "G_2")
+        = Type.curve (Literal fqe)
+            ~a:(var (twist_coeff "a"))
+            ~b:(var (twist_coeff "b")) ]
 
 let update_env (env : Env.t) {name= module_name; declarations} =
   List.fold declarations ~init:env ~f:(fun env {name; value} ->

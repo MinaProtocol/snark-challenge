@@ -101,7 +101,7 @@ let interface : Html.t Problem.Interface.t =
     Type.Field.Extension
       { base= Literal fq
       ; degree= 2
-      ; non_residue= Literal (Value (Bigint.of_int 13)) }
+      ; non_residue= Literal (Integer (Value (Bigint.of_int 13))) }
   in
   let%bind n = !Input "n" (Literal UInt64) in
   let arr =

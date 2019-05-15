@@ -91,26 +91,23 @@ module QAP_witness_map = struct
     return ()
 end
 
-let wrap cs =
+let head =
   let open Html in
-  node "html" []
-    [ node "head" []
-        [ literal {h|<meta charset="UTF-8">|h}
-        ; link ~href:(sprintf "%s/static/main.css" base_url)
-        ; literal
-            {h|
+  [ literal {h|<meta charset="UTF-8">|h}
+  ; link ~href:(sprintf "%s/static/main.css" base_url)
+  ; literal
+      {h|
 <link rel="stylesheet"
       href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>|h}
-        ; literal
-            {h|<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+  ; literal
+      {h|<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
     onload="renderMathInElement(document.body);"></script>|h}
-        ]
-    ; Html.literal
-        {html|<script>
+  ; Html.literal
+      {html|<script>
           document.addEventListener("DOMContentLoaded", function() {
             var blocks = document.querySelectorAll(".math.display");
             for (var i = 0; i < blocks.length; i++) {
@@ -124,7 +121,15 @@ let wrap cs =
             }
           });
         </script>|html}
-    ; node "body" [] cs ]
+  ]
+
+let markdown_wrap cs = Html.div [] (head @ cs)
+
+let html_wrap cs =
+  let open Html in
+  node "html" [] [node "head" [] head; node "body" [] cs]
+
+let wrap = html_wrap
 
 let problem_url (p : Problem.t) = sprintf "%s/problem-%s.html" base_url p.title
 
@@ -134,7 +139,7 @@ let site =
   let env = List.fold modules ~init:Env.empty ~f:Module.update_env in
   let problems =
     [ Multiexp.problem
-    ; Groth16_prove.problem
+    ; Simple_groth16_prove.problem
     ; Fft.problem
     ; Curve_operations.problem
     ; Field_arithmetic.problem
@@ -149,7 +154,7 @@ let site =
     ; mnt4= Name.module_url Module.mnt4753.name
     ; mnt6= Name.module_url Module.mnt6753.name
     ; multi_exponentiation= problem_url Multiexp.problem
-    ; groth16= problem_url Groth16_prove.problem
+    ; groth16= problem_url Simple_groth16_prove.problem
     ; curve_operations= problem_url Curve_operations.problem
     ; fft= problem_url Fft.problem }
   in

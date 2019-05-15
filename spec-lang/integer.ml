@@ -2,7 +2,12 @@ open Core
 open Or_name
 module Html = Html_concise
 
-type literal = Value of Bigint.t | Add of t * t | Sub of t * t | Pow of t * t
+type literal =
+  | Value of Bigint.t
+  | Add of t * t
+  | Sub of t * t
+  | Pow of t * t
+  | Mul of t * t
 
 and t = literal Or_name.t
 
@@ -69,6 +74,9 @@ let rec render : t -> Html.t = function
   | Literal (Add (t1, t2)) ->
       let open Html in
       span [] [render t1; text "+"; render t2]
+  | Literal (Mul (t1, t2)) ->
+      let open Html in
+      span [] [render t1; text "&#8901;"; render t2]
   | Literal (Pow (t1, t2)) ->
       let open Html in
       span [] [render t1; sup [render t2]]
