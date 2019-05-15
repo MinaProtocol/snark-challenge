@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/snark-challenge/static/main.css">
+    
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            var blocks = document.querySelectorAll(".math.display");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:true});
+            }
+            blocks = document.querySelectorAll(".math.inline");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:false});
+            }
+          });
+        </script>
+  </head>
+  <body>
+    <div>
+      <h1>
+        Cubic extension arithmetic
+      </h1>
+      <div>
+        <h2>
+          Quick details
+        </h2>
+        <ul>
+          <li>
+            <p><strong>Problem:</strong></p>
+            Multiply together an array of elements of a cubic extension field.
+          </li>
+          <li>
+            <p><strong>Prize:</strong></p>
+            <ul>
+              <li>
+                <p><strong>First 25 submissions</strong>: $25</p>
+              </li>
+              <li>
+                <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <p>Now that we've implemented arithmetic in a prime-order field in a <a href="/snark-challenge/problem-field-arithmetic.html">previous challenge</a>, we can implement field extension arithmetic, which we'll need for multi-exponentiation.</p>
+      <h2 id="definitions-and-review">Definitions and review</h2>
+      <p>Let's review what exactly a field extension is. The actual operations needed are actually pretty simple, so if you just want to get started coding, you can safely skip this section.</p>
+      <p>A field extension of a field <span class="math inline">\mathbb{F}</span> is another field <span class="math inline">\mathbb{F}&#39;</span> which contains <span class="math inline">\mathbb{F}</span>. To use a familiar example, <span class="math inline">\mathbb{R}</span>, the field of real numbers is a field extension of the field <span class="math inline">\mathbb{Q}</span> of rational numbers.</p>
+      <p>In the SNARK challenge and in cryptography in general, we work with finite fields, and the extension fields we'll consider will be finite fields as well.</p>
+      <p>In this problem, you'll implement a kind of extension called a cubic extension. The idea is the following. First we'll start with our prime order field <span class="math inline">\mathbb{F}_q</span> where <span class="math inline">q</span> is <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>. Then, we'll pick a number in <span class="math inline">\mathbb{F}_q</span> which does not have a cube root in <span class="math inline">\mathbb{F}_q</span>. In our case, we'll use <span class="math inline">11</span>. If you already completed <a href="/snark-challenge/problem-quadratic-extension-arithmetic.html">the quadratic extension</a>, this problem is very similar.</p>
+      <p>Now we can define the field we call <span class="math inline">\mathbb{F}_q[x] / (x^3 = 11)</span>. This is the field obtained by adding an &quot;imaginary&quot; cube root <span class="math inline">x</span> for <span class="math inline">11</span> to <span class="math inline">\mathbb{F}_q</span>. It's a lot like how the complex numbers are constructed from the real numbers by adding an &quot;imaginary&quot; square root <span class="math inline">i</span> for <span class="math inline">-1</span> to <span class="math inline">\mathbb{R}</span>.</p>
+      <p>Similar to the complex numbers, the elements of <span class="math inline">\mathbb{F}_q[x] / (x^3 = 11)</span> are sums of the form <span class="math inline">a_0 + a_1 x + a_2 x^2</span> where <span class="math inline">a_0, a_1, a_2</span> are elements of <span class="math inline">\mathbb{F}_q</span>. This is a field extension of <span class="math inline">\mathbb{F}_q</span> since <span class="math inline">\mathbb{F}_q</span> is contained in this field as the elements with <span class="math inline">a_1 = a_2 = 0</span>. For short, we call this field <span class="math inline">\mathbb{F}_{q^3}</span> since it has <span class="math inline">q^3</span> elements.</p>
+      <h2 id="the-problem">The problem</h2>
+      <p>In code, you can think of an element of <span class="math inline">\mathbb{F}_{q^3}</span> as a tuple <code>(a0, a1, a2)</code> where each of <code>a0</code>, <code>a1</code>, <code>a2</code> is an element of <span class="math inline">\mathbb{F}_q</span> or a struct <code>{ a0 : Fq, a1 : Fq, a2 : Fq }</code>.</p>
+      <p>This problem will have you implement multiplication for <span class="math inline">\mathbb{F}_{q^2}</span>. Addition and multiplication are defined how you might expect:</p>
+      <p><span class="math display">\displaystyle 
+      \begin{aligned}
+      (a_0 + a_1 x + a_2 x^2) +  (b_0 + b_1 x + b_2 x^2)
+      &amp;= (a_0 + b_0) + (a_1 + b_1) x + (a_2 + b_2) x^2 \\
+      (a_0 + a_1 x + a_2 x^2) (b_0 + b_1 x + b_2 x^2)
+      &amp;= a_0 b_0 + a_0 b_1 x + a_0 b_2 x^2
+      + a_1 b_0 x + a_1 b_1 x^2 + a_1 b_2 x^3
+      + a_2 b_0 x^2 + a_2 b_1 x^3 + a_2 b_2 x^4 \\
+      &amp;= a_0 b_0 + a_0 b_1 x + a_0 b_2 x^2
+      + a_1 b_0 x + a_1 b_1 x^2 + 11 a_1 b_2 
+      + a_2 b_0 x^2 + 11 a_2 b_1 + 11 a_2 b_2 x \\
+      &amp;= (a_0 b_0 + 11 a_1 b_2 + 11 a_2 b_1)
+      + (a_0 b_1 + a_1 b_0 + 11 a_2 b_2) x
+      + (a_0 b_2 + a_1 b_1 + a_2 b_0) x^2 \\
+      \end{aligned}
+      </span></p>
+      <p>In pseduo-code, this would be</p>
+      <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">
+      <span class="kw">var</span> alpha <span class="op">=</span> <span class="at">fq</span>(<span class="dv">11</span>)<span class="op">;</span>
+      
+      <span class="kw">var</span> fq3_add <span class="op">=</span> (a<span class="op">,</span> b) <span class="op">=&gt;</span> <span class="op">{</span>
+        <span class="cf">return</span> <span class="op">{</span>
+          <span class="dt">a0</span><span class="op">:</span> <span class="at">fq_add</span>(<span class="va">a</span>.<span class="at">a0</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a0</span>)<span class="op">,</span>
+          <span class="dt">a1</span><span class="op">:</span> <span class="at">fq_add</span>(<span class="va">a</span>.<span class="at">a1</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a1</span>)<span class="op">,</span>
+          <span class="dt">a2</span><span class="op">:</span> <span class="at">fq_add</span>(<span class="va">a</span>.<span class="at">a2</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a2</span>)
+        <span class="op">};</span>
+      <span class="op">};</span>
+      
+      <span class="kw">var</span> fq3_mul <span class="op">=</span> (a<span class="op">,</span> b) <span class="op">=&gt;</span> <span class="op">{</span>
+        <span class="kw">var</span> a0_b0 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a0</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a0</span>)<span class="op">;</span>
+        <span class="kw">var</span> a0_b1 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a0</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a1</span>)<span class="op">;</span>
+        <span class="kw">var</span> a0_b2 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a0</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a2</span>)<span class="op">;</span>
+      
+        <span class="kw">var</span> a1_b0 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a1</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a0</span>)<span class="op">;</span>
+        <span class="kw">var</span> a1_b1 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a1</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a1</span>)<span class="op">;</span>
+        <span class="kw">var</span> a1_b2 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a1</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a2</span>)<span class="op">;</span>
+      
+        <span class="kw">var</span> a2_b0 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a2</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a0</span>)<span class="op">;</span>
+        <span class="kw">var</span> a2_b1 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a2</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a1</span>)<span class="op">;</span>
+        <span class="kw">var</span> a2_b2 <span class="op">=</span> <span class="at">fq_mul</span>(<span class="va">a</span>.<span class="at">a2</span><span class="op">,</span> <span class="va">b</span>.<span class="at">a2</span>)<span class="op">;</span>
+      
+        <span class="cf">return</span> <span class="op">{</span>
+          <span class="dt">a0</span><span class="op">:</span> <span class="at">fq_add</span>(a0_b0<span class="op">,</span> <span class="at">fq_mul</span>(alpha<span class="op">,</span> <span class="at">fq_add</span>(a1_b2<span class="op">,</span> a2_b1)))<span class="op">,</span>
+          <span class="dt">a1</span><span class="op">:</span> <span class="at">fq_add</span>(a0_b1<span class="op">,</span> <span class="at">fq_add</span>(a1_b0<span class="op">,</span> <span class="at">fq_mul</span>(alpha<span class="op">,</span> a2_b2)))<span class="op">,</span>
+          <span class="dt">a2</span><span class="op">:</span> <span class="at">fq_add</span>(a0_b2<span class="op">,</span> <span class="at">fq_add</span>(a1_b1<span class="op">,</span> a2_b0))
+        <span class="op">};</span>
+      <span class="op">};</span></code></pre></div>
+      <div class="problem">
+        <h2>
+          Problem specification
+        </h2>
+        <div class="parameters" id="input">
+          <h2>
+            Input
+          </h2>
+          <ul class="value-list">
+            <li>
+              <div>
+                <span class="identifier">n</span>
+                :
+                <span class="type"><span>uint64</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+            <li>
+              <div>
+                <span class="identifier">x</span>
+                :
+                <span class="type"><span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span>, <a href="#bg==">n</a>)</span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="parameters" id="output">
+          <h2>
+            Output
+          </h2>
+          <ul class="value-list">
+            <li>
+              <div>
+                <span class="identifier">y</span>
+                :
+                <span class="type"><span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span></span>
+              </div>
+              <div class="representation">
+              </div>
+            </li>
+          </ul>
+        </div>
+        <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
+        <p>The output should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span> as described above.</p>
+      </div>
+      <div>
+        <h2>
+          Submission guidelines
+        </h2>
+        <p>Your submission will be run and evaluated as follows.</p>
+        <ol start="0" style="list-style-type: decimal">
+        <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+        <li><p>Your binary will be invoked with</p>
+        <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+        <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+        <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+        <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+        </ol>
+      </div>
+      <h2 id="efficiency-tricks">Efficiency tricks</h2>
+      <p>The pseduocode above does 9 <span class="math inline">\mathbb{F}_q</span> multiplications, 2 multiplications by <span class="math inline">11</span> (which can be made much cheaper than a general multiplication if it is special-cased), and 6 additions.</p>
+      <p>If you want to get the most efficiency, it's good to reduce the number of multiplications, as they are much more costly than additions. There a two methods to do so, called the Karatsuba and Toom-Cook methods, , described in <a href="https://pdfs.semanticscholar.org/3e01/de88d7428076b2547b60072088507d881bf1.pdf">section 4 of this paper</a>. They require 6 and 5 multiplications respectively. The Toom-Cook method should be faster, but it's slightly more complicated to implement.</p>
+      <hr >
+      <a href="">Reference implementation</a>
+    </div>
+  </body>
+</html>

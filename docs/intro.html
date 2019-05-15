@@ -12,8 +12,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
     onload="renderMathInElement(document.body);"></script>
-  </head>
-  <script>
+    <script>
           document.addEventListener("DOMContentLoaded", function() {
             var blocks = document.querySelectorAll(".math.display");
             for (var i = 0; i < blocks.length; i++) {
@@ -27,6 +26,7 @@
             }
           });
         </script>
+  </head>
   <body>
     <p>The Groth16 SNARK prover is not such a complicated algorithm, but it does involve several steps, each of which builds on the next. The prover must be implemented for two settings of parameters: the parameters associated with the curve <a href="/snark-challenge/MNT4753.html">MNT4-753</a> and those associated with the curve <a href="/snark-challenge/MNT6753.html">MNT6-753</a>.</p>
     <p>Once a collection of parameters <span class="math inline">(r, q, e, G_1, G_2)</span> is fixed, the sub-problems making up the SNARK prover are</p>

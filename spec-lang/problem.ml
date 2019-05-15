@@ -166,6 +166,9 @@ type t =
   ; postamble: Pages.t -> Html.t
   ; reference_implementation_url: string }
 
+let slug t =
+  String.map (String.lowercase t.title) ~f:(fun c -> if c = ' ' then '-' else c)
+
 let render ~pages
     { title
     ; quick_details

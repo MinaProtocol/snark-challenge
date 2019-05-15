@@ -1,16 +1,42 @@
+open Core
 open Util
 
-let t =
-  Html.markdown
+let page (pages : Pages.t) : Html.t =
+  ksprintf Html.markdown
     {md|# Implementation suggestions
 
 This page has suggestions for how to implement the best Groth16 SNARK
 prover ([described here](%s)) to take home up to $75,000 in prizes.
 
+## Splitting computation between the CPU and GPU
+The Groth16 prover consists of 4 $G_1$ multiexponentiations, 1 $G_2$ multiexponentiation,
+and 7 FFTs, as described [here](%s).
+
+1 of the $G_1$ multiexponentiations cannot be computed until all of the FFTs.
+The other 3 $G_1$ multiexponentiations and the $G_2$ multiexponentiation however
+don't have any dependencies between each other or on any other computation.
+
+So, some of them can be computed on the CPU while at the same time others are computed on the GPU.
+For example, you could first the FFTs first on the CPU, while simultaneously performing 2 of
+the $G_1$ multi-exponentiations on the GPU. After those completed, you could then compute the
+final $G_1$ multi-exponentiation on the CPU and the $G_2$ multi-exponentiation on the GPU.
+
 ## Parallelism
 Both the FFT and the multiexponentiations are massively parallelizable.
 The multiexponentiation in particular is an instance of a reduction: combining
-an array of values together using a binary operation. Check out [this CUDA code](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction)
+an array of values together using a binary operation. 
+
+### Parallelism on the CPU
+[libsnark](https://github.com/scipr-lab/libsnark)'s "sub-libraries"
+[libff](https://github.com/scipr-lab/libff/) and
+[libfqfft](https://github.com/scipr-lab/libfqfft) implement parallelized
+multiexponentiation (code [here](https://github.com/scipr-lab/libff/blob/master/libff/algebra/scalar_multiplication/multiexp.tcc#L402)) and
+FFT (code [here](https://github.com/scipr-lab/libfqfft/blob/master/libfqfft/evaluation_domain/domains/basic_radix2_domain_aux.tcc#L81))
+respectively.
+
+
+### Parallelism on the GPU
+Check out [this CUDA code](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction)
 which implements a parallel reduction in CUDA to sum up an array of 32-bit ints.
 
 ## Field arithmetic
@@ -38,3 +64,4 @@ There are likely many other optimizations
 ### Exponentiation algorithms
 There are many techniques for speeding up exponentiation and multi-exponentiation.
 |md}
+    pages.groth16 pages.groth16

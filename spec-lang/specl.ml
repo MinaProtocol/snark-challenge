@@ -131,7 +131,8 @@ let html_wrap cs =
 
 let wrap = html_wrap
 
-let problem_url (p : Problem.t) = sprintf "%s/problem-%s.html" base_url p.title
+let problem_url (p : Problem.t) =
+  sprintf "%s/problem-%s.html" base_url (Problem.slug p)
 
 let site =
   let open Stationary in
@@ -158,12 +159,12 @@ let site =
     ; curve_operations= problem_url Curve_operations.problem
     ; fft= problem_url Fft.problem }
   in
+  let page name x = File_system.file (File.of_html ~name (wrap [x])) in
   Site.create
     [ File_system.directory "snark-challenge"
-        ( [ File_system.file
-              (File.of_html ~name:"intro.html" (wrap [Intro.page pages]))
-          ; File_system.file
-              (File.of_html ~name:"index.html" (wrap [Stage1.page pages]))
+        ( [ page "intro.html" (Intro.page pages)
+          ; page "index.html" (Stage1.page pages)
+          ; page "strategies.html" (Implementation_strategies.page pages)
           ; File_system.copy_directory "static" ]
         @ List.map modules ~f:(fun m ->
               File_system.file
