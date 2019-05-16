@@ -159,7 +159,7 @@ let interface =
         (n num_vars) (n lt) (n selected_degree) (n ht) (n r) b1_def
       |> latex |> latex
     in
-    ksprintf Html.markdown
+    ksprintf Markdown.of_string
       {md|This problem is a version of the [Groth16 SNARK prover](https://eprint.iacr.org/2016/260.pdf), simplified to the difficult core of the problem.
 
 If $P, Q$ are points on an elliptic curve (either $%s$ or $%s$) and $s : %s$, then
@@ -235,19 +235,20 @@ perform 4 multiexponentiations in %s and 1 multiexponentiation in %s.
   return description
 
 let preamble (pages : Pages.t) =
-  ksprintf Html.markdown
+  ksprintf Markdown.of_string
     {md|This is the full Groth16 prover, or a slightly simplified version of it. It is the main
 event of the SNARK Challenge.
 It requires performing 7 [FFTs](%s), 4 [multiexponentiations](%s) in $G_1$ and 1 multiexponentiation in $G_2$. How
 exactly is described below.
 The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.|md}
     pages.fft pages.multi_exponentiation
-  |> List.return |> Sectioned_page.leaf |> List.return
+  |> Sectioned_page.leaf |> List.return
 
 let problem : Problem.t =
   { title= "Groth16Prove"
   ; quick_details=
-      {description= Html.text "The full Groth16 prover."; prize= Prize.stage1 0}
+      { description= Markdown.of_string "The full Groth16 prover."
+      ; prize= Prize.stage1 0 }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

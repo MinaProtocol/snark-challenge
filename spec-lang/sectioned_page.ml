@@ -7,6 +7,15 @@ and 'a item = Section of 'a section | Leaf of 'a
 
 and 'a t = 'a item list
 
+let rec map t ~f = List.map ~f:(map_item ~f) t
+
+and map_item t ~f =
+  match t with
+  | Section {heading; body} ->
+      Section {heading; body= map body ~f}
+  | Leaf x ->
+      Leaf (f x)
+
 let rec render_item ~leaf ~section ~concat level = function
   | Leaf md ->
       leaf md

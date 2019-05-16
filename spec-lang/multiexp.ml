@@ -26,7 +26,7 @@ form is more likely to be useful than Montgomery representation for this problem
   in
   let%bind _y = !Output "y" (Name group) in
   let description =
-    Html.markdown
+    Markdown.of_string
       {md|The output should be the multiexponentiation with the scalars `s`
 on the bases `g`. In other words, the group element
 `s[0] * g[0] + s[1] * g[1] + ... + s[n - 1] * g[n - 1]`.
@@ -55,7 +55,7 @@ let problem : Problem.t =
   { interface
   ; quick_details=
       { description=
-          Html.text
+          Markdown.of_string
             "Compute the multi-exponentiation of an array of (scalar, \
              curve-point) pairs for the 4 relevant groups."
       ; prize= Prize.stage1 0 }

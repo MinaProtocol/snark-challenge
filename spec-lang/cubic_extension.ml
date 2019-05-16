@@ -13,7 +13,7 @@ let r = param "r"
 
 let preamble (pages : Pages.t) =
   let open Sectioned_page in
-  let md fmt = ksprintf (fun s -> leaf [Html.markdown s]) fmt in
+  let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ md
       {md|Now that we've implemented arithmetic in a prime-order field
 in a [previous challenge](%s), we can implement field extension
@@ -219,7 +219,7 @@ var fq3_mul = (a, b) => {
     pages.field_arithmetic (q MNT6) pages.quadratic_extension
 *)
 
-let interface : Html.t Problem.Interface.t =
+let interface : _ Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
   let fq = Type.Field.Prime {order= Name (Name.in_scope "MNT4753" "q")} in
@@ -236,18 +236,17 @@ let interface : Html.t Problem.Interface.t =
   in
   let%map _x = !Input "x" arr
   and _output = !Output "y" (Type.field (Literal fqe)) in
-  ksprintf Html.markdown
-    {md|%s
+  ksprintf Markdown.of_string
+    !{md|%s
     
 The output should be `x[0] * x[1] * ... * x[n - 1]`
-where `*` is multiplication in the field %s as described above.|md}
+where `*` is multiplication in the field %{Html} as described above.|md}
     Gpu_message.t
-    ( (fun () -> Type.Field.render (Literal fqe) |> Html.to_string)
-    |> Async.Thread_safe.block_on_async_exn )
+    (Type.Field.render (Literal fqe))
 
 let postamble _ =
   let open Sectioned_page in
-  let md fmt = ksprintf (fun s -> leaf [Html.markdown s]) fmt in
+  let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ sec ~title:"Efficiency tricks"
       [ md
           {md|The pseduocode above does 9 $\mathbb{F}_q$ multiplications, 2 multiplications
@@ -282,7 +281,7 @@ let problem : Problem.t =
   { title= "Cubic extension arithmetic"
   ; quick_details=
       { description=
-          Html.text
+          Markdown.of_string
             "Multiply together an array of elements of a cubic extension field."
       ; prize= Prize.stage1 25 }
   ; preamble

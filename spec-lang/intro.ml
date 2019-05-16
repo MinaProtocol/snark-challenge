@@ -4,7 +4,7 @@ open Util
 let url = sprintf "%s/intro.html" base_url
 
 let page (pages : Pages.t) =
-  ksprintf Html.markdown
+  ksprintf Markdown.of_string
     {md|The Groth16 SNARK prover is not such a complicated algorithm, but
 it does involve several steps, each of which builds on the next.
 The prover must be implemented for two settings of parameters:

@@ -139,5 +139,9 @@ let page pages =
   let t = page_t pages in
   let toc = table_of_contents t in
   let content = render_to_markdown t in
-  let open Html in
-  div [] [h2 [] [text "Implementation strategies"]; toc; Html.markdown content]
+  ksprintf Markdown.of_string
+    !{md|# Implementation strategies
+%{Html}
+
+%s|md}
+    toc content

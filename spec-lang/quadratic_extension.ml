@@ -14,15 +14,15 @@ let r = param "r"
 let preamble (pages : Pages.t) =
   let open Sectioned_page in
   [ leaf
-      [ ksprintf Html.markdown
-          {md|Now that we've implemented arithmetic in a prime-order field
+      (ksprintf Markdown.of_string
+         {md|Now that we've implemented arithmetic in a prime-order field
 in a [previous challenge](%s), we can implement field extension
 arithmetic, which we'll need for multi-exponentiation.|md}
-          pages.field_arithmetic ]
+         pages.field_arithmetic)
   ; sec ~title:"Definitions and review"
       [ leaf
-          [ ksprintf Html.markdown
-              {md|
+          (ksprintf Markdown.of_string
+             {md|
 Let's review what exactly a field extension is. The actual operations
 needed are actually pretty simple, so if you just want to get started coding,
 you can safely skip this section.
@@ -52,11 +52,11 @@ of the form $a_0 + a_1 x$ where $a_0$ and $a_1$ are elements of $\mathbb{F}_q$. 
 field extension of $\mathbb{F}_q$ since $\mathbb{F}_q$ is contained in this field as
 the elements with $a_1 = 0$. For short, we call this field $\mathbb{F}_{q^2}$ since it
 has $q^2$ elements.|md}
-              (q MNT4) ] ]
+             (q MNT4)) ]
   ; sec ~title:"The problem"
       [ leaf
-          [ Html.markdown
-              {md|In code, you can think of an element of $\mathbb{F}_{q^2}$ as a pair `(a0, a1)` where
+          (Markdown.of_string
+             {md|In code, you can think of an element of $\mathbb{F}_{q^2}$ as a pair `(a0, a1)` where
 each of $a_0, a_1$ is an element of $\mathbb{F}_q$ or a struct `{ a0 : Fq, a1 : Fq }`.
 
 This problem will have you implement addition and multiplication for $\mathbb{F}_{q^2}$.
@@ -95,8 +95,8 @@ var fq2_mul = (a, b) => {
     a1: fq_add(a1_b0, a0_b1)
   };
 };
-```|md}
-          ] ] ]
+```|md})
+      ] ]
 
 (*
   ksprintf Html.markdown
@@ -181,7 +181,7 @@ var fq2_mul = (a, b) => {
     pages.field_arithmetic (q MNT4)
 
 *)
-let interface : Html.t Problem.Interface.t =
+let interface : Markdown.t Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
   let fq = Type.Field.Prime {order= Name (Name.in_scope "MNT4753" "q")} in
@@ -198,22 +198,21 @@ let interface : Html.t Problem.Interface.t =
   in
   let%map _x = !Input "x" arr
   and _output = !Output "y" (Type.field (Literal fqe)) in
-  ksprintf Html.markdown
+  ksprintf Markdown.of_string
     {md|%s
 
 The output should be `x[0] * x[1] * ... * x[n - 1]`
 where `*` is multiplication in the field %s as described above.
 |md}
     Gpu_message.t
-    ( (fun () -> Type.Field.render (Literal fqe) |> Html.to_string)
-    |> Async.Thread_safe.block_on_async_exn )
+    (Type.Field.render (Literal fqe) |> Html.to_string)
 
 let postamble _ =
   let open Sectioned_page in
   [ sec ~title:"Efficiency tricks"
       [ leaf
-          [ Html.markdown
-              {md|The pseduocode above does 4 $\mathbb{F}_q$ multiplications, 1 multiplication
+          (Markdown.of_string
+             {md|The pseduocode above does 4 $\mathbb{F}_q$ multiplications, 1 multiplication
 by $13$ (which can be made much cheaper than a general multiplication if it is
 special-cased), and 2 additions.
 
@@ -242,14 +241,14 @@ var fq2_mul = (a, b) => {
   };
 };
 ```
-|md}
-          ] ] ]
+|md})
+      ] ]
 
 let problem : Problem.t =
   { title= "Quadratic extension arithmetic"
   ; quick_details=
       { description=
-          Html.text
+          Markdown.of_string
             "Multiply together an array of elements of a quadratic extension \
              field."
       ; prize= Prize.stage1 25 }

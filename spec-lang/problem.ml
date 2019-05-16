@@ -6,16 +6,22 @@ module Parameter_kind = struct
 end
 
 module Quick_details = struct
-  type t = {description: Html.t; prize: Prize.t}
+  type t = {description: Markdown.t; prize: Prize.t}
 
   let render {description; prize} =
     let open Sectioned_page in
     sec ~title:"Quick details"
       [ leaf
-          [ (let open Html in
-            ul []
-              [ li [] [Html.markdown "**Problem:** "; description]
-              ; li [] [Html.markdown "**Prize:** "; Prize.render prize] ]) ] ]
+          (ksprintf Markdown.of_string
+             !{md|- **Problem:** %{Markdown}
+- **Prize:**
+%s|md}
+             description
+             ( List.map prize ~f:(fun (p, r) ->
+                   sprintf
+                     !"    - **%{Prize.Participant_set}:** %{Prize.Reward}"
+                     p r )
+             |> String.concat ~sep:"\n" )) ]
 
   (*
   let render {description; prize} =
@@ -102,21 +108,44 @@ module Interface = struct
           ; batch_parameters
           ; input
           ; output }) =
-      let open Html in
       let definitional_preamble =
         let names, choices = definitional_parameters in
         match choices with
         | [] ->
-            []
+            ""
         | _ ->
+            let bindings =
+              ( (if Vec.length names > 1 then ["("] else [])
+              @ List.intersperse ~sep:","
+                  (List.map (Vec.to_list names) ~f:(fun name ->
+                       Name.render_declaration name |> Html.to_string ))
+              @ if Vec.length names > 1 then [")"] else [] )
+              |> String.concat
+            in
+            let choices =
+              List.map choices ~f:(fun choice ->
+                  String.concat
+                    (List.map (Vec.to_list choice)
+                       ~f:(Fn.compose Html.to_string Type.render))
+                    ~sep:", "
+                  |> sprintf "- %s" )
+              |> String.concat ~sep:"\n"
+            in
+            sprintf
+              {md|The following problem is defined for any choice of %s
+in
+
+%s
+
+You can click on the above types to see how they will be
+represented in the files given to your program. `uint64`
+values are represented in little-endian byte order. Arrays
+are represented as sequences of values, with no length
+prefix and no separators between elements. Structs are also
+represented this way.|md}
+              bindings choices
+        (*
             [ span []
-                ( [text "The following problem is defined for any choice of "]
-                @ (if Vec.length names > 1 then [text "("] else [])
-                @ List.intersperse ~sep:(text ",")
-                    (List.map (Vec.to_list names) ~f:(fun name ->
-                         Name.render_declaration name ))
-                @ (if Vec.length names > 1 then [text ")"] else [])
-                @ [text " in"] )
             ; ul []
                 (List.map choices ~f:(fun choice ->
                      li []
@@ -130,11 +159,20 @@ module Interface = struct
                  are represented as sequences of values, with no length \
                  prefix and no separators between elements. Structs are also \
                  represented this way." ]
+*)
       in
       let params ?desc ~title xs =
         let open Sectioned_page in
         sec ~title
-          ( Option.(to_list (map desc ~f:(fun d -> leaf [d])))
+          ( Option.(to_list (map desc ~f:(fun d -> leaf d)))
+          @ [ List.map xs ~f:(fun (ident, ty, note) ->
+                  sprintf !{md|- %s : %{Html}|md} ident (Type.render ty)
+                  ^ Option.value_map note ~default:""
+                      ~f:(sprintf !"\n    %{Html}") )
+              |> String.concat ~sep:"\n" |> Markdown.of_string |> leaf ] )
+        (*
+
+          ]
           @ [ [ ul [class_ "value-list"]
                   (List.map xs ~f:(fun (ident, ty, note) ->
                        li []
@@ -147,6 +185,7 @@ module Interface = struct
                                   div [class_ "note"] [note] ))
                          @ [div [class_ "representation"] []] ) )) ]
               |> leaf ] )
+*)
         (*
         div
           [ class_ "parameters"
@@ -171,7 +210,7 @@ module Interface = struct
         else
           [ params ~title:"Parameters"
               ~desc:
-                (p
+                (Markdown.of_string
                    "The parameters will be generated once and your submission \
                     will be allowed to preprocess them in any way you like \
                     before being invoked on multiple inputs.")
@@ -181,10 +220,9 @@ module Interface = struct
       let output = params ~title:"Output" output in
       let open Sectioned_page in
       sec ~title:"Problem specification"
-        ( [leaf definitional_preamble]
+        ( [leaf (Markdown.of_string definitional_preamble)]
         @ batch_parameters
-        @ [input; output; sec ~title:"Expected behavior" [leaf [description]]]
-        )
+        @ [input; output; sec ~title:"Expected behavior" [leaf description]] )
 
     (*
       div [class_ "problem"]
@@ -199,9 +237,9 @@ end
 type t =
   { title: string
   ; quick_details: Quick_details.t
-  ; preamble: Pages.t -> Html.t list Sectioned_page.t
-  ; interface: Html.t Interface.t
-  ; postamble: Pages.t -> Html.t list Sectioned_page.t
+  ; preamble: Pages.t -> Markdown.t Sectioned_page.t
+  ; interface: Markdown.t Interface.t
+  ; postamble: Pages.t -> Markdown.t Sectioned_page.t
   ; reference_implementation_url: string }
 
 let slug t =
@@ -214,7 +252,6 @@ let render ~pages
     ; interface
     ; postamble
     ; reference_implementation_url } =
-  let open Html in
   let spec = Interface.Spec.create ~name:title interface in
   let batch_params_description =
     {md|
@@ -235,7 +272,7 @@ let render ~pages
     @ preamble pages
     @ [ Interface.Spec.render spec
       ; sec ~title:"Submission guidelines"
-          [ ksprintf Html.markdown
+          [ ksprintf Markdown.of_string
               {md|Your submission will be run and evaluated as follows.
 
 %s
@@ -261,19 +298,25 @@ let render ~pages
               ( if Interface.Spec.has_batch_parameters spec then
                 batch_params_description
               else "" )
-            |> List.return |> leaf ]
+            |> leaf ]
       ; sec ~title:"Reference implementation"
-          [ leaf
-              [ span []
-                  [ Html.text
-                      "The output of your program submission will be checked \
-                       against the reference implementation "
-                  ; a [href reference_implementation_url] [Html.text "here"]
-                  ; Html.text "." ] ] ]
+          [ ksprintf
+              (Fn.compose leaf Markdown.of_string)
+              {md|The output of your submitted program will be checked against 
+reference implementation [here](%s)|md}
+              reference_implementation_url ]
       ; sec ~title:"Further discussion and background" (postamble pages) ]
   in
-  let content = Sectioned_page.render_to_html t in
-  div [] ([h1 [] [text title]] @ [Sectioned_page.table_of_contents t] @ content)
+  let content =
+    Sectioned_page.(render_to_markdown (map ~f:Markdown.to_string t))
+  in
+  ksprintf Markdown.of_string !{md|# %s
+
+%{Html}
+
+%s|md} title
+    (Sectioned_page.table_of_contents t)
+    content
 
 (*
   div []

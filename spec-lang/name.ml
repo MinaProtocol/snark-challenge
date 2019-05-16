@@ -40,7 +40,7 @@ let url {qualification; ident} =
 
 let render_declaration name =
   let open Html in
-  span [Attribute.create "id" (id name)] [text name]
+  a [Attribute.create "name" (id name)] [text name]
 
 let render name = Html.a [Html.href (url name)] [Html.text (to_string name)]
 

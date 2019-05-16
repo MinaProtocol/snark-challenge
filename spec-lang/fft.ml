@@ -7,9 +7,9 @@ let q curve_scope =
   let s = (match curve_scope with MNT4 -> "MNT4" | MNT6 -> "MNT6") ^ "753" in
   Name.in_scope s "q" |> Name.to_markdown
 
-let preamble _ = [Sectioned_page.leaf [ksprintf Html.markdown {md||md}]]
+let preamble _ = []
 
-let interface : Html.t Problem.Interface.t =
+let interface : _ Problem.Interface.t =
   let open Html in
   let open Problem.Interface in
   let open Let_syntax in
@@ -29,7 +29,7 @@ let interface : Html.t Problem.Interface.t =
   let field = Type.field (Type.Field.prime (Name r)) in
   let arr = Literal (Type.Array {element= field; length= Some (Name n)}) in
   let%map x = !Input "x" arr and output = !Output "y" arr in
-  ksprintf Html.markdown
+  ksprintf Markdown.of_string
     {md|The output should be
 %s[i] = \sum_{j=0}^{n-1} %s[i] \omega^{ij (2^s / n)}|md}
     (Name.to_string output) (Name.to_string x)
@@ -38,7 +38,7 @@ let problem : Problem.t =
   { title= "Curve operation"
   ; quick_details=
       { description=
-          Html.markdown
+          Markdown.of_string
             {m|Perform a fast-fourier transform on an array of elements of one of the scalar fields $\mathbb{F}_r$.|m}
       ; prize= Prize.stage1 0 }
   ; preamble

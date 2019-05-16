@@ -134,6 +134,9 @@ let wrap = html_wrap
 let problem_url i (p : Problem.t) =
   sprintf "%s/problem-%02d-%s.html" base_url i (Problem.slug p)
 
+let problem_md_name i (p : Problem.t) =
+  sprintf "problem-%02d-%s.markdown" i (Problem.slug p)
+
 let site =
   let open Stationary in
   let modules = [Module.mnt4753; Module.mnt6753] in
@@ -160,24 +163,43 @@ let site =
     ; mnt4= Name.module_url Module.mnt4753.name
     ; mnt6= Name.module_url Module.mnt6753.name }
   in
-  let page name x = File_system.file (File.of_html ~name (wrap [x])) in
+  let page name md =
+    let md = Markdown.to_string md in
+    [ File_system.file
+        (File.of_html ~name:(sprintf "%s.html" name) (wrap [Html.markdown md]))
+    ; File_system.file (File.of_text ~name:(sprintf "%s.markdown" name) md) ]
+  in
   Site.create
     [ File_system.directory "snark-challenge"
-        ( [ page "intro.html" (Intro.page pages)
-          ; page "index.html" (Stage1.page pages)
-          ; File_system.file (File.of_text ~name:".nojekyll" "")
-          ; page "strategies.html" (Implementation_strategies.page pages)
+        ( page "intro" (Intro.page pages)
+        @ page "index" (Stage1.page pages)
+        @ page "strategies" (Implementation_strategies.page pages)
+        @ [ File_system.file (File.of_text ~name:".nojekyll" "")
           ; File_system.copy_directory "static" ]
         @ List.map modules ~f:(fun m ->
               File_system.file
                 (File.of_html
                    ~name:(Filename.basename (Name.module_url m.name))
                    (wrap [Module.(Page.render (to_page env m))])) )
+        @ List.map modules ~f:(fun m ->
+              File_system.file
+                (File.of_text
+                   ~name:(sprintf "%s.markdown" m.name)
+                   (Module.(Page.render (to_page env m)) |> Util.Html.to_string))
+          )
+        @ List.mapi problems ~f:(fun i p ->
+              File_system.file
+                (File.of_text
+                   ~name:(problem_md_name (i + 1) p)
+                   (Problem.render ~pages p |> Markdown.to_string)) )
         @ List.mapi problems ~f:(fun i p ->
               File_system.file
                 (File.of_html
                    ~name:(Filename.basename (problem_url (i + 1) p))
-                   (wrap [Problem.render ~pages p])) ) ) ]
+                   (wrap
+                      [ Html.markdown
+                          (Problem.render ~pages p |> Markdown.to_string) ]))
+          ) ) ]
 
 let () =
   let open Async in

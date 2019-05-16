@@ -1,8 +1,7 @@
 open Core
-open Util
 
 let page (pages : Pages.t) =
-  ksprintf Html.markdown
+  ksprintf Markdown.of_string
     {md|#*SNARK Challenge*: Stage 1
 
 Welcome to stage 1 of the SNARK challenge!

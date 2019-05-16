@@ -1,3 +1,4 @@
+open Core
 open Stationary
 include Html
 
@@ -26,3 +27,10 @@ let h1 = node "h1"
 let h2 = node "h2"
 
 let h3 = node "h3"
+
+let to_string t = Async.Thread_safe.block_on_async_exn (fun () -> to_string t)
+
+let deindent s =
+  String.split_lines s |> List.map ~f:String.strip |> String.concat ~sep:"\n"
+
+let to_string = Fn.compose deindent to_string

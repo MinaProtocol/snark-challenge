@@ -15,7 +15,7 @@ let r = param "r"
 
 let preamble _pages =
   let open Sectioned_page in
-  let md fmt = ksprintf (fun s -> leaf [Html.markdown s]) fmt in
+  let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ md
       {md|The basic operations needed for the SNARK prover algorithm are
 multiplication and addition of integers.
@@ -205,10 +205,7 @@ are given [here](http://cacr.uwaterloo.ca/hac/about/chap14.pdf), where our $q$ i
   searching for these terms along with "GPU".|md}
 *)
 
-let html_to_string x =
-  Async.Thread_safe.block_on_async_exn (fun () -> Html.to_string x)
-
-let interface : Html.t Problem.Interface.t =
+let interface : _ Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
   (*
@@ -228,35 +225,35 @@ let interface : Html.t Problem.Interface.t =
       (arr (fq MNT4))
       ~note:
         (Html.markdown
-           "The elements of `x` are represented using the montgomery\n\
+           "The elements of `x` are represented using the Montgomery \
             representation as described below.")
   and _y =
     ( ! ) Input "y"
       (arr (fq MNT6))
       ~note:
         (Html.markdown
-           "The elements of `y` are represented using the montgomery\n\
+           "The elements of `y` are represented using the Montgomery \
             representation as described below.")
   and _ = !Output "out_x" (fq MNT4)
   and _ = !Output "out_y" (fq MNT6) in
-  ksprintf Html.markdown
-    {md|%s
+  ksprintf Markdown.of_string
+    !{md|%s
     
 The output `out_x` should be `x[0] * x[1] * ... * x[n - 1]`
-where `*` is multiplication in the field %s.
+where `*` is multiplication in the field %{Html}.
 
 The output `out_y` should be `y[0] * y[1] * ... * y[n - 1]`
-where `*` is multiplication in the field %s.
+where `*` is multiplication in the field %{Html}.
 |md}
     Gpu_message.t
-    (html_to_string (Type.render (fq MNT4)))
-    (html_to_string (Type.render (fq MNT6)))
+    (Type.render (fq MNT4))
+    (Type.render (fq MNT6))
 
 let problem : Problem.t =
   { title= "Field arithmetic"
   ; quick_details=
       { description=
-          Html.text
+          Markdown.of_string
             "Use a GPU to multiply together an array of elements of a \
              prime-order field."
       ; prize= Prize.stage1 50 }

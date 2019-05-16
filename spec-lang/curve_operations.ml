@@ -9,7 +9,7 @@ let p c = Name.in_scope (curve_scope c) "q" |> Name.to_markdown
 
 let preamble (pages : Pages.t) =
   let open Sectioned_page in
-  let md fmt = ksprintf (fun s -> leaf [Html.markdown s]) fmt in
+  let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ md
       {md|In this challenge you'll use the field arithmetic built up 
 in [this](%s), [this](%s) and [this challenge](%s)
@@ -107,18 +107,9 @@ let group = group' latex
 
 let group_md = group' (sprintf "$%s$")
 
-let interface : Html.t Problem.Interface.t =
+let interface : _ Problem.Interface.t =
   let open Problem.Interface in
   let open Let_syntax in
-  (*
-  let%bind [group] =
-    def [latex "G"]
-      List.Let_syntax.(
-        let%map c = ["MNT4753"; "MNT6753"]
-        and g = [latex "G_1"; latex "G_2"] in
-        Vec.[Name (Name.in_scope c g)])
-  in
-*)
   let%bind n = !Input "n" (Literal UInt64) in
   let input (c, i) =
     let arr =
@@ -145,11 +136,11 @@ let interface : Html.t Problem.Interface.t =
   in
   sprintf "%s\n\n%s" Gpu_message.t
     (String.concat ~sep:"\n\n" (List.map ~f:desc params))
-  |> Html.markdown
+  |> Markdown.of_string
 
 let postamble (pages : Pages.t) =
   let open Sectioned_page in
-  let md fmt = ksprintf (fun s -> leaf [Html.markdown s]) fmt in
+  let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ md
       {md|Please see [this page](%s) for a more full list of implementation techniques.|md}
       pages.implementation_strategies
@@ -209,7 +200,7 @@ let problem : Problem.t =
   { title= "Curve operations"
   ; quick_details=
       { description=
-          Html.text
+          Markdown.of_string
             "Add together an array of elements of each of the four relevant \
              elliptic curves."
       ; prize= Prize.stage1 100 }
