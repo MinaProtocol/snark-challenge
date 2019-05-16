@@ -22,16 +22,6 @@ module Quick_details = struct
                      !"    - **%{Prize.Participant_set}:** %{Prize.Reward}"
                      p r )
              |> String.concat ~sep:"\n" )) ]
-
-  (*
-  let render {description; prize} =
-    let open Html in
-    div []
-      [ h2 [] [text "Quick details"]
-      ; ul []
-          [ li [] [Html.markdown "**Problem:** "; description]
-          ; li [] [Html.markdown "**Prize:** "; Prize.render prize] ] ]
-*)
 end
 
 module Interface = struct
@@ -116,7 +106,7 @@ module Interface = struct
         | _ ->
             let bindings =
               ( (if Vec.length names > 1 then ["("] else [])
-              @ List.intersperse ~sep:","
+              @ List.intersperse ~sep:", "
                   (List.map (Vec.to_list names) ~f:(fun name ->
                        Name.render_declaration name |> Html.to_string ))
               @ if Vec.length names > 1 then [")"] else [] )
@@ -303,9 +293,12 @@ let render ~pages
           [ ksprintf
               (Fn.compose leaf Markdown.of_string)
               {md|The output of your submitted program will be checked against 
-reference implementation [here](%s)|md}
-              reference_implementation_url ]
-      ; sec ~title:"Further discussion and background" (postamble pages) ]
+the reference implementation [here](%s)|md}
+              reference_implementation_url ] ]
+    @
+    let postamble = postamble pages in
+    if List.is_empty postamble then []
+    else [sec ~title:"Further discussion and background" postamble]
   in
   let content =
     Sectioned_page.(render_to_markdown (map ~f:Markdown.to_string t))

@@ -91,11 +91,11 @@ let rec render =
           ; text "}" ]
     | Record ts ->
         span []
-          ( [text "{"]
-          @ List.intersperse ~sep:(text ",")
+          ( [text "{ "]
+          @ List.intersperse ~sep:(text ", ")
               (List.map ts ~f:(fun (name, t) ->
-                   span [] [text name; text ":"; render t] ))
-          @ [text "}"] )
+                   span [] [text name; text " : "; render t] ))
+          @ [text " }"] )
     | Polynomial {degree; field} ->
         let field = Field.render field in
         span []

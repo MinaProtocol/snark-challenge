@@ -5,6 +5,7 @@ type definitional_params = {field: Name.t; g1: Name.t; g2: Name.t}
 
 let definitional_params =
   let open Problem.Interface in
+  let latex = md_latex in
   let%map [field; g1; g2] =
     let curve_scopes = ["MNT4753"; "MNT6753"] in
     def
@@ -162,7 +163,7 @@ let interface =
     ksprintf Markdown.of_string
       {md|This problem is a version of the [Groth16 SNARK prover](https://eprint.iacr.org/2016/260.pdf), simplified to the difficult core of the problem.
 
-If $P, Q$ are points on an elliptic curve (either $%s$ or $%s$) and $s : %s$, then
+If $P, Q$ are points on an elliptic curve (either $G_1$ or $G_2$) and $s : %s$, then
 $P + Q$ denotes the sum of the points as described [here](https://en.wikipedia.org/wiki/Elliptic_curve#The_group_law)
 and $s \times P$ denotes the scalar-multiplication of $P$ by $s$ as described [here](https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Basics).
 
@@ -225,8 +226,8 @@ All in all, we have to do 3 FFTs and 4 inverse FFTs to compute the array `H`,
 perform 4 multiexponentiations in %s and 1 multiexponentiation in %s.
 
 .|md}
-      (n g1) (n g2) (n field) a_def b2_def c_def (n selected_degree) (n ca)
-      (n cb) (n cc) (n selected_degree) (n selected_degree) (n selected_degree)
+      (n field) a_def b2_def c_def (n selected_degree) (n ca) (n cb) (n cc)
+      (n selected_degree) (n selected_degree) (n selected_degree)
       (n selected_degree) (n selected_degree) (n selected_degree)
       (n selected_degree) (n selected_degree) (n selected_degree)
       (n selected_degree) (n selected_degree) (n selected_degree)
@@ -248,7 +249,12 @@ let problem : Problem.t =
   { title= "Groth16Prove"
   ; quick_details=
       { description= Markdown.of_string "The full Groth16 prover."
-      ; prize= Prize.stage1 0 }
+      ; prize=
+          [ (Best_performance_at_end, Dollars 20_000)
+          ; (First_to (Improve_speed_by 16), Dollars 12_000)
+          ; (First_to (Improve_speed_by 8), Dollars 10_000)
+          ; (First_to (Improve_speed_by 4), Dollars 8_000)
+          ; (First_to (Improve_speed_by 2), Dollars 5_000) ] }
   ; preamble
   ; interface
   ; reference_implementation_url= ""

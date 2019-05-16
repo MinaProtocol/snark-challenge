@@ -11,14 +11,26 @@ module Reward = struct
         sprintf "$%s" (Int.to_string_hum ~delimiter:',' d)
 end
 
+module Condition = struct
+  type t = Improve_speed_by of int
+end
+
 module Participant_set = struct
-  type t = All | First_n of int
+  type t =
+    | All
+    | First_n of int
+    | First_to of Condition.t
+    | Best_performance_at_end
 
   let to_string = function
     | All ->
         "All submissions"
     | First_n n ->
         sprintf "First %d submissions" n
+    | Best_performance_at_end ->
+        "Fastest at end of competition"
+    | First_to (Improve_speed_by n) ->
+        sprintf "First submission to increase speed by %dx" n
 end
 
 type t = (Participant_set.t * Reward.t) list
