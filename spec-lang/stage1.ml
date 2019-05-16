@@ -16,7 +16,7 @@ implement the full SNARK prover and you'll get paid to do so.
 The first 25 participants who complete the four challenges in this stage
 will receive $200 and a *SNARK Challenge* swag-bag.
 They'll also be very well positioned to apply their solutions to
-create submissions for the $95,000 in prizes up for grabs in the second stage.
+create submissions for the $75,000 in optimization prizes up for grabs in the second stage.
 
 Let's dive into it and give a quick overview of the SNARK prover so
 we have an idea of where we're going. The SNARK prover itself
@@ -44,6 +44,30 @@ be well on your way to having a complete GPU implementation of the SNARK prover 
 You'll want to get started with the first challenge, [finite field arithmetic](%s),
 and work your way through the others. If you want to get a sense for how all these
 algorithms come together to build the whole prover, check out [this page](%s).
+
+## The stage 2 challenges
+
+This is the main stage of the challenge and where most of the prizes are.
+The challenges break into two categories: implementation and theory. Let's
+start with implementation.
+
+### Implementation challenges
+These challenges all build on the challenges of stage 1. They are
+
+1. Writing the fastest Javascript imple
+
+The prizes are as follows.
+
+1. 
 |md}
     pages.field_arithmetic pages.quadratic_extension pages.cubic_extension
     pages.curve_operations pages.field_arithmetic pages.intro
+
+(*
+have N elements.
+         split into batches of size k.
+                                      r = 753
+                               window w
+(N / k) * ( (r / w)*MIXED*k + r * DOUBLE )
+
+*)
