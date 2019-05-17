@@ -28,300 +28,132 @@
         </script>
   </head>
   <body>
-    <div>
-      <h1>
-        Groth16Prove
-      </h1>
-      <div class="table-of-contents">
-        <ul>
-          <li>
-            <a href="#quick-details">1: Quick details</a>
-          </li>
-          <li>
-            <a href="#problem-specification">2: Problem specification</a>
-          </li>
-          <li>
-            <a href="#parameters">2.1: Parameters</a>
-          </li>
-          <li>
-            <a href="#input">2.2: Input</a>
-          </li>
-          <li>
-            <a href="#output">2.3: Output</a>
-          </li>
-          <li>
-            <a href="#expected-behavior">2.4: Expected behavior</a>
-          </li>
-          <li>
-            <a href="#submission-guidelines">3: Submission guidelines</a>
-          </li>
-          <li>
-            <a href="#reference-implementation">4: Reference implementation</a>
-          </li>
-          <li>
-            <a href="#further-discussion-and-background">5: Further discussion and background</a>
-          </li>
-        </ul>
-      </div>
-      <h2 id="quick-details">
-        Quick details
-      </h2>
-      <ul>
-        <li>
-          <p><strong>Problem:</strong></p>
-          The full Groth16 prover.
-        </li>
-        <li>
-          <p><strong>Prize:</strong></p>
-          <ul>
-            <li>
-              <p><strong>First 25 submissions</strong>: $0</p>
-            </li>
-            <li>
-              <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <p>This is the full Groth16 prover, or a slightly simplified version of it. It is the main event of the SNARK Challenge. It requires performing 7 <a href="/snark-challenge/problem-06-curve-operation.html">FFTs</a>, 4 <a href="/snark-challenge/problem-05-multi-exponentiation.html">multiexponentiations</a> in <span class="math inline">G_1</span> and 1 multiexponentiation in <span class="math inline">G_2</span>. How exactly is described below. The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.</p>
-      <h2 id="problem-specification">
-        Problem specification
-      </h2>
-      <span>The following problem is defined for any choice of (<span id="Rg==">F</span>,<span id="XChHXzFcKQ==">\(G_1\)</span>,<span id="XChHXzJcKQ==">\(G_2\)</span>) in</span>
-      <ul>
-        <li>
-          <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>
-          , 
-          <a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>
-          , 
-          <a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>
-        </li>
-        <li>
-          <span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>
-          , 
-          <a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>
-          , 
-          <a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>
-        </li>
-      </ul>
-      <p>You can click on the above types to see how they will be represented in the files given to your program. <code>uint64</code> values are represented in little-endian byte order. Arrays are represented as sequences of values, with no length prefix and no separators between elements. Structs are also represented this way.</p>
-      <h3 id="parameters">
-        Parameters
-      </h3>
-      <p>
-        The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
-      </p>
-      <ul class="value-list">
-        <li>
-          <div>
-            <span class="identifier">n</span>
-            :
-            <span class="type"><span>uint64</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">N</span>
-            :
-            <span class="type"><span>uint64</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">m</span>
-            :
-            <span class="type"><span>uint64</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">ca</span>
-            :
-            <span class="type"><span>Array(<a href="#Rg==">F</a>, <span><a href="#Tg==">N</a>+1</span>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">cb</span>
-            :
-            <span class="type"><span>Array(<a href="#Rg==">F</a>, <span><a href="#Tg==">N</a>+1</span>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">cc</span>
-            :
-            <span class="type"><span>Array(<a href="#Rg==">F</a>, <span><a href="#Tg==">N</a>+1</span>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">A</span>
-            :
-            <span class="type"><span>Array(<a href="#XChHXzFcKQ==">\(G_1\)</a>, <span><a href="#bQ==">m</a>+1</span>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">B1</span>
-            :
-            <span class="type"><span>Array(<a href="#XChHXzFcKQ==">\(G_1\)</a>, <span><a href="#bQ==">m</a>+1</span>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">B2</span>
-            :
-            <span class="type"><span>Array(<a href="#XChHXzJcKQ==">\(G_2\)</a>, <span><a href="#bQ==">m</a>+1</span>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">L</span>
-            :
-            <span class="type"><span>Array(<a href="#XChHXzFcKQ==">\(G_1\)</a>, <span><a href="#bQ==">m</a>-1</span>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">T</span>
-            :
-            <span class="type"><span>Array(<a href="#XChHXzFcKQ==">\(G_1\)</a>, <a href="#Tg==">N</a>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-      </ul>
-      <h3 id="input">
-        Input
-      </h3>
-      <ul class="value-list">
-        <li>
-          <div>
-            <span class="identifier">w</span>
-            :
-            <span class="type"><span>Array(<a href="#Rg==">F</a>, <span><a href="#bQ==">m</a>+1</span>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">r</span>
-            :
-            <span class="type"><a href="#Rg==">F</a></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-      </ul>
-      <h3 id="output">
-        Output
-      </h3>
-      <ul class="value-list">
-        <li>
-          <div>
-            <span class="identifier">d</span>
-            :
-            <span class="type"><span>uint64</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">proof</span>
-            :
-            <span class="type"><span>{<span>A:<a href="#XChHXzFcKQ==">\(G_1\)</a></span>,<span>B:<a href="#XChHXzJcKQ==">\(G_2\)</a></span>,<span>C:<a href="#XChHXzFcKQ==">\(G_1\)</a></span>}</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-      </ul>
-      <h3 id="expected-behavior">
-        Expected behavior
-      </h3>
-      <p>This problem is a version of the <a href="https://eprint.iacr.org/2016/260.pdf">Groth16 SNARK prover</a>, simplified to the difficult core of the problem.</p>
-      <p>If <span class="math inline">P, Q</span> are points on an elliptic curve (either <span class="math inline">G_1</span> or <span class="math inline">G_2</span>) and <span class="math inline">s : F</span>, then <span class="math inline">P + Q</span> denotes the sum of the points as described <a href="https://en.wikipedia.org/wiki/Elliptic_curve#The_group_law">here</a> and <span class="math inline">s \times P</span> denotes the scalar-multiplication of <span class="math inline">P</span> by <span class="math inline">s</span> as described <a href="https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Basics">here</a>.</p>
-      <p>The output should be as follows.</p>
-      <ul>
-      <li>A = <span class="math display">\displaystyle \sum_{i=0}^{m} w[i] \times A[i]</span></li>
-      <li>B = <span class="math display">\displaystyle \sum_{i=0}^{m} w[i] \times B2[i]</span></li>
-      <li>C = <span class="math display">\displaystyle \sum_{i=2}^{m} w[i] \times L[i - 2] + \sum_{i=0}^{d - 1} H[i] \times T[i] + r \sum_{i=0}^{m} w[i] \times B1[i]</span></li>
-      </ul>
-      <p>where</p>
-      <ul>
-      <li>H is an array of the coefficients of the polynomial <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> where <span class="math inline">a, b, c</span> are the degree d polynomials specified by</li>
-      </ul>
-      <p><span class="math display">\displaystyle 
-      \begin{aligned}
-        a(\omega^i) &amp;= ca[i] \\
-        b(\omega^i) &amp;= cb[i] \\
-        c(\omega^i) &amp;= cc[i] \\
-      \end{aligned}
-      </span></p>
-      <p>for <span class="math inline">0 \leq i &lt; d + 1</span> and where <span class="math inline">z</span> is the polynomial <span class="math display">\displaystyle 
-      \begin{aligned}
-        z(x)
-        &amp;= (x - 1)(x - \omega^1) \dots (x - \omega^{d}) \\
-        &amp;= x^{d} - 1
-      \end{aligned}
-      </span></p>
-      <p>One would want to obtain the coefficients of <span class="math inline">h</span> by computing its evaluations on <span class="math inline">\omega^0, \dots, \omega^{d}</span> as <code>(d[i] * d[i] - d[i]) / z(ω_i)</code> for each <code>i</code>. This won't work however as <span class="math inline">z(\omega^i) = 0</span> for each <span class="math inline">i</span>. Alternatively, one can do the following.</p>
-      <ol style="list-style-type: decimal">
-      <li>Perform 3 inverse FFTs to compute the coefficients of <span class="math inline">a, b</span> and <span class="math inline">c</span>.</li>
-      <li><p>Use the coefficients of these polynomials to compute the evaluations of of <span class="math inline">a, b, c</span> on the &quot;shifted set&quot; <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span> where <span class="math inline">\sigma</span> is any field element not equal to <span class="math inline">\omega^i</span> (for example, a random <span class="math inline">\sigma</span> would work).</p>
-      <p>Let's say <code>ea</code> is an array with <code>ea[i]</code> being the i<sup>th</sup> coefficient of the polynomial <code>a</code>. Then we can evaluate <code>a</code> on the set <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span> by computing <code>sa = ea.map((ai, i) =&gt; sigma**i * ai)</code> and then performing an FFT on <code>sa</code>. Analogously for the polynomials <span class="math inline">b</span> and <span class="math inline">c</span> to obtain evaluation arrays <code>eb</code> and <code>ec</code>.</p>
-      In all this step requires 3 FFTs.</li>
-      <li><p>Note that <span class="math inline">z(\sigma \omega^i) = \sigma^{d} \omega^{d} - 1 = \sigma^{d} - 1</span>. So, having computed <code>sa, sb, sc</code>, you can compute the evaluations of <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> on the shifted set as <code>sh[i] = (sa[i] * sb[i] - sc[i]) / (sigma**d - 1)</code>.</p></li>
-      <li><p>Finally, we can now obtain the coefficients <code>H</code> of <span class="math inline">h</span> by performing an inverse FFT on <code>sh</code> to obtain <code>shifted_H</code> and then computing <code>H[i] = shifted_H[i] / sigma</code>.</p></li>
-      </ol>
-      <p>All in all, we have to do 3 FFTs and 4 inverse FFTs to compute the array <code>H</code>, perform 4 multiexponentiations in G_1 and 1 multiexponentiation in G_2.</p>
-      <p>.</p>
-      <h2 id="submission-guidelines">
-        Submission guidelines
-      </h2>
-      <p>Your submission will be run and evaluated as follows.</p>
-      <ol start="0" style="list-style-type: decimal">
-      <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
-      <li><p>Your binary <code>main</code> will be run with</p>
-      <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
-      <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
-      Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</li>
-      <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
-      <li><p>Your binary will be invoked with</p>
-      <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
-      <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
-      <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
-      <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
-      </ol>
-      <h2 id="reference-implementation">
-        Reference implementation
-      </h2>
-      <span>The output of your program submission will be checked against the reference implementation <a href="">here</a>.</span>
-      <h2 id="further-discussion-and-background">
-        Further discussion and background
-      </h2>
+    <h1 id="groth16prove">Groth16Prove</h1>
+    <div class="table-of-contents">
+    <ul>
+    <li>
+    <a href="#quick-details">1: Quick details</a>
+    </li>
+    <li>
+    <a href="#problem-specification">2: Problem specification</a>
+    </li>
+    <li>
+    <a href="#parameters">2.1: Parameters</a>
+    </li>
+    <li>
+    <a href="#input">2.2: Input</a>
+    </li>
+    <li>
+    <a href="#output">2.3: Output</a>
+    </li>
+    <li>
+    <a href="#expected-behavior">2.4: Expected behavior</a>
+    </li>
+    <li>
+    <a href="#submission-guidelines">3: Submission guidelines</a>
+    </li>
+    <li>
+    <a href="#reference-implementation">4: Reference implementation</a>
+    </li>
+    </ul>
     </div>
+    <h2 id="quick-details">Quick details</h2>
+    <ul>
+    <li><strong>Problem:</strong> The full Groth16 prover.</li>
+    <li><strong>Prize:</strong>
+    <ul>
+    <li><strong>Fastest at end of competition:</strong> $20,000</li>
+    <li><strong>First submission to increase speed by 16x:</strong> $12,000</li>
+    <li><strong>First submission to increase speed by 8x:</strong> $10,000</li>
+    <li><strong>First submission to increase speed by 4x:</strong> $8,000</li>
+    <li><strong>First submission to increase speed by 2x:</strong> $5,000</li>
+    </ul></li>
+    </ul>
+    <p>This is the full Groth16 prover, or a slightly simplified version of it. It is the main event of the SNARK Challenge. It requires performing 7 <a href="/snark-challenge/problem-06-curve-operation.html">FFTs</a>, 4 <a href="/snark-challenge/problem-05-multi-exponentiation.html">multiexponentiations</a> in <span class="math inline">G_1</span> and 1 multiexponentiation in <span class="math inline">G_2</span>. How exactly is described below. The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.</p>
+    <h2 id="problem-specification">Problem specification</h2>
+    <p>The following problem is defined for any choice of (<a name="Rg==">F</a>, <a name="JEdfMSQ="><span class="math inline">G_1</span></a>, <a name="JEdfMiQ="><span class="math inline">G_2</span></a>) in</p>
+    <ul>
+    <li><span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>, <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>, <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a></li>
+    <li><span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>, <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>, <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a></li>
+    </ul>
+    <p>You can click on the above types to see how they will be represented in the files given to your program. <code>uint64</code> values are represented in little-endian byte order. Arrays are represented as sequences of values, with no length prefix and no separators between elements. Structs are also represented this way.</p>
+    <h3 id="parameters">Parameters</h3>
+    <p>The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.</p>
+    <ul>
+    <li>d : <span>uint64</span></li>
+    <li>m : <span>uint64</span></li>
+    <li>ca : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
+    <li>cb : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
+    <li>cc : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
+    <li>A : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
+    <li>B1 : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
+    <li>B2 : <span>Array(<a href="#JEdfMiQ="><span class="math inline">G_2</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
+    <li>L : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <span><a href="#bQ==">m</a>-1</span>)</span></li>
+    <li>T : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <a href="#ZA==">d</a>)</span></li>
+    </ul>
+    <h3 id="input">Input</h3>
+    <ul>
+    <li>w : <span>Array(<a href="#Rg==">F</a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
+    <li>r : <a href="#Rg==">F</a></li>
+    </ul>
+    <h3 id="output">Output</h3>
+    <ul>
+    <li>proof : <span>{ <span>A : <a href="#JEdfMSQ="><span class="math inline">G_1</span></a></span>, <span>B : <a href="#JEdfMiQ="><span class="math inline">G_2</span></a></span>, <span>C : <a href="#JEdfMSQ="><span class="math inline">G_1</span></a></span> }</span></li>
+    </ul>
+    <h3 id="expected-behavior">Expected behavior</h3>
+    <p>This problem is a version of the <a href="https://eprint.iacr.org/2016/260.pdf">Groth16 SNARK prover</a>, simplified to the difficult core of the problem.</p>
+    <p>If <span class="math inline">P, Q</span> are points on an elliptic curve (either <span class="math inline">G_1</span> or <span class="math inline">G_2</span>) and <span class="math inline">s : F</span>, then <span class="math inline">P + Q</span> denotes the sum of the points as described <a href="https://en.wikipedia.org/wiki/Elliptic_curve#The_group_law">here</a> and <span class="math inline">s \times P</span> denotes the scalar-multiplication of <span class="math inline">P</span> by <span class="math inline">s</span> as described <a href="https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Basics">here</a>.</p>
+    <p>The output should be as follows.</p>
+    <ul>
+    <li>A = <span class="math display">\displaystyle \sum_{i=0}^{m} w[i] \times A[i]</span></li>
+    <li>B = <span class="math display">\displaystyle \sum_{i=0}^{m} w[i] \times B2[i]</span></li>
+    <li>C = <span class="math display">\displaystyle \sum_{i=2}^{m} w[i] \times L[i - 2] + \sum_{i=0}^{d - 1} H[i] \times T[i] + r \sum_{i=0}^{m} w[i] \times B1[i]</span></li>
+    </ul>
+    <p>where</p>
+    <ul>
+    <li>H is an array of the coefficients of the polynomial <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> where <span class="math inline">a, b, c</span> are the degree d polynomials specified by</li>
+    </ul>
+    <p><span class="math display">\displaystyle 
+    \begin{aligned}
+      a(\omega^i) &amp;= ca[i] \\
+      b(\omega^i) &amp;= cb[i] \\
+      c(\omega^i) &amp;= cc[i] \\
+    \end{aligned}
+    </span></p>
+    <p>for <span class="math inline">0 \leq i &lt; d + 1</span> and where <span class="math inline">z</span> is the polynomial <span class="math display">\displaystyle 
+    \begin{aligned}
+      z(x)
+      &amp;= (x - 1)(x - \omega^1) \dots (x - \omega^{d}) \\
+      &amp;= x^{d} - 1
+    \end{aligned}
+    </span></p>
+    <p>One would want to obtain the coefficients of <span class="math inline">h</span> by computing its evaluations on <span class="math inline">\omega^0, \dots, \omega^{d}</span> as <code>(d[i] * d[i] - d[i]) / z(ω_i)</code> for each <code>i</code>. This won't work however as <span class="math inline">z(\omega^i) = 0</span> for each <span class="math inline">i</span>. Alternatively, one can do the following.</p>
+    <ol style="list-style-type: decimal">
+    <li>Perform 3 inverse FFTs to compute the coefficients of <span class="math inline">a, b</span> and <span class="math inline">c</span>.</li>
+    <li><p>Use the coefficients of these polynomials to compute the evaluations of of <span class="math inline">a, b, c</span> on the &quot;shifted set&quot; <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span> where <span class="math inline">\sigma</span> is any field element not equal to <span class="math inline">\omega^i</span> (for example, a random <span class="math inline">\sigma</span> would work).</p>
+    <p>Let's say <code>ea</code> is an array with <code>ea[i]</code> being the i<sup>th</sup> coefficient of the polynomial <code>a</code>. Then we can evaluate <code>a</code> on the set <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span> by computing <code>sa = ea.map((ai, i) =&gt; sigma**i * ai)</code> and then performing an FFT on <code>sa</code>. Analogously for the polynomials <span class="math inline">b</span> and <span class="math inline">c</span> to obtain evaluation arrays <code>eb</code> and <code>ec</code>.</p>
+    In all this step requires 3 FFTs.</li>
+    <li><p>Note that <span class="math inline">z(\sigma \omega^i) = \sigma^{d} \omega^{d} - 1 = \sigma^{d} - 1</span>. So, having computed <code>sa, sb, sc</code>, you can compute the evaluations of <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> on the shifted set as <code>sh[i] = (sa[i] * sb[i] - sc[i]) / (sigma**d - 1)</code>.</p></li>
+    <li><p>Finally, we can now obtain the coefficients <code>H</code> of <span class="math inline">h</span> by performing an inverse FFT on <code>sh</code> to obtain <code>shifted_H</code> and then computing <code>H[i] = shifted_H[i] / sigma</code>.</p></li>
+    </ol>
+    <p>All in all, we have to do 3 FFTs and 4 inverse FFTs to compute the array <code>H</code>, perform 4 multiexponentiations in <span class="math inline">G_1</span> and 1 multiexponentiation in <span class="math inline">G_2</span>.</p>
+    <p>.</p>
+    <h2 id="submission-guidelines">Submission guidelines</h2>
+    <p>Your submission will be run and evaluated as follows.</p>
+    <ol start="0" style="list-style-type: decimal">
+    <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
+    <li><p>Your binary <code>main</code> will be run with</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
+    <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
+    Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</li>
+    <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+    <li><p>Your binary will be invoked with</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+    <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+    <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+    <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+    </ol>
+    <h2 id="reference-implementation">Reference implementation</h2>
+    <p>The output of your submitted program will be checked against the reference implementation <a href="">here</a></p>
   </body>
 </html>

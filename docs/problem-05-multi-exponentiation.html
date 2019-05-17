@@ -28,185 +28,100 @@
         </script>
   </head>
   <body>
-    <div>
-      <h1>
-        Multi-exponentiation
-      </h1>
-      <div class="table-of-contents">
-        <ul>
-          <li>
-            <a href="#quick-details">1: Quick details</a>
-          </li>
-          <li>
-            <a href="#problem-specification">2: Problem specification</a>
-          </li>
-          <li>
-            <a href="#parameters">2.1: Parameters</a>
-          </li>
-          <li>
-            <a href="#input">2.2: Input</a>
-          </li>
-          <li>
-            <a href="#output">2.3: Output</a>
-          </li>
-          <li>
-            <a href="#expected-behavior">2.4: Expected behavior</a>
-          </li>
-          <li>
-            <a href="#submission-guidelines">3: Submission guidelines</a>
-          </li>
-          <li>
-            <a href="#reference-implementation">4: Reference implementation</a>
-          </li>
-          <li>
-            <a href="#further-discussion-and-background">5: Further discussion and background</a>
-          </li>
-        </ul>
-      </div>
-      <h2 id="quick-details">
-        Quick details
-      </h2>
-      <ul>
-        <li>
-          <p><strong>Problem:</strong></p>
-          Compute the multi-exponentiation of an array of (scalar, curve-point) pairs for the 4 relevant groups.
-        </li>
-        <li>
-          <p><strong>Prize:</strong></p>
-          <ul>
-            <li>
-              <p><strong>First 25 submissions</strong>: $0</p>
-            </li>
-            <li>
-              <p><strong>All submissions</strong>: Swag bag including SNARK challenge poster.</p>
-            </li>
-          </ul>
-        </li>
-      </ul>
-      <h2 id="problem-specification">
-        Problem specification
-      </h2>
-      <span>The following problem is defined for any choice of (<span id="Rw==">G</span>,<span id="U2NhbGFy">Scalar</span>) in</span>
-      <ul>
-        <li>
-          <a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>
-          , 
-          <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>
-        </li>
-        <li>
-          <a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>
-          , 
-          <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>
-        </li>
-        <li>
-          <a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>
-          , 
-          <span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>
-        </li>
-        <li>
-          <a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>
-          , 
-          <span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>
-        </li>
-      </ul>
-      <p>You can click on the above types to see how they will be represented in the files given to your program. <code>uint64</code> values are represented in little-endian byte order. Arrays are represented as sequences of values, with no length prefix and no separators between elements. Structs are also represented this way.</p>
-      <h3 id="parameters">
-        Parameters
-      </h3>
-      <p>
-        The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
-      </p>
-      <ul class="value-list">
-        <li>
-          <div>
-            <span class="identifier">n</span>
-            :
-            <span class="type"><span>uint64</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="identifier">g</span>
-            :
-            <span class="type"><span>Array(<a href="#Rw==">G</a>, <a href="#bg==">n</a>)</span></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-      </ul>
-      <h3 id="input">
-        Input
-      </h3>
-      <ul class="value-list">
-        <li>
-          <div>
-            <span class="identifier">s</span>
-            :
-            <span class="type"><span>Array(<a href="#U2NhbGFy">Scalar</a>, <a href="#bg==">n</a>)</span></span>
-          </div>
-          <div class="note">
-            <p>Elements of <code>s</code> will be represented in <strong>standard</strong> form as a little-endian array of 12 64-bit unsigned limbs. This form is more likely to be useful than Montgomery representation for this problem.</p>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-      </ul>
-      <h3 id="output">
-        Output
-      </h3>
-      <ul class="value-list">
-        <li>
-          <div>
-            <span class="identifier">y</span>
-            :
-            <span class="type"><a href="#Rw==">G</a></span>
-          </div>
-          <div class="representation">
-          </div>
-        </li>
-      </ul>
-      <h3 id="expected-behavior">
-        Expected behavior
-      </h3>
-      <p>The output should be the multiexponentiation with the scalars <code>s</code> on the bases <code>g</code>. In other words, the group element <code>s[0] * g[0] + s[1] * g[1] + ... + s[n - 1] * g[n - 1]</code>.</p>
-      <p>In pseduocode, something like</p>
-      <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">
-      <span class="kw">var</span> g <span class="op">=</span> [g0<span class="op">,</span> g1<span class="op">,</span> ..<span class="op">,</span> gn]<span class="op">;</span>
-      
-      <span class="kw">var</span> multiexp <span class="op">=</span> (s) <span class="op">=&gt;</span> <span class="op">{</span>
-        <span class="kw">var</span> res <span class="op">=</span> G_identity<span class="op">;</span>
-        <span class="cf">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="va">s</span>.<span class="at">length</span><span class="op">;</span> <span class="op">++</span>i) <span class="op">{</span>
-          <span class="kw">var</span> sg <span class="op">=</span> <span class="at">G_scale</span>(s[i]<span class="op">,</span> g[i])<span class="op">;</span>
-          res <span class="op">=</span> <span class="at">G_add</span>(res<span class="op">,</span> sg)<span class="op">;</span>
-        <span class="op">}</span>
-        <span class="cf">return</span> res<span class="op">;</span>
-      <span class="op">}</span></code></pre></div>
-      <h2 id="submission-guidelines">
-        Submission guidelines
-      </h2>
-      <p>Your submission will be run and evaluated as follows.</p>
-      <ol start="0" style="list-style-type: decimal">
-      <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
-      <li><p>Your binary <code>main</code> will be run with</p>
-      <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
-      <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
-      Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</li>
-      <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
-      <li><p>Your binary will be invoked with</p>
-      <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
-      <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
-      <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
-      <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
-      </ol>
-      <h2 id="reference-implementation">
-        Reference implementation
-      </h2>
-      <span>The output of your program submission will be checked against the reference implementation <a href="">here</a>.</span>
-      <h2 id="further-discussion-and-background">
-        Further discussion and background
-      </h2>
+    <h1 id="multi-exponentiation">Multi-exponentiation</h1>
+    <div class="table-of-contents">
+    <ul>
+    <li>
+    <a href="#quick-details">1: Quick details</a>
+    </li>
+    <li>
+    <a href="#problem-specification">2: Problem specification</a>
+    </li>
+    <li>
+    <a href="#parameters">2.1: Parameters</a>
+    </li>
+    <li>
+    <a href="#input">2.2: Input</a>
+    </li>
+    <li>
+    <a href="#output">2.3: Output</a>
+    </li>
+    <li>
+    <a href="#expected-behavior">2.4: Expected behavior</a>
+    </li>
+    <li>
+    <a href="#submission-guidelines">3: Submission guidelines</a>
+    </li>
+    <li>
+    <a href="#reference-implementation">4: Reference implementation</a>
+    </li>
+    </ul>
     </div>
+    <h2 id="quick-details">Quick details</h2>
+    <ul>
+    <li><strong>Problem:</strong> Compute the multi-exponentiation of an array of (scalar, curve-point) pairs for the 4 relevant groups.</li>
+    <li><strong>Prize:</strong>
+    <ul>
+    <li><strong>First 25 submissions:</strong> $0</li>
+    <li><strong>All submissions:</strong> Swag bag including SNARK challenge poster.</li>
+    </ul></li>
+    </ul>
+    <h2 id="problem-specification">Problem specification</h2>
+    <p>The following problem is defined for any choice of (<a name="Rw==">G</a>, <a name="U2NhbGFy">Scalar</a>) in</p>
+    <ul>
+    <li><a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.(G_1)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span></li>
+    <li><a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.(G_2)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span></li>
+    <li><a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.(G_1)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span></li>
+    <li><a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.(G_2)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span></li>
+    </ul>
+    <p>You can click on the above types to see how they will be represented in the files given to your program. <code>uint64</code> values are represented in little-endian byte order. Arrays are represented as sequences of values, with no length prefix and no separators between elements. Structs are also represented this way.</p>
+    <h3 id="parameters">Parameters</h3>
+    <p>The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.</p>
+    <ul>
+    <li>n : <span>uint64</span></li>
+    <li>g : <span>Array(<a href="#Rw==">G</a>, <a href="#bg==">n</a>)</span></li>
+    </ul>
+    <h3 id="input">Input</h3>
+    <ul>
+    <li>s : <span>Array(<a href="#U2NhbGFy">Scalar</a>, <a href="#bg==">n</a>)</span>
+    <p>
+    Elements of <code>s</code> will be represented in <strong>standard</strong> form as a little-endian array of 12 64-bit unsigned limbs. This form is more likely to be useful than Montgomery representation for this problem.
+    </p></li>
+    </ul>
+    <h3 id="output">Output</h3>
+    <ul>
+    <li>y : <a href="#Rw==">G</a></li>
+    </ul>
+    <h3 id="expected-behavior">Expected behavior</h3>
+    <p>The output should be the multiexponentiation with the scalars <code>s</code> on the bases <code>g</code>. In other words, the group element <code>s[0] * g[0] + s[1] * g[1] + ... + s[n - 1] * g[n - 1]</code>.</p>
+    <p>In pseduocode, something like</p>
+    <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">
+    <span class="kw">var</span> g <span class="op">=</span> [g0<span class="op">,</span> g1<span class="op">,</span> ..<span class="op">,</span> gn]<span class="op">;</span>
+    
+    <span class="kw">var</span> multiexp <span class="op">=</span> (s) <span class="op">=&gt;</span> <span class="op">{</span>
+      <span class="kw">var</span> res <span class="op">=</span> G_identity<span class="op">;</span>
+      <span class="cf">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="va">s</span>.<span class="at">length</span><span class="op">;</span> <span class="op">++</span>i) <span class="op">{</span>
+        <span class="kw">var</span> sg <span class="op">=</span> <span class="at">G_scale</span>(s[i]<span class="op">,</span> g[i])<span class="op">;</span>
+        res <span class="op">=</span> <span class="at">G_add</span>(res<span class="op">,</span> sg)<span class="op">;</span>
+      <span class="op">}</span>
+      <span class="cf">return</span> res<span class="op">;</span>
+    <span class="op">}</span></code></pre></div>
+    <h2 id="submission-guidelines">Submission guidelines</h2>
+    <p>Your submission will be run and evaluated as follows.</p>
+    <ol start="0" style="list-style-type: decimal">
+    <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
+    <li><p>Your binary <code>main</code> will be run with</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
+    <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
+    Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</li>
+    <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+    <li><p>Your binary will be invoked with</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+    <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+    <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+    <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+    </ol>
+    <h2 id="reference-implementation">Reference implementation</h2>
+    <p>The output of your submitted program will be checked against the reference implementation <a href="">here</a></p>
   </body>
 </html>
