@@ -30,7 +30,7 @@ module Interface = struct
       | Declare of
           Parameter_kind.t * string * Type.t * Html.t option * (Name.t -> 'a)
       | Choose_definitional_parameter :
-          (Type.t, 'n) Vec.t list
+          ((Type.t, 'n) Vec.t * string) list
           * (string, 'n) Vec.t
           * ((Name.t, 'n) Vec.t -> 'a)
           -> 'a t
@@ -51,7 +51,8 @@ module Interface = struct
 
   module Spec = struct
     type ('a, 'n) spec =
-      { definitional_parameters: (string, 'n) Vec.t * (Type.t, 'n) Vec.t list
+      { definitional_parameters:
+          (string, 'n) Vec.t * ((Type.t, 'n) Vec.t * string) list
       ; batch_parameters: (string * Type.t * Html.t option) list
       ; input: (string * Type.t * Html.t option) list
       ; output: (string * Type.t * Html.t option) list
@@ -113,12 +114,14 @@ module Interface = struct
               |> String.concat
             in
             let choices =
-              List.map choices ~f:(fun choice ->
+              List.map choices ~f:(fun (choice, name) ->
+                  let with_params = Vec.length choice > 1 in
                   String.concat
                     (List.map (Vec.to_list choice)
                        ~f:(Fn.compose Html.to_string Type.render))
                     ~sep:", "
-                  |> sprintf "- %s" )
+                  |> (if with_params then sprintf "(%s)" else Fn.id)
+                  |> sprintf "- `%s`: %s" name )
               |> String.concat ~sep:"\n"
             in
             sprintf
@@ -243,18 +246,31 @@ let render ~pages
     ; postamble
     ; reference_implementation_url } =
   let spec = Interface.Spec.create ~name:title interface in
+  let param_set_names =
+    let (Interface.Spec.T spec) = spec in
+    spec.Interface.Spec.definitional_parameters |> snd |> List.map ~f:snd
+  in
   let batch_params_description =
-    {md|
-0. The submission-runner will randomly generate the parameters and save them to a file `PATH_TO_PARAMETERS`
+    sprintf
+      {md|
+0. The submission-runner will randomly generate the parameters and save them to
+    files %s.
 0. Your binary `main` will be run with 
 
     ```bash
-    ./main preprocess PATH_TO_PARAMETERS
+        %s
     ```
-    where `PATH_TO_PARAMETERS` will be replaced by the acutal path.
+    where `PATH_TO_X_PARAMETERS` will be replaced by the actual path.
 
     Your binary can at this point, if you like, do some preprocessing of the parameters and
-    save any state it would like to a file `./preprocessed`.|md}
+    save any state it would like to files %s.|md}
+      (String.concat ~sep:" and "
+         (List.map param_set_names ~f:(sprintf "`PATH_TO_%s_PARAMETERS`")))
+      (String.concat ~sep:"\n"
+         (List.map param_set_names ~f:(fun s ->
+              sprintf "./main %s preprocess PATH_TO_%s_PARAMETERS" s s )))
+      (String.concat ~sep:" and "
+         (List.map param_set_names ~f:(sprintf "`./%s_preprocessed`")))
   in
   let t : _ Sectioned_page.t =
     let open Sectioned_page in
@@ -272,21 +288,33 @@ let render ~pages
 3. Your binary will be invoked with
 
     ```bash
-    ./main compute PATH_TO_INPUTS PATH_TO_OUTPUTS
+        %s
     ```
 
-    and its runtime will be recorded. The file PATH_TO_INPUTS will contain
+    and its runtime will be recorded. The file `PATH_TO_INPUTS` will contain
     a sequence of inputs, each of which is of the form specified in the
     ["Input"](#input) section. 
 
-    It should create a file called "outputs" at the path PATH_TO_OUTPUTS
+    It should create a file called "outputs" at the path `PATH_TO_OUTPUTS`
     which contains a sequence of outputs, each of which is of the form
     specified in the ["Output"](#output) section.
 
-    It can, if it likes, read
-    the file "./preprocessed" in order to help it solve the problem.|md}
+    %s
+    |md}
               ( if Interface.Spec.has_batch_parameters spec then
                 batch_params_description
+              else "" )
+              ( if Interface.Spec.has_batch_parameters spec then
+                List.map param_set_names ~f:(fun p ->
+                    sprintf
+                      "./main %s PATH_TO_%s_PARAMETERS PATH_TO_INPUTS \
+                       PATH_TO_OUTPUTS"
+                      p p )
+                |> String.concat ~sep:"\n"
+              else "./main compute PATH_TO_INPUTS PATH_TO_OUTPUTS" )
+              ( if Interface.Spec.has_batch_parameters spec then
+                {md|It can, if it likes, read the preprocessed files created in step 1
+    in order to help it solve the problem.|md}
               else "" )
             |> leaf ]
       ; sec ~title:"Reference implementation"

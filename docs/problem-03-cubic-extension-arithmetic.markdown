@@ -175,19 +175,19 @@ Your submission will be run and evaluated as follows.
 3. Your binary will be invoked with
 
     ```bash
-    ./main compute PATH_TO_INPUTS PATH_TO_OUTPUTS
+        ./main compute PATH_TO_INPUTS PATH_TO_OUTPUTS
     ```
 
-    and its runtime will be recorded. The file PATH_TO_INPUTS will contain
+    and its runtime will be recorded. The file `PATH_TO_INPUTS` will contain
     a sequence of inputs, each of which is of the form specified in the
     ["Input"](#input) section. 
 
-    It should create a file called "outputs" at the path PATH_TO_OUTPUTS
+    It should create a file called "outputs" at the path `PATH_TO_OUTPUTS`
     which contains a sequence of outputs, each of which is of the form
     specified in the ["Output"](#output) section.
 
-    It can, if it likes, read
-    the file "./preprocessed" in order to help it solve the problem.
+    
+    
 
 ## Reference implementation
 

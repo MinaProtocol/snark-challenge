@@ -157,6 +157,7 @@ let mnt4753 : t =
   let var x = Name (Name.local x) in
   let fq_field = Type.Field.Prime {order= var "q"} in
   let fq = Literal fq_field in
+  let fr = Literal (Type.Field.Prime {order= var "r"}) in
   let e = 2 in
   let non_residue = Integer.Value (Bigint.of_int 13) in
   let fqe =
@@ -181,6 +182,7 @@ let mnt4753 : t =
       ; let_ ("e" ^: Type.integer) = Value.integer (Int.to_string e)
       ; let_field fq_field
       ; let_field fqe
+      ; let_ (latex "\\sigma" ^: Type.field fr) = Value.integer "17"
       ; let_ ("a" ^: Type.field fq) = Value.integer "2"
       ; let_ ("b" ^: Type.field fq)
         = Value.integer

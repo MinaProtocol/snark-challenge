@@ -9,7 +9,7 @@ let interface =
     def ["G"; "Scalar"]
       List.Let_syntax.(
         let%map scope = curve_scopes and group = group_names in
-        Vec.[scope ^. group; Type.prime_field (scope ^. "r")])
+        (Vec.[scope ^. group; Type.prime_field (scope ^. "r")], scope))
   in
   let%bind n = !Batch_parameter "n" (Literal UInt64) in
   let%bind _g =

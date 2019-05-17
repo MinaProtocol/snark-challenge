@@ -50,8 +50,8 @@ The majority of the time is spent the multiexponentiations, so optimization effo
 The following problem is defined for any choice of (<a name="Rg==">F</a>, <a name="JEdfMSQ=">$G_1$</a>, <a name="JEdfMiQ=">$G_2$</a>)
 in
 
-- <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>, <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.$G_1$</a>, <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.$G_2$</a>
-- <span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>, <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.$G_1$</a>, <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.$G_2$</a>
+- `MNT4753`: (<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>, <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.$G_1$</a>, <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.$G_2$</a>)
+- `MNT6753`: (<span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>, <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.$G_1$</a>, <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.$G_2$</a>)
 
 You can click on the above types to see how they will be
 represented in the files given to your program. `uint64`
@@ -65,6 +65,7 @@ represented this way.
 The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
 
 - d : <span>uint64</span>
+    <p><span class="math inline">d + 1</span> is guaranteed to be a power of <span class="math inline">2</span> in the MNT4753 case and of the form <span class="math inline">2^x 5^y</span> in the MNT6753 case.</p>
 - m : <span>uint64</span>
 - ca : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span>
 - cb : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span>
@@ -100,10 +101,14 @@ The output should be as follows.
 
 where
 
-- H is an array of the coefficients of the polynomial
-  $h(x) = \frac{a(x) b(x) - c(x)}{z(x)}$
-  where $a, b, c$ are the degree d
-  polynomials specified by
+- Let $\omega = \sigma^{(r - 1) / (d + 1)}$. This guarantees that
+  we have $\omega^{d + 1} = 1$. Look at the MNT4753 or MNT6753 parameter
+  pages to find the value of $\sigma$ in each case.
+
+    H is an array of the coefficients of the polynomial
+    $h(x) = \frac{a(x) b(x) - c(x)}{z(x)}$
+    where $a, b, c$ are the degree d
+    polynomials specified by
 
 $$
 \begin{aligned}
@@ -128,9 +133,7 @@ This won't work however as $z(\omega^i) = 0$ for each $i$. Alternatively, one ca
 
 1. Perform 3 inverse FFTs to compute the coefficients of $a, b$ and $c$.
 2. Use the coefficients of these polynomials to compute the evaluations of of $a, b, c$
-    on the "shifted set" $\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}$
-    where $\sigma$ is any field element not equal to $\omega^i$ (for example, a random $\sigma$
-    would work).
+    on the "shifted set" $\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}$.
 
     Let's say `ea` is an array with `ea[i]` being the i<sup>th</sup> coefficient of the polynomial
     `a`. Then we can evaluate `a` on the set $\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}$
@@ -157,35 +160,39 @@ perform 4 multiexponentiations in $G_1$ and 1 multiexponentiation in $G_2$.
 Your submission will be run and evaluated as follows.
 
 
-0. The submission-runner will randomly generate the parameters and save them to a file `PATH_TO_PARAMETERS`
+0. The submission-runner will randomly generate the parameters and save them to
+    files `PATH_TO_MNT4753_PARAMETERS` and `PATH_TO_MNT6753_PARAMETERS`.
 0. Your binary `main` will be run with 
 
     ```bash
-    ./main preprocess PATH_TO_PARAMETERS
+        ./main MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS
+./main MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS
     ```
-    where `PATH_TO_PARAMETERS` will be replaced by the acutal path.
+    where `PATH_TO_X_PARAMETERS` will be replaced by the actual path.
 
     Your binary can at this point, if you like, do some preprocessing of the parameters and
-    save any state it would like to a file `./preprocessed`.
+    save any state it would like to files `./MNT4753_preprocessed` and `./MNT6753_preprocessed`.
 0. The submission runner will generate a random sequence of inputs, saved to a file
    `PATH_TO_INPUTS`.
 
 3. Your binary will be invoked with
 
     ```bash
-    ./main compute PATH_TO_INPUTS PATH_TO_OUTPUTS
+        ./main MNT4753 PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+./main MNT6753 PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
     ```
 
-    and its runtime will be recorded. The file PATH_TO_INPUTS will contain
+    and its runtime will be recorded. The file `PATH_TO_INPUTS` will contain
     a sequence of inputs, each of which is of the form specified in the
     ["Input"](#input) section. 
 
-    It should create a file called "outputs" at the path PATH_TO_OUTPUTS
+    It should create a file called "outputs" at the path `PATH_TO_OUTPUTS`
     which contains a sequence of outputs, each of which is of the form
     specified in the ["Output"](#output) section.
 
-    It can, if it likes, read
-    the file "./preprocessed" in order to help it solve the problem.
+    It can, if it likes, read the preprocessed files created in step 1
+    in order to help it solve the problem.
+    
 
 ## Reference implementation
 

@@ -73,14 +73,17 @@
     <h2 id="problem-specification">Problem specification</h2>
     <p>The following problem is defined for any choice of (<a name="Rg==">F</a>, <a name="JEdfMSQ="><span class="math inline">G_1</span></a>, <a name="JEdfMiQ="><span class="math inline">G_2</span></a>) in</p>
     <ul>
-    <li><span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>, <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>, <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a></li>
-    <li><span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>, <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>, <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a></li>
+    <li><code>MNT4753</code>: (<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>, <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>, <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a>)</li>
+    <li><code>MNT6753</code>: (<span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>, <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>, <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a>)</li>
     </ul>
     <p>You can click on the above types to see how they will be represented in the files given to your program. <code>uint64</code> values are represented in little-endian byte order. Arrays are represented as sequences of values, with no length prefix and no separators between elements. Structs are also represented this way.</p>
     <h3 id="parameters">Parameters</h3>
     <p>The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.</p>
     <ul>
-    <li>d : <span>uint64</span></li>
+    <li>d : <span>uint64</span>
+    <p>
+    <span class="math inline">d + 1</span> is guaranteed to be a power of <span class="math inline">2</span> in the MNT4753 case and of the form <span class="math inline">2^x 5^y</span> in the MNT6753 case.
+    </p></li>
     <li>m : <span>uint64</span></li>
     <li>ca : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
     <li>cb : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
@@ -111,7 +114,8 @@
     </ul>
     <p>where</p>
     <ul>
-    <li>H is an array of the coefficients of the polynomial <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> where <span class="math inline">a, b, c</span> are the degree d polynomials specified by</li>
+    <li><p>Let <span class="math inline">\omega = \sigma^{(r - 1) / (d + 1)}</span>. This guarantees that we have <span class="math inline">\omega^{d + 1} = 1</span>. Look at the MNT4753 or MNT6753 parameter pages to find the value of <span class="math inline">\sigma</span> in each case.</p>
+    <p>H is an array of the coefficients of the polynomial <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> where <span class="math inline">a, b, c</span> are the degree d polynomials specified by</p></li>
     </ul>
     <p><span class="math display">\displaystyle 
     \begin{aligned}
@@ -130,7 +134,7 @@
     <p>One would want to obtain the coefficients of <span class="math inline">h</span> by computing its evaluations on <span class="math inline">\omega^0, \dots, \omega^{d}</span> as <code>(d[i] * d[i] - d[i]) / z(ω_i)</code> for each <code>i</code>. This won't work however as <span class="math inline">z(\omega^i) = 0</span> for each <span class="math inline">i</span>. Alternatively, one can do the following.</p>
     <ol style="list-style-type: decimal">
     <li>Perform 3 inverse FFTs to compute the coefficients of <span class="math inline">a, b</span> and <span class="math inline">c</span>.</li>
-    <li><p>Use the coefficients of these polynomials to compute the evaluations of of <span class="math inline">a, b, c</span> on the &quot;shifted set&quot; <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span> where <span class="math inline">\sigma</span> is any field element not equal to <span class="math inline">\omega^i</span> (for example, a random <span class="math inline">\sigma</span> would work).</p>
+    <li><p>Use the coefficients of these polynomials to compute the evaluations of of <span class="math inline">a, b, c</span> on the &quot;shifted set&quot; <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span>.</p>
     <p>Let's say <code>ea</code> is an array with <code>ea[i]</code> being the i<sup>th</sup> coefficient of the polynomial <code>a</code>. Then we can evaluate <code>a</code> on the set <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span> by computing <code>sa = ea.map((ai, i) =&gt; sigma**i * ai)</code> and then performing an FFT on <code>sa</code>. Analogously for the polynomials <span class="math inline">b</span> and <span class="math inline">c</span> to obtain evaluation arrays <code>eb</code> and <code>ec</code>.</p>
     In all this step requires 3 FFTs.</li>
     <li><p>Note that <span class="math inline">z(\sigma \omega^i) = \sigma^{d} \omega^{d} - 1 = \sigma^{d} - 1</span>. So, having computed <code>sa, sb, sc</code>, you can compute the evaluations of <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> on the shifted set as <code>sh[i] = (sa[i] * sb[i] - sc[i]) / (sigma**d - 1)</code>.</p></li>
@@ -141,17 +145,19 @@
     <h2 id="submission-guidelines">Submission guidelines</h2>
     <p>Your submission will be run and evaluated as follows.</p>
     <ol start="0" style="list-style-type: decimal">
-    <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
+    <li>The submission-runner will randomly generate the parameters and save them to files <code>PATH_TO_MNT4753_PARAMETERS</code> and <code>PATH_TO_MNT6753_PARAMETERS</code>.</li>
     <li><p>Your binary <code>main</code> will be run with</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
-    <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
-    Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</li>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS
+    <span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS</code></pre></div>
+    <p>where <code>PATH_TO_X_PARAMETERS</code> will be replaced by the actual path.</p>
+    Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to files <code>./MNT4753_preprocessed</code> and <code>./MNT6753_preprocessed</code>.</li>
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
-    <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
-    <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
-    <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+    <span class="ex">./main</span> MNT6753 PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+    <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+    <p>It can, if it likes, read the preprocessed files created in step 1 in order to help it solve the problem.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
     <p>The output of your submitted program will be checked against the reference implementation <a href="">here</a></p>

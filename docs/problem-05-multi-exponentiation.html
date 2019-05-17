@@ -69,10 +69,10 @@
     <h2 id="problem-specification">Problem specification</h2>
     <p>The following problem is defined for any choice of (<a name="Rw==">G</a>, <a name="U2NhbGFy">Scalar</a>) in</p>
     <ul>
-    <li><a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.(G_1)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span></li>
-    <li><a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.(G_2)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span></li>
-    <li><a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.(G_1)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span></li>
-    <li><a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.(G_2)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span></li>
+    <li><code>MNT4753</code>: (<a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.(G_1)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>)</li>
+    <li><code>MNT4753</code>: (<a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.(G_2)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>)</li>
+    <li><code>MNT6753</code>: (<a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.(G_1)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>)</li>
+    <li><code>MNT6753</code>: (<a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.(G_2)</a>, <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>)</li>
     </ul>
     <p>You can click on the above types to see how they will be represented in the files given to your program. <code>uint64</code> values are represented in little-endian byte order. Arrays are represented as sequences of values, with no length prefix and no separators between elements. Structs are also represented this way.</p>
     <h3 id="parameters">Parameters</h3>
@@ -109,17 +109,23 @@
     <h2 id="submission-guidelines">Submission guidelines</h2>
     <p>Your submission will be run and evaluated as follows.</p>
     <ol start="0" style="list-style-type: decimal">
-    <li>The submission-runner will randomly generate the parameters and save them to a file <code>PATH_TO_PARAMETERS</code></li>
+    <li>The submission-runner will randomly generate the parameters and save them to files <code>PATH_TO_MNT4753_PARAMETERS</code> and <code>PATH_TO_MNT4753_PARAMETERS</code> and <code>PATH_TO_MNT6753_PARAMETERS</code> and <code>PATH_TO_MNT6753_PARAMETERS</code>.</li>
     <li><p>Your binary <code>main</code> will be run with</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> preprocess PATH_TO_PARAMETERS</code></pre></div>
-    <p>where <code>PATH_TO_PARAMETERS</code> will be replaced by the acutal path.</p>
-    Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to a file <code>./preprocessed</code>.</li>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS
+    <span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS
+    <span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS
+    <span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS</code></pre></div>
+    <p>where <code>PATH_TO_X_PARAMETERS</code> will be replaced by the actual path.</p>
+    Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to files <code>./MNT4753_preprocessed</code> and <code>./MNT4753_preprocessed</code> and <code>./MNT6753_preprocessed</code> and <code>./MNT6753_preprocessed</code>.</li>
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
-    <p>and its runtime will be recorded. The file PATH_TO_INPUTS will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
-    <p>It should create a file called &quot;outputs&quot; at the path PATH_TO_OUTPUTS which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
-    <p>It can, if it likes, read the file &quot;./preprocessed&quot; in order to help it solve the problem.</p></li>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+    <span class="ex">./main</span> MNT4753 PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+    <span class="ex">./main</span> MNT6753 PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+    <span class="ex">./main</span> MNT6753 PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+    <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+    <p>It can, if it likes, read the preprocessed files created in step 1 in order to help it solve the problem.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
     <p>The output of your submitted program will be checked against the reference implementation <a href="">here</a></p>

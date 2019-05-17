@@ -49,6 +49,13 @@ Binary representation
 </div>
 </div>
 <div class="entry value">
+<a name="XChcc2lnbWFcKQ==">\(\sigma\)</a>
+:
+<span>&#x1D53D;<sub><a href="#cg==">r</a></sub></span>
+=
+17
+</div>
+<div class="entry value">
 <a name="YQ==">a</a>
 :
 <span>&#x1D53D;<sub><a href="#cQ==">q</a></sub></span>

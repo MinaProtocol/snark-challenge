@@ -11,10 +11,11 @@ let definitional_params =
     def
       ["F"; latex "G_1"; latex "G_2"]
       (List.map curve_scopes ~f:(fun scope ->
-           Vec.
-             [ Type.prime_field (scope ^. "r")
-             ; scope ^. latex "G_1"
-             ; scope ^. latex "G_2" ] ))
+           ( Vec.
+               [ Type.prime_field (scope ^. "r")
+               ; scope ^. latex "G_1"
+               ; scope ^. latex "G_2" ]
+           , scope ) ))
   in
   {field; g1; g2}
 
@@ -33,7 +34,12 @@ type batch_params =
 (* For simplicity we hardcode num_inputs = 1. *)
 let batch_params {field; g1; g2} =
   let open Problem.Interface in
-  let%bind max_degree = !Batch_parameter "d" (Literal UInt64)
+  let%bind max_degree =
+    ( ! ) Batch_parameter "d" (Literal UInt64)
+      ~note:
+        (Html.markdown
+           "$d + 1$ is guaranteed to be a power of $2$ in the MNT4753 case \
+            and of the form $2^x 5^y$ in the MNT6753 case.")
   and num_vars = !Batch_parameter "m" (Literal UInt64) in
   let _group_elt name group = !Batch_parameter name (Name group) in
   let group_array name group len =
@@ -46,6 +52,7 @@ let batch_params {field; g1; g2} =
          (Array
             { element= Name field
             ; length=
+                (* The last entry here I think will always be zero. Test that. *)
                 Some
                   (Literal (Add (Name max_degree, Literal (Value Bigint.one))))
             }))
@@ -173,10 +180,14 @@ The output should be as follows.
 
 where
 
-- H is an array of the coefficients of the polynomial
-  $h(x) = \frac{a(x) b(x) - c(x)}{z(x)}$
-  where $a, b, c$ are the degree %s
-  polynomials specified by
+- Let $\omega = \sigma^{(r - 1) / (d + 1)}$. This guarantees that
+  we have $\omega^{d + 1} = 1$. Look at the MNT4753 or MNT6753 parameter
+  pages to find the value of $\sigma$ in each case.
+
+    H is an array of the coefficients of the polynomial
+    $h(x) = \frac{a(x) b(x) - c(x)}{z(x)}$
+    where $a, b, c$ are the degree %s
+    polynomials specified by
 
 $$
 \begin{aligned}
@@ -201,9 +212,7 @@ This won't work however as $z(\omega^i) = 0$ for each $i$. Alternatively, one ca
 
 1. Perform 3 inverse FFTs to compute the coefficients of $a, b$ and $c$.
 2. Use the coefficients of these polynomials to compute the evaluations of of $a, b, c$
-    on the "shifted set" $\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{%s}\}$
-    where $\sigma$ is any field element not equal to $\omega^i$ (for example, a random $\sigma$
-    would work).
+    on the "shifted set" $\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{%s}\}$.
 
     Let's say `ea` is an array with `ea[i]` being the i<sup>th</sup> coefficient of the polynomial
     `a`. Then we can evaluate `a` on the set $\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{%s}\}$

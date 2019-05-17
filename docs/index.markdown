@@ -1,8 +1,15 @@
+Welcome to the SNARK challenge! The SNARK challenge is divided
+up into two stages. In the first stage, you'll get your feet wet and
+learn about the algorithms underlying the SNARK prover.
+Think of this stage as a paid training for the ultimate challenge
+of writing a super-fast SNARK prover. There are $5,000 in prizes in
+this stage.
+
+The second stage is the main stage of the competition.
+
+
 #*SNARK Challenge*: Stage 1
 
-Welcome to stage 1 of the SNARK challenge!
-Think of this stage as a paid training for the ultimate challenge
-of writing a super-fast SNARK prover.
 Want to learn cutting edge cryptography, GPU programming and get
 paid to do it? Then you're in the right place.
 

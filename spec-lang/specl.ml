@@ -64,7 +64,7 @@ module QAP_witness_map = struct
       let curve_scopes = ["MNT4753"; "MNT6753"] in
       def ["F"]
         (List.map curve_scopes ~f:(fun scope ->
-             Vec.[Type.prime_field (scope ^. "r")] ))
+             (Vec.[Type.prime_field (scope ^. "r")], scope) ))
     in
     let%bind n = !Batch_parameter "n" (Literal UInt64) in
     let%bind m = !Batch_parameter "m" (Literal UInt64) in

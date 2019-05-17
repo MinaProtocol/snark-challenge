@@ -41,8 +41,8 @@
 The following problem is defined for any choice of (<a name="XChyXCk=">\(r\)</a>, <a name="XChzXCk=">\(s\)</a>, <a name="XChcb21lZ2FcKQ==">\(\omega\)</a>)
 in
 
-- <a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a>, <a href="/snark-challenge/MNT4753.html#cw==">MNT4753.s</a>, <a href="/snark-challenge/MNT4753.html#XChcb21lZ2FcKQ==">MNT4753.\(\omega\)</a>
-- <a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a>, <a href="/snark-challenge/MNT6753.html#cw==">MNT6753.s</a>, <a href="/snark-challenge/MNT6753.html#XChcb21lZ2FcKQ==">MNT6753.\(\omega\)</a>
+- `MNT4753`: (<a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a>, <a href="/snark-challenge/MNT4753.html#cw==">MNT4753.s</a>, <a href="/snark-challenge/MNT4753.html#XChcb21lZ2FcKQ==">MNT4753.\(\omega\)</a>)
+- `MNT6753`: (<a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a>, <a href="/snark-challenge/MNT6753.html#cw==">MNT6753.s</a>, <a href="/snark-challenge/MNT6753.html#XChcb21lZ2FcKQ==">MNT6753.\(\omega\)</a>)
 
 You can click on the above types to see how they will be
 represented in the files given to your program. `uint64`
@@ -76,35 +76,39 @@ y[i] = \sum_{j=0}^{n-1} x[i] \omega^{ij (2^s / n)}
 Your submission will be run and evaluated as follows.
 
 
-0. The submission-runner will randomly generate the parameters and save them to a file `PATH_TO_PARAMETERS`
+0. The submission-runner will randomly generate the parameters and save them to
+    files `PATH_TO_MNT4753_PARAMETERS` and `PATH_TO_MNT6753_PARAMETERS`.
 0. Your binary `main` will be run with 
 
     ```bash
-    ./main preprocess PATH_TO_PARAMETERS
+        ./main MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS
+./main MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS
     ```
-    where `PATH_TO_PARAMETERS` will be replaced by the acutal path.
+    where `PATH_TO_X_PARAMETERS` will be replaced by the actual path.
 
     Your binary can at this point, if you like, do some preprocessing of the parameters and
-    save any state it would like to a file `./preprocessed`.
+    save any state it would like to files `./MNT4753_preprocessed` and `./MNT6753_preprocessed`.
 0. The submission runner will generate a random sequence of inputs, saved to a file
    `PATH_TO_INPUTS`.
 
 3. Your binary will be invoked with
 
     ```bash
-    ./main compute PATH_TO_INPUTS PATH_TO_OUTPUTS
+        ./main MNT4753 PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+./main MNT6753 PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
     ```
 
-    and its runtime will be recorded. The file PATH_TO_INPUTS will contain
+    and its runtime will be recorded. The file `PATH_TO_INPUTS` will contain
     a sequence of inputs, each of which is of the form specified in the
     ["Input"](#input) section. 
 
-    It should create a file called "outputs" at the path PATH_TO_OUTPUTS
+    It should create a file called "outputs" at the path `PATH_TO_OUTPUTS`
     which contains a sequence of outputs, each of which is of the form
     specified in the ["Output"](#output) section.
 
-    It can, if it likes, read
-    the file "./preprocessed" in order to help it solve the problem.
+    It can, if it likes, read the preprocessed files created in step 1
+    in order to help it solve the problem.
+    
 
 ## Reference implementation
 

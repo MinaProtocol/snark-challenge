@@ -17,10 +17,11 @@ let interface : _ Problem.Interface.t =
     def
       [latex "r"; latex "s"; latex "\\omega"]
       (List.map ["MNT4753"; "MNT6753"] ~f:(fun c ->
-           Vec.
-             [ Name (Name.in_scope c "r")
-             ; Name (Name.in_scope c "s")
-             ; Name (Name.in_scope c (latex "\\omega")) ] ))
+           ( Vec.
+               [ Name (Name.in_scope c "r")
+               ; Name (Name.in_scope c "s")
+               ; Name (Name.in_scope c (latex "\\omega")) ]
+           , c ) ))
   in
   let%bind n =
     ( ! ) Batch_parameter "n" (Literal UInt64)
