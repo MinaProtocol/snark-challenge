@@ -19,7 +19,7 @@ let definitional_params =
   {field; g1; g2}
 
 type batch_params =
-  { num_constraints: Name.t
+  { max_degree: Name.t
   ; num_vars: Name.t
   ; ca: Name.t
   ; cb: Name.t
@@ -33,8 +33,7 @@ type batch_params =
 (* For simplicity we hardcode num_inputs = 1. *)
 let batch_params {field; g1; g2} =
   let open Problem.Interface in
-  let%bind num_constraints = !Batch_parameter "n" (Literal UInt64)
-  and max_degree = !Batch_parameter "N" (Literal UInt64)
+  let%bind max_degree = !Batch_parameter "d" (Literal UInt64)
   and num_vars = !Batch_parameter "m" (Literal UInt64) in
   let _group_elt name group = !Batch_parameter name (Name group) in
   let group_array name group len =
@@ -106,7 +105,7 @@ let batch_params {field; g1; g2} =
        alpha_g1 + \sum_{i=0}^m w[i] * ( \sum_{j=1}^n A[i][j] * T[j] ) + r delta
 
     *)
-  {num_vars; num_constraints; ca; cb; cc; at; bt1; bt2; ht; lt}
+  {num_vars; max_degree; ca; cb; cc; at; bt1; bt2; ht; lt}
 
 let delatex s =
   let ( >>= ) = Option.( >>= ) in
@@ -132,7 +131,6 @@ let interface =
     !Input "w"
       (Literal (Array {element= Name field; length= Some num_vars_plus_one}))
   and r = field_input "r" in
-  let%bind selected_degree = !Output "d" (Literal UInt64) in
   let%bind _proof =
     !Output "proof"
       (Literal (Record [("A", Name g1); ("B", Name g2); ("C", Name g1)]))
@@ -140,7 +138,7 @@ let interface =
   let latex s = sprintf "$%s$" s in
   let description =
     let n = Fn.compose delatex Name.to_string in
-    let {num_vars; at; bt2; lt; bt1; num_constraints= _; ht; ca; cb; cc} =
+    let {num_vars; at; bt2; lt; bt1; max_degree; ht; ca; cb; cc} =
       batch_params
     in
     let a_def =
@@ -157,7 +155,7 @@ let interface =
       sprintf
         (*           {md| \left( \sum_{i=0}^{%s - 2} w[2 + i] %s[i]\right)  + \left(\sum_{i=0}^{%s - 1} H[i] %s[i] \right) + %s A+ %s B1- (%s %s) %s|md} *)
         {md|\sum_{i=2}^{%s} w[i] \times %s[i - 2] + \sum_{i=0}^{%s - 1} H[i] \times %s[i] + %s %s|md}
-        (n num_vars) (n lt) (n selected_degree) (n ht) (n r) b1_def
+        (n num_vars) (n lt) (n max_degree) (n ht) (n r) b1_def
       |> latex |> latex
     in
     ksprintf Markdown.of_string
@@ -226,12 +224,11 @@ All in all, we have to do 3 FFTs and 4 inverse FFTs to compute the array `H`,
 perform 4 multiexponentiations in %s and 1 multiexponentiation in %s.
 
 .|md}
-      (n field) a_def b2_def c_def (n selected_degree) (n ca) (n cb) (n cc)
-      (n selected_degree) (n selected_degree) (n selected_degree)
-      (n selected_degree) (n selected_degree) (n selected_degree)
-      (n selected_degree) (n selected_degree) (n selected_degree)
-      (n selected_degree) (n selected_degree) (n selected_degree)
-      (n selected_degree) (n g1) (n g2)
+      (n field) a_def b2_def c_def (n max_degree) (n ca) (n cb) (n cc)
+      (n max_degree) (n max_degree) (n max_degree) (n max_degree)
+      (n max_degree) (n max_degree) (n max_degree) (n max_degree)
+      (n max_degree) (n max_degree) (n max_degree) (n max_degree)
+      (n max_degree) (n g1) (n g2)
   in
   return description
 
