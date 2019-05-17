@@ -6,9 +6,33 @@ of writing a super-fast SNARK prover. There are $5,000 in prizes in
 this stage.
 
 The second stage is the main stage of the competition.
+There are $95,000 in prizes including $55,000 for speeding up the
+[Groth16 prover](/snark-challenge/problem-07-groth16prove.html) and $20,000 for developing better cryptographic
+primitives. Here you'll apply GPU programming and techniques for
+speeding up elliptic-curve and finite-field arithmetic to try
+to build the fastest possible [Groth16 prover](/snark-challenge/problem-07-groth16prove.html).
+  
+<div class="table-of-contents">
+<ul>
+<li>
+<a href="#stage-1">1: Stage 1</a>
+</li>
+<li>
+<a href="#the-stage-1-challenges">1.1: The stage 1 challenges</a>
+</li>
+<li>
+<a href="#stage-2">2: Stage 2</a>
+</li>
+<li>
+<a href="#implementation-challenges">2.1: Implementation challenges</a>
+</li>
+<li>
+<a href="#theory-challenges">2.2: Theory challenges</a>
+</li>
+</ul>
+</div>
 
-
-#*SNARK Challenge*: Stage 1
+## Stage 1
 
 Want to learn cutting edge cryptography, GPU programming and get
 paid to do it? Then you're in the right place.
@@ -37,7 +61,10 @@ These 2 algorithms themselves have sub-algorithms which you'll need to implement
 In total, the first stage has 4 challenges. After implementing these challenges you'll
 be well on your way to having a complete GPU implementation of the SNARK prover itself.
 
-## The stage 1 challenges
+### The stage 1 challenges
+
+The stage 1 challenges are
+
 1. [Finite field arithmetic](/snark-challenge/problem-01-field-arithmetic.html). Reward of $50.
 2. [Quadratic extension arithmetic](/snark-challenge/problem-02-quadratic-extension-arithmetic.html). Reward of $25.
 3. [Cubic extension arithmetic](/snark-challenge/problem-03-cubic-extension-arithmetic.html). Reward of $25.
@@ -47,17 +74,18 @@ You'll want to get started with the first challenge, [finite field arithmetic](/
 and work your way through the others. If you want to get a sense for how all these
 algorithms come together to build the whole prover, check out [this page](/snark-challenge/intro.html).
 
-## The stage 2 challenges
+## Stage 2
 
-This is the main stage of the challenge with a total of $95,000 in prizes.
+Stage 2 is the main stage of the challenge with a total of $95,000 in prizes.
 The challenges break into two categories: implementation and theory. Let's
 start with implementation.
 
 ### Implementation challenges
+
 These challenges all build on the challenges of stage 1. They are
 
-1. Writing the fastest Groth16 SNARK prover on a machine with a fast CPU,
-    NVIDIA RTX 2080 and AMD TODO. The prizes here total $55,000.
+1. Writing the fastest Groth16 SNARK prover on a machine with these [specs](/coda/build/specs.html)
+    The prizes here total $55,000.
     
 2. Writing the fastest in-browser implementation of the Groth16 SNARK verifier.
     Acceptable submissions would compile to WebAssembly or JavaScript.
@@ -69,6 +97,6 @@ These challenges all build on the challenges of stage 1. They are
 5. Most creative Groth16 prover.
 5. Most elegant Groth16 prover.
 
-The prizes are as follows.
+### Theory challenges
 
-1. 
+A description of the theory challenges will be coming soon!
