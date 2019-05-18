@@ -1,5 +1,4 @@
 FROM ubuntu:18.04
-#FROM debian:9
 
 RUN apt-get update && apt install -y \
     build-essential \
