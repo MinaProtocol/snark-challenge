@@ -11,3 +11,10 @@ RUN apt-get update && apt install -y \
     pkg-config \
     linux-tools-generic \
     linux-tools-4.15.0-48-generic
+
+RUN mkdir /app
+ADD . /app
+
+WORKDIR /app/test-runner
+
+ENTRYPOINT /app/test-runner/run_reference.sh
