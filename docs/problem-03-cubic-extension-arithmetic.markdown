@@ -33,7 +33,10 @@
 <a href="#further-discussion-and-background">7: Further discussion and background</a>
 </li>
 <li>
-<a href="#efficiency-tricks">7.1: Efficiency tricks</a>
+<a href="#starter-code">7.1: Starter code</a>
+</li>
+<li>
+<a href="#efficiency-tricks">7.2: Efficiency tricks</a>
 </li>
 </ul>
 </div>
@@ -43,7 +46,7 @@
 - **Problem:** Multiply together an array of elements of a cubic extension field.
 - **Prize:**
     - **First 25 submissions:** $25
-    - **All submissions:** Swag bag including SNARK challenge poster.
+    - **All submissions:** Swag bag including SNARK challenge T-shirt.
 
 Now that we've implemented arithmetic in a prime-order field
 in a [previous challenge](/snark-challenge/problem-01-field-arithmetic.html), we can implement field extension
@@ -192,9 +195,21 @@ Your submission will be run and evaluated as follows.
 ## Reference implementation
 
 The output of your submitted program will be checked against 
-the reference implementation [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-03-cubic-extension)
+the reference implementation at this repo [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-03-cubic-extension).
+The "main" file is [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-03-cubic-extension/libff/main.cpp).
+The core algorithm is implemented [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-03-cubic-extension/libff/algebra/fields/fp3.tcc#L83).
+
 
 ## Further discussion and background
+
+### Starter code
+
+- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
+implementation.
+- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
+   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.
 
 ### Efficiency tricks
 

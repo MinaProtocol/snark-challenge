@@ -30,13 +30,16 @@
 <a href="#further-discussion-and-background">6: Further discussion and background</a>
 </li>
 <li>
-<a href="#techniques">6.1: Techniques</a>
+<a href="#starter-code">6.1: Starter code</a>
 </li>
 <li>
-<a href="#coordinate-systems">6.1.1: Coordinate systems</a>
+<a href="#techniques">6.2: Techniques</a>
 </li>
 <li>
-<a href="#parallelism">6.2: Parallelism</a>
+<a href="#coordinate-systems">6.2.1: Coordinate systems</a>
+</li>
+<li>
+<a href="#parallelism">6.3: Parallelism</a>
 </li>
 </ul>
 </div>
@@ -46,7 +49,7 @@
 - **Problem:** Add together an array of elements of each of the four relevant elliptic curves.
 - **Prize:**
     - **First 25 submissions:** $100
-    - **All submissions:** Swag bag including SNARK challenge poster.
+    - **All submissions:** Swag bag including SNARK challenge T-shirt.
 
 In this challenge you'll use the field arithmetic built up 
 in [this](/snark-challenge/problem-01-field-arithmetic.html), [this](/snark-challenge/problem-02-quadratic-extension-arithmetic.html) and [this challenge](/snark-challenge/problem-03-cubic-extension-arithmetic.html)
@@ -145,9 +148,21 @@ Your submission will be run and evaluated as follows.
 ## Reference implementation
 
 The output of your submitted program will be checked against 
-the reference implementation [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations)
+the reference implementation at this repo [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations).
+The "main" file is [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations/libff/main.cpp).
+The core algorithm is implemented [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-04-curve-operations/libff/algebra/curves/mnt753/mnt4753/mnt4753_g1.cpp#L135).
+
 
 ## Further discussion and background
+
+### Starter code
+
+- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
+implementation.
+- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
+   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.
 
 Please see [this page](/snark-challenge/strategies.html) for a more full list of implementation techniques.
 

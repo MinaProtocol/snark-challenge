@@ -44,5 +44,5 @@ let problem : Problem.t =
       ; prize= Prize.stage1 0 }
   ; preamble
   ; interface
-  ; reference_implementation_url= ""
+  ; reference_implementation= {repo= ""; main= ""; core= ""}
   ; postamble= Fn.const [] }

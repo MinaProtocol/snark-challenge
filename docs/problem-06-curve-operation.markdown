@@ -34,7 +34,7 @@
 - **Problem:** Perform a fast-fourier transform on an array of elements of one of the scalar fields $\mathbb{F}_r$.
 - **Prize:**
     - **First 25 submissions:** $0
-    - **All submissions:** Swag bag including SNARK challenge poster.
+    - **All submissions:** Swag bag including SNARK challenge T-shirt.
 
 ## Problem specification
 
@@ -94,8 +94,8 @@ Your submission will be run and evaluated as follows.
 3. Your binary will be invoked with
 
     ```bash
-        ./main MNT4753 PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
-./main MNT6753 PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+        ./main MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+./main MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
     ```
 
     and its runtime will be recorded. The file `PATH_TO_INPUTS` will contain
@@ -113,4 +113,6 @@ Your submission will be run and evaluated as follows.
 ## Reference implementation
 
 The output of your submitted program will be checked against 
-the reference implementation [here]()
+the reference implementation at this repo [here]().
+The "main" file is [here]().
+The core algorithm is implemented [here]().

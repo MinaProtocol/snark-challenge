@@ -227,13 +227,17 @@ represented this way.|md}
   end
 end
 
+module Reference_implementation = struct
+  type t = {repo: string; main: string; core: string}
+end
+
 type t =
   { title: string
   ; quick_details: Quick_details.t
   ; preamble: Pages.t -> Markdown.t Sectioned_page.t
   ; interface: Markdown.t Interface.t
   ; postamble: Pages.t -> Markdown.t Sectioned_page.t
-  ; reference_implementation_url: string }
+  ; reference_implementation: Reference_implementation.t }
 
 let slug t =
   String.map (String.lowercase t.title) ~f:(fun c -> if c = ' ' then '-' else c)
@@ -244,7 +248,7 @@ let render ~pages
     ; preamble
     ; interface
     ; postamble
-    ; reference_implementation_url } =
+    ; reference_implementation } =
   let spec = Interface.Spec.create ~name:title interface in
   let param_set_names =
     let (Interface.Spec.T spec) = spec in
@@ -307,7 +311,7 @@ let render ~pages
               ( if Interface.Spec.has_batch_parameters spec then
                 List.map param_set_names ~f:(fun p ->
                     sprintf
-                      "./main %s PATH_TO_%s_PARAMETERS PATH_TO_INPUTS \
+                      "./main %s compute PATH_TO_%s_PARAMETERS PATH_TO_INPUTS \
                        PATH_TO_OUTPUTS"
                       p p )
                 |> String.concat ~sep:"\n"
@@ -321,8 +325,12 @@ let render ~pages
           [ ksprintf
               (Fn.compose leaf Markdown.of_string)
               {md|The output of your submitted program will be checked against 
-the reference implementation [here](%s)|md}
-              reference_implementation_url ] ]
+the reference implementation at this repo [here](%s).
+The "main" file is [here](%s).
+The core algorithm is implemented [here](%s).
+|md}
+              reference_implementation.repo reference_implementation.main
+              reference_implementation.core ] ]
     @
     let postamble = postamble pages in
     if List.is_empty postamble then []

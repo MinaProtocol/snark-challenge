@@ -6,7 +6,7 @@ module Reward = struct
 
   let to_string = function
     | Swag_bag ->
-        "Swag bag including SNARK challenge poster."
+        "Swag bag including SNARK challenge T-shirt."
     | Dollars d ->
         sprintf "$%s" (Int.to_string_hum ~delimiter:',' d)
 end

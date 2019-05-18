@@ -26,6 +26,12 @@
 <li>
 <a href="#reference-implementation">4: Reference implementation</a>
 </li>
+<li>
+<a href="#further-discussion-and-background">5: Further discussion and background</a>
+</li>
+<li>
+<a href="#starter-code">5.1: Starter code</a>
+</li>
 </ul>
 </div>
 
@@ -178,8 +184,8 @@ Your submission will be run and evaluated as follows.
 3. Your binary will be invoked with
 
     ```bash
-        ./main MNT4753 PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
-./main MNT6753 PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+        ./main MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+./main MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
     ```
 
     and its runtime will be recorded. The file `PATH_TO_INPUTS` will contain
@@ -197,4 +203,18 @@ Your submission will be run and evaluated as follows.
 ## Reference implementation
 
 The output of your submitted program will be checked against 
-the reference implementation [here]()
+the reference implementation at this repo [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover).
+The "main" file is [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover/libsnark/main.cpp).
+The core algorithm is implemented [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-07-groth16-prover/libsnark/main.cpp#L199).
+
+
+## Further discussion and background
+
+### Starter code
+
+- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
+implementation.
+- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
+   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.

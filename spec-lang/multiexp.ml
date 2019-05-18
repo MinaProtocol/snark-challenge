@@ -61,5 +61,5 @@ let problem : Problem.t =
       ; prize= Prize.stage1 0 }
   ; preamble= [] |> Fn.const
   ; title= "Multi-exponentiation"
-  ; reference_implementation_url= ""
+  ; reference_implementation= {repo= ""; main= ""; core= ""}
   ; postamble= Fn.const [] }

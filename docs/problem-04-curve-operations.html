@@ -59,13 +59,16 @@
     <a href="#further-discussion-and-background">6: Further discussion and background</a>
     </li>
     <li>
-    <a href="#techniques">6.1: Techniques</a>
+    <a href="#starter-code">6.1: Starter code</a>
     </li>
     <li>
-    <a href="#coordinate-systems">6.1.1: Coordinate systems</a>
+    <a href="#techniques">6.2: Techniques</a>
     </li>
     <li>
-    <a href="#parallelism">6.2: Parallelism</a>
+    <a href="#coordinate-systems">6.2.1: Coordinate systems</a>
+    </li>
+    <li>
+    <a href="#parallelism">6.3: Parallelism</a>
     </li>
     </ul>
     </div>
@@ -75,7 +78,7 @@
     <li><strong>Prize:</strong>
     <ul>
     <li><strong>First 25 submissions:</strong> $100</li>
-    <li><strong>All submissions:</strong> Swag bag including SNARK challenge poster.</li>
+    <li><strong>All submissions:</strong> Swag bag including SNARK challenge T-shirt.</li>
     </ul></li>
     </ul>
     <p>In this challenge you'll use the field arithmetic built up in <a href="/snark-challenge/problem-01-field-arithmetic.html">this</a>, <a href="/snark-challenge/problem-02-quadratic-extension-arithmetic.html">this</a> and <a href="/snark-challenge/problem-03-cubic-extension-arithmetic.html">this challenge</a> to implement the group operation for several elliptic curves.</p>
@@ -125,8 +128,13 @@
     <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
-    <p>The output of your submitted program will be checked against the reference implementation <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations">here</a></p>
+    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations">here</a>. The &quot;main&quot; file is <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations/libff/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-04-curve-operations/libff/algebra/curves/mnt753/mnt4753/mnt4753_g1.cpp#L135">here</a>.</p>
     <h2 id="further-discussion-and-background">Further discussion and background</h2>
+    <h3 id="starter-code">Starter code</h3>
+    <ul>
+    <li>This <a href="https://github.com/data61/cuda-fixnum">library</a> implements prime-order field arithmetic in CUDA. Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example implementation.</li>
+    <li>This <a href="https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction">repo</a> has some starter code for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.</li>
+    </ul>
     <p>Please see <a href="/snark-challenge/strategies.html">this page</a> for a more full list of implementation techniques.</p>
     <h3 id="techniques">Techniques</h3>
     <h4 id="coordinate-systems">Coordinate systems</h4>

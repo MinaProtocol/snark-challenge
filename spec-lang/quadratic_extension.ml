@@ -209,7 +209,16 @@ where `*` is multiplication in the field %s as described above.
 
 let postamble _ =
   let open Sectioned_page in
-  [ sec ~title:"Efficiency tricks"
+  [ sec ~title:"Starter code"
+      [ md
+          {md|- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
+implementation.
+- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
+   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.|md}
+      ]
+  ; sec ~title:"Efficiency tricks"
       [ leaf
           (Markdown.of_string
              {md|The pseduocode above does 4 $\mathbb{F}_q$ multiplications, 1 multiplication
@@ -254,6 +263,12 @@ let problem : Problem.t =
       ; prize= Prize.stage1 25 }
   ; preamble
   ; interface
-  ; reference_implementation_url=
-      "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-02-quadratic-extension"
+  ; reference_implementation=
+      { repo=
+          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-02-quadratic-extension"
+      ; main=
+          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-02-quadratic-extension/libff/main.cpp"
+      ; core=
+          "https://github.com/CodaProtocol/snark-challenge/blob/master/reference-02-quadratic-extension/libff/algebra/fields/fp2.tcc#L79"
+      }
   ; postamble }

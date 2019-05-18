@@ -137,7 +137,13 @@ let interface =
     in
     !Input "w"
       (Literal (Array {element= Name field; length= Some num_vars_plus_one}))
-  and r = field_input "r" in
+  and r =
+    field_input "r"
+    (*
+  and d1 = field_input "d1"
+  and d2 = field_input "d2"
+  and d3 = field_input "d3" *)
+  in
   let%bind _proof =
     !Output "proof"
       (Literal (Record [("A", Name g1); ("B", Name g2); ("C", Name g1)]))
@@ -251,6 +257,18 @@ The majority of the time is spent the multiexponentiations, so optimization effo
     pages.fft pages.multi_exponentiation
   |> Sectioned_page.leaf |> List.return
 
+let postamble _ =
+  let open Sectioned_page in
+  [ sec ~title:"Starter code"
+      [ md
+          {md|- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
+implementation.
+- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
+   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.|md}
+      ] ]
+
 let problem : Problem.t =
   { title= "Groth16Prove"
   ; quick_details=
@@ -263,5 +281,12 @@ let problem : Problem.t =
           ; (First_to (Improve_speed_by 2), Dollars 5_000) ] }
   ; preamble
   ; interface
-  ; reference_implementation_url= ""
-  ; postamble= Fn.const [] }
+  ; reference_implementation=
+      { repo=
+          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover"
+      ; main=
+          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover/libsnark/main.cpp"
+      ; core=
+          "https://github.com/CodaProtocol/snark-challenge/blob/master/reference-07-groth16-prover/libsnark/main.cpp#L199"
+      }
+  ; postamble }

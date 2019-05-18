@@ -68,3 +68,5 @@ let sec ~title body = Section {heading= title; body}
 let leaf s = Leaf s
 
 let text : string -> string item = leaf
+
+let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt

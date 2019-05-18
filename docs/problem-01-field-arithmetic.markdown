@@ -30,7 +30,10 @@
 <a href="#montgomery-representation">5.1: Montgomery representation</a>
 </li>
 <li>
-<a href="#resources">5.2: Resources</a>
+<a href="#starter-code">5.2: Starter code</a>
+</li>
+<li>
+<a href="#other-resources">5.3: Other resources</a>
 </li>
 </ul>
 </div>
@@ -40,7 +43,7 @@
 - **Problem:** Use a GPU to multiply together an array of elements of a prime-order field.
 - **Prize:**
     - **First 25 submissions:** $50
-    - **All submissions:** Swag bag including SNARK challenge poster.
+    - **All submissions:** Swag bag including SNARK challenge T-shirt.
 
 ## Problem specification
 
@@ -98,7 +101,10 @@ Your submission will be run and evaluated as follows.
 ## Reference implementation
 
 The output of your submitted program will be checked against 
-the reference implementation [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic)
+the reference implementation at this repo [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic).
+The "main" file is [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/main.cpp).
+The core algorithm is implemented [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/algebra/fields/fp.tcc#L161).
+
 
 ## Further discussion and background
 
@@ -184,7 +190,16 @@ div_R(X * Y)
 ```
 which is the Montgomery representation of the product of the inputs, exactly as we wanted.
 
-### Resources
+### Starter code
+
+- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
+implementation.
+- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
+   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.
+
+### Other resources
 
 - Algorithms for big-integer multiplication and `div_R` (often called Montgomery reduction)
 are given [here](http://cacr.uwaterloo.ca/hac/about/chap14.pdf), where our $q$ is called $m$.

@@ -1,4 +1,10 @@
-Welcome to the SNARK challenge! The SNARK challenge is divided
+Welcome to the SNARK challenge! The SNARK challenge is a
+global competition to advance the state-of-the-art in performance
+for SNARK proving. Participants will be part of an effort that aims
+to have a massive impact on user-protecting cryptographic technology,
+and compete for $100,000 in prizes.
+
+The SNARK challenge is divided
 up into two stages. In the first stage, you'll get your feet wet and
 learn about the algorithms underlying the SNARK prover.
 Think of this stage as a paid training for the ultimate challenge
@@ -84,7 +90,7 @@ start with implementation.
 
 These challenges all build on the challenges of stage 1. They are
 
-1. Writing the fastest Groth16 SNARK prover on a machine with these [specs](/coda/build/specs.html)
+1. [Writing the fastest Groth16 SNARK prover](/snark-challenge/problem-07-groth16prove.html) on a machine with these [specs](/coda/build/specs.html)
     The prizes here total $55,000.
     
 2. Writing the fastest in-browser implementation of the Groth16 SNARK verifier.

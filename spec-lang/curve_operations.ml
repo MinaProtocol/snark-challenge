@@ -141,7 +141,16 @@ let interface : _ Problem.Interface.t =
 let postamble (pages : Pages.t) =
   let open Sectioned_page in
   let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
-  [ md
+  [ sec ~title:"Starter code"
+      [ md
+          {md|- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
+implementation.
+- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
+   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.|md}
+      ]
+  ; md
       {md|Please see [this page](%s) for a more full list of implementation techniques.|md}
       pages.implementation_strategies
   ; sec ~title:"Techniques"
@@ -206,6 +215,12 @@ let problem : Problem.t =
       ; prize= Prize.stage1 100 }
   ; preamble
   ; interface
-  ; reference_implementation_url=
-      "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations"
+  ; reference_implementation=
+      { repo=
+          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations"
+      ; main=
+          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations/libff/main.cpp"
+      ; core=
+          "https://github.com/CodaProtocol/snark-challenge/blob/master/reference-04-curve-operations/libff/algebra/curves/mnt753/mnt4753/mnt4753_g1.cpp#L135"
+      }
   ; postamble }

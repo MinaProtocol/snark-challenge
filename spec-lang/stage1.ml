@@ -57,7 +57,7 @@ start with implementation.|md}
               (Fn.compose leaf Markdown.of_string)
               {md|These challenges all build on the challenges of stage 1. They are
 
-1. Writing the fastest Groth16 SNARK prover on a machine with these [specs](/coda/build/specs.html)
+1. [Writing the fastest Groth16 SNARK prover](%s) on a machine with these [specs](/coda/build/specs.html)
     The prizes here total $55,000.
     
 2. Writing the fastest in-browser implementation of the Groth16 SNARK verifier.
@@ -69,7 +69,7 @@ start with implementation.|md}
 4. The code golf prize: Shortest Groth16 prover.
 5. Most creative Groth16 prover.
 5. Most elegant Groth16 prover.|md}
-          ]
+              pages.groth16 ]
       ; sec ~title:"Theory challenges"
           [ ksprintf
               (Fn.compose leaf Markdown.of_string)
@@ -80,7 +80,13 @@ let page pages =
   let t = page pages in
   let intro =
     ksprintf Markdown.of_string
-      {md|Welcome to the SNARK challenge! The SNARK challenge is divided
+      {md|Welcome to the SNARK challenge! The SNARK challenge is a
+global competition to advance the state-of-the-art in performance
+for SNARK proving. Participants will be part of an effort that aims
+to have a massive impact on user-protecting cryptographic technology,
+and compete for $100,000 in prizes.
+
+The SNARK challenge is divided
 up into two stages. In the first stage, you'll get your feet wet and
 learn about the algorithms underlying the SNARK prover.
 Think of this stage as a paid training for the ultimate challenge

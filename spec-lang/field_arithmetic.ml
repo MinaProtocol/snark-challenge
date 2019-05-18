@@ -15,7 +15,6 @@ let r = param "r"
 
 let preamble _pages =
   let open Sectioned_page in
-  let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ md
       {md|The basic operations needed for the SNARK prover algorithm are
 multiplication and addition of integers.
@@ -99,7 +98,16 @@ div_R(X * Y)
 ```
 which is the Montgomery representation of the product of the inputs, exactly as we wanted.|md}
           (q MNT4) (q MNT6) (q MNT4) ]
-  ; sec ~title:"Resources"
+  ; sec ~title:"Starter code"
+      [ md
+          {md|- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
+implementation.
+- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
+   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.|md}
+      ]
+  ; sec ~title:"Other resources"
       [ md
           {md|- Algorithms for big-integer multiplication and `div_R` (often called Montgomery reduction)
 are given [here](http://cacr.uwaterloo.ca/hac/about/chap14.pdf), where our $q$ is called $m$.
@@ -260,6 +268,11 @@ let problem : Problem.t =
   ; preamble= Fn.const []
   ; postamble= preamble
   ; interface
-  ; reference_implementation_url=
-      "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic"
-  }
+  ; reference_implementation=
+      { repo=
+          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic"
+      ; main=
+          "https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/main.cpp"
+      ; core=
+          "https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/algebra/fields/fp.tcc#L161"
+      } }

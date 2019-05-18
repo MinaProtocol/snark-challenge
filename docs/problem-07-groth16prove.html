@@ -55,6 +55,12 @@
     <li>
     <a href="#reference-implementation">4: Reference implementation</a>
     </li>
+    <li>
+    <a href="#further-discussion-and-background">5: Further discussion and background</a>
+    </li>
+    <li>
+    <a href="#starter-code">5.1: Starter code</a>
+    </li>
     </ul>
     </div>
     <h2 id="quick-details">Quick details</h2>
@@ -153,13 +159,19 @@
     Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to files <code>./MNT4753_preprocessed</code> and <code>./MNT6753_preprocessed</code>.</li>
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
-    <span class="ex">./main</span> MNT6753 PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+    <span class="ex">./main</span> MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
     <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
     <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
     <p>It can, if it likes, read the preprocessed files created in step 1 in order to help it solve the problem.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
-    <p>The output of your submitted program will be checked against the reference implementation <a href="">here</a></p>
+    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover">here</a>. The &quot;main&quot; file is <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover/libsnark/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-07-groth16-prover/libsnark/main.cpp#L199">here</a>.</p>
+    <h2 id="further-discussion-and-background">Further discussion and background</h2>
+    <h3 id="starter-code">Starter code</h3>
+    <ul>
+    <li>This <a href="https://github.com/data61/cuda-fixnum">library</a> implements prime-order field arithmetic in CUDA. Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example implementation.</li>
+    <li>This <a href="https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction">repo</a> has some starter code for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.</li>
+    </ul>
   </body>
 </html>

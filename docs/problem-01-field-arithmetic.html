@@ -59,7 +59,10 @@
     <a href="#montgomery-representation">5.1: Montgomery representation</a>
     </li>
     <li>
-    <a href="#resources">5.2: Resources</a>
+    <a href="#starter-code">5.2: Starter code</a>
+    </li>
+    <li>
+    <a href="#other-resources">5.3: Other resources</a>
     </li>
     </ul>
     </div>
@@ -69,7 +72,7 @@
     <li><strong>Prize:</strong>
     <ul>
     <li><strong>First 25 submissions:</strong> $50</li>
-    <li><strong>All submissions:</strong> Swag bag including SNARK challenge poster.</li>
+    <li><strong>All submissions:</strong> Swag bag including SNARK challenge T-shirt.</li>
     </ul></li>
     </ul>
     <h2 id="problem-specification">Problem specification</h2>
@@ -104,7 +107,7 @@
     <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
-    <p>The output of your submitted program will be checked against the reference implementation <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic">here</a></p>
+    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic">here</a>. The &quot;main&quot; file is <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/algebra/fields/fp.tcc#L161">here</a>.</p>
     <h2 id="further-discussion-and-background">Further discussion and background</h2>
     <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
     <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span>) respectively.</p>
@@ -137,7 +140,12 @@
     == (x * y * R * 1) % q
     == (x * y * R) % q</code></pre>
     <p>which is the Montgomery representation of the product of the inputs, exactly as we wanted.</p>
-    <h3 id="resources">Resources</h3>
+    <h3 id="starter-code">Starter code</h3>
+    <ul>
+    <li>This <a href="https://github.com/data61/cuda-fixnum">library</a> implements prime-order field arithmetic in CUDA. Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example implementation.</li>
+    <li>This <a href="https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction">repo</a> has some starter code for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.</li>
+    </ul>
+    <h3 id="other-resources">Other resources</h3>
     <ul>
     <li>Algorithms for big-integer multiplication and <code>div_R</code> (often called Montgomery reduction) are given <a href="http://cacr.uwaterloo.ca/hac/about/chap14.pdf">here</a>, where our <span class="math inline">q</span> is called <span class="math inline">m</span>.</li>
     <li>A C++ implementation of Montgomery reduction can be found <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp.tcc#L161">here</a>.</li>
