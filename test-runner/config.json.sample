@@ -1,7 +1,0 @@
-{
-    "region_name": "AMAZONREGION",
-    "table_name" : "TABLENAME",
-    "service_url": "https://SERVICEURL",
-    "api_key": "SECRETKEY",
-    "test_id": "SECRETID"
-}
