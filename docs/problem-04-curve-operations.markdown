@@ -96,17 +96,17 @@ the techniques section below.
 ### Input
 
 - n : <span>uint64</span>
-- g4_1 : <span>Array(<a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>, <a href="#bg==">n</a>)</span>
-- g4_2 : <span>Array(<a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>, <a href="#bg==">n</a>)</span>
-- g6_1 : <span>Array(<a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>, <a href="#bg==">n</a>)</span>
-- g6_2 : <span>Array(<a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>, <a href="#bg==">n</a>)</span>
+- g4_1 : <span>Array(<a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.$G_1$</a>, <a href="#bg==">n</a>)</span>
+- g4_2 : <span>Array(<a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.$G_2$</a>, <a href="#bg==">n</a>)</span>
+- g6_1 : <span>Array(<a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.$G_1$</a>, <a href="#bg==">n</a>)</span>
+- g6_2 : <span>Array(<a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.$G_2$</a>, <a href="#bg==">n</a>)</span>
 
 ### Output
 
-- h4_1 : <a href="/snark-challenge/MNT4753.html#XChHXzFcKQ==">MNT4753.\(G_1\)</a>
-- h4_2 : <a href="/snark-challenge/MNT4753.html#XChHXzJcKQ==">MNT4753.\(G_2\)</a>
-- h6_1 : <a href="/snark-challenge/MNT6753.html#XChHXzFcKQ==">MNT6753.\(G_1\)</a>
-- h6_2 : <a href="/snark-challenge/MNT6753.html#XChHXzJcKQ==">MNT6753.\(G_2\)</a>
+- h4_1 : <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.$G_1$</a>
+- h4_2 : <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.$G_2$</a>
+- h6_1 : <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.$G_1$</a>
+- h6_2 : <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.$G_2$</a>
 
 ### Expected behavior
 

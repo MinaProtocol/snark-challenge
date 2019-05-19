@@ -48,7 +48,7 @@ implement the full SNARK prover and you'll get paid to do so.
 The first 25 participants who complete the four challenges in this stage
 will receive $200 and a *SNARK Challenge* swag-bag.
 They'll also be very well positioned to apply their solutions to
-create submissions for the $75,000 in optimization prizes up for grabs in the second stage.
+create submissions for $55,000 of the $75,000 in prizes up for grabs in the second stage.
 
 Let's dive into it and give a quick overview of the SNARK prover so
 we have an idea of where we're going. The SNARK prover itself
@@ -88,7 +88,11 @@ start with implementation.
 
 ### Implementation challenges
 
-These challenges all build on the challenges of stage 1. They are
+These challenges all build on the challenges of stage 1. Stage 2 officially starts on
+June 3, but we will add information regarding these challenges as they are 
+finalized in case you want to get a head start.
+
+The challenges are
 
 1. [Writing the fastest Groth16 SNARK prover](/snark-challenge/problem-07-groth16prove.html) on a machine with these [specs](https://github.com/CodaProtocol/snark-challenge/blob/master/descriptions/testing_platform.markdown)
     The prizes here total $55,000.
@@ -100,7 +104,9 @@ These challenges all build on the challenges of stage 1. They are
 3. Fastest Groth16 SNARK prover for CPU.
 
 4. The code golf prize: Shortest Groth16 prover.
+
 5. Most creative Groth16 prover.
+
 5. Most elegant Groth16 prover.
 
 ### Theory challenges

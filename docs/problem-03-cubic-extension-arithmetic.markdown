@@ -154,18 +154,18 @@ var fq3_mul = (a, b) => {
 ### Input
 
 - n : <span>uint64</span>
-- x : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span>, <a href="#bg==">n</a>)</span>
+- x : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>3</sup></sub></span>, <a href="#bg==">n</a>)</span>
 
 ### Output
 
-- y : <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span>
+- y : <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>3</sup></sub></span>
 
 ### Expected behavior
 
 Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found [here]().
     
 The output should be `x[0] * x[1] * ... * x[n - 1]`
-where `*` is multiplication in the field <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span> as described above.
+where `*` is multiplication in the field <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>3</sup></sub></span> as described above.
 
 ## Submission guidelines
 
