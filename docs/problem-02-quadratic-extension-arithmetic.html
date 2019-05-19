@@ -137,6 +137,7 @@
     <p>Your submission will be run and evaluated as follows.</p>
     <ol start="0" style="list-style-type: decimal">
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+    <li><p>Your binary will be compiled with <code>./build.sh</code>. This step should produce a binary <code>./main</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
     <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
     <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
@@ -147,8 +148,8 @@
     <h2 id="further-discussion-and-background">Further discussion and background</h2>
     <h3 id="starter-code">Starter code</h3>
     <ul>
-    <li>This <a href="https://github.com/data61/cuda-fixnum">library</a> implements prime-order field arithmetic in CUDA. Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example implementation.</li>
-    <li>This <a href="https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction">repo</a> has some starter code for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.</li>
+    <li>This <a href="https://github.com/CodaProtocol/snark-challenge-cuda-starter">repo</a> has some CUDA starter code, just to illustrate how to build it on the benchmark machine.</li>
+    <li>This <a href="https://github.com/data61/cuda-fixnum">library</a> implements prime-order field arithmetic in CUDA. Unfortunately, it's not currently working correctly with CUDA 10.1 which is what is used on our benchmark machine, but it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example implementation.</li>
     </ul>
     <h3 id="efficiency-tricks">Efficiency tricks</h3>
     <p>The pseduocode above does 4 <span class="math inline">\mathbb{F}_q</span> multiplications, 1 multiplication by <span class="math inline">13</span> (which can be made much cheaper than a general multiplication if it is special-cased), and 2 additions.</p>

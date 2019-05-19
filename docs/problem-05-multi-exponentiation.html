@@ -118,6 +118,7 @@
     <p>where <code>PATH_TO_X_PARAMETERS</code> will be replaced by the actual path.</p>
     Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to files <code>./MNT4753_preprocessed</code> and <code>./MNT4753_preprocessed</code> and <code>./MNT6753_preprocessed</code> and <code>./MNT6753_preprocessed</code>.</li>
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+    <li><p>Your binary will be compiled with <code>./build.sh</code>. This step should produce a binary <code>./main</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
     <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
     <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS

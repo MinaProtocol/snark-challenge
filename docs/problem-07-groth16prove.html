@@ -158,6 +158,7 @@
     <p>where <code>PATH_TO_X_PARAMETERS</code> will be replaced by the actual path.</p>
     Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to files <code>./MNT4753_preprocessed</code> and <code>./MNT6753_preprocessed</code>.</li>
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
+    <li><p>Your binary will be compiled with <code>./build.sh</code>. This step should produce a binary <code>./main</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
     <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
     <span class="ex">./main</span> MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
@@ -170,8 +171,8 @@
     <h2 id="further-discussion-and-background">Further discussion and background</h2>
     <h3 id="starter-code">Starter code</h3>
     <ul>
-    <li>This <a href="https://github.com/data61/cuda-fixnum">library</a> implements prime-order field arithmetic in CUDA. Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example implementation.</li>
-    <li>This <a href="https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction">repo</a> has some starter code for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.</li>
+    <li>This <a href="https://github.com/CodaProtocol/snark-challenge-cuda-starter">repo</a> has some CUDA starter code, just to illustrate how to build it on the benchmark machine.</li>
+    <li>This <a href="https://github.com/data61/cuda-fixnum">library</a> implements prime-order field arithmetic in CUDA. Unfortunately, it's not currently working correctly with CUDA 10.1 which is what is used on our benchmark machine, but it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example implementation.</li>
     </ul>
   </body>
 </html>

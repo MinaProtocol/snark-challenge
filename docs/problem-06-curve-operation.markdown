@@ -91,6 +91,8 @@ Your submission will be run and evaluated as follows.
 0. The submission runner will generate a random sequence of inputs, saved to a file
    `PATH_TO_INPUTS`.
 
+1. Your binary will be compiled with `./build.sh`. This step should produce a binary `./main`.
+
 3. Your binary will be invoked with
 
     ```bash

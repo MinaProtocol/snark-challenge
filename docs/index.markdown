@@ -90,7 +90,7 @@ start with implementation.
 
 These challenges all build on the challenges of stage 1. They are
 
-1. [Writing the fastest Groth16 SNARK prover](/snark-challenge/problem-07-groth16prove.html) on a machine with these [specs](/coda/build/specs.html)
+1. [Writing the fastest Groth16 SNARK prover](/snark-challenge/problem-07-groth16prove.html) on a machine with these [specs](https://github.com/CodaProtocol/snark-challenge/blob/master/descriptions/testing_platform.markdown)
     The prizes here total $55,000.
     
 2. Writing the fastest in-browser implementation of the Groth16 SNARK verifier.

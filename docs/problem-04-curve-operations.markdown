@@ -128,6 +128,8 @@ Your submission will be run and evaluated as follows.
 0. The submission runner will generate a random sequence of inputs, saved to a file
    `PATH_TO_INPUTS`.
 
+1. Your binary will be compiled with `./build.sh`. This step should produce a binary `./main`.
+
 3. Your binary will be invoked with
 
     ```bash
@@ -157,12 +159,13 @@ The core algorithm is implemented [here](https://github.com/CodaProtocol/snark-c
 
 ### Starter code
 
+- This [repo](https://github.com/CodaProtocol/snark-challenge-cuda-starter) has some CUDA starter code,
+   just to illustrate how to build it on the benchmark machine.
 - This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
-Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+Unfortunately, it's not currently working correctly with CUDA 10.1 which is what is used on our benchmark machine, but
 it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
 implementation.
-- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
-   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.
+
 
 Please see [this page](/snark-challenge/strategies.html) for a more full list of implementation techniques.
 

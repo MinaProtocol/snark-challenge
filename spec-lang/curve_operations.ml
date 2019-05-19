@@ -143,12 +143,13 @@ let postamble (pages : Pages.t) =
   let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ sec ~title:"Starter code"
       [ md
-          {md|- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
-Unfortunately, it's not currently compiling against CUDA 10.1 which is what is used on our benchmark machine, but
+          {md|- This [repo](https://github.com/CodaProtocol/snark-challenge-cuda-starter) has some CUDA starter code,
+   just to illustrate how to build it on the benchmark machine.
+- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
+Unfortunately, it's not currently working correctly with CUDA 10.1 which is what is used on our benchmark machine, but
 it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
 implementation.
-- This [repo](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) has some starter code
-   for a CUDA implementation of a parallel reduction for summing up an array of 32-bit integers.|md}
+|md}
       ]
   ; md
       {md|Please see [this page](%s) for a more full list of implementation techniques.|md}
