@@ -113,14 +113,15 @@ let interface : _ Problem.Interface.t =
   let%bind n = !Input "n" (Literal UInt64) in
   let input (c, i) =
     let arr =
-      Literal (Type.Array {element= Name (group c i); length= Some (Name n)})
+      Literal
+        (Type.Array {element= Name (group_md c i); length= Some (Name n)})
     in
     !Input (sprintf "g%d_%d" (embedding_degree c) (int_of_two i)) arr
   in
   let output (c, i) =
     !Output
       (sprintf "h%d_%d" (embedding_degree c) (int_of_two i))
-      (Name (group c i))
+      (Name (group_md c i))
   in
   let params = [(MNT4, One); (MNT4, Two); (MNT6, One); (MNT6, Two)] in
   let%map _input = all (List.map ~f:input params)

@@ -225,7 +225,7 @@ let interface : _ Problem.Interface.t =
   let fqe =
     Type.Field.Extension
       { base= Literal fq
-      ; degree= 2
+      ; degree= 3
       ; non_residue= Literal (Integer (Value (Bigint.of_int 13))) }
   in
   let%bind n = !Input "n" (Literal UInt64) in
