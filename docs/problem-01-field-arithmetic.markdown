@@ -197,9 +197,7 @@ which is the Montgomery representation of the product of the inputs, exactly as 
 - This [repo](https://github.com/CodaProtocol/snark-challenge-cuda-starter) has some CUDA starter code,
    just to illustrate how to build it on the benchmark machine.
 - This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
-Unfortunately, it's not currently working correctly with CUDA 10.1 which is what is used on our benchmark machine, but
-it should be a great place to start, either in getting it to compile against CUDA 10.1 or just as an example
-implementation.
+It should be a great place to start.
 
 
 ### Other resources
