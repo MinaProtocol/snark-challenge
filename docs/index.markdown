@@ -28,7 +28,7 @@ to build the fastest possible [Groth16 prover](/snark-challenge/problem-07-groth
 <a href="#stage-1">1: Stage 1</a>
 </li>
 <li>
-<a href="#the-stage-1-challenges">1.1: The stage 1 challenges</a>
+<a href="#the-stage-1-challenges">1.1: The Stage 1 challenges</a>
 </li>
 <li>
 <a href="#stage-2">2: Stage 2</a>
@@ -44,15 +44,12 @@ to build the fastest possible [Groth16 prover](/snark-challenge/problem-07-groth
 
 ## Stage 1
 
-Want to learn cutting edge cryptography, GPU programming and get
-paid to do it? Then you're in the right place.
-
 In this stage, you'll implement the sub-algorithms you need to
 implement the full SNARK prover and you'll get paid to do so.
 The first 25 participants who complete the four challenges in this stage
 will receive $200 and a *SNARK Challenge* swag-bag.
 They'll also be very well positioned to apply their solutions to
-create submissions for $55,000 of the $75,000 in prizes up for grabs in the second stage.
+create submissions for $55,000 of the $75,000 in prizes up for grabs in Stage 2 of the challenge.
 
 Let's dive into it and give a quick overview of the SNARK prover so
 we have an idea of where we're going. The SNARK prover itself
@@ -68,21 +65,19 @@ particular is just a big [reduction](https://developer.download.nvidia.com/asset
 although the reduction function requires some work to describe.
 
 These 2 algorithms themselves have sub-algorithms which you'll need to implement first.
-In total, the first stage has 4 challenges. After implementing these challenges you'll
-be well on your way to having a complete GPU implementation of the SNARK prover itself.
+In total, the first stage has 4 challenges. After implementing these algorithms you'll
+be well on your way to having a complete GPU implementation of the SNARK prover.
 
-### The stage 1 challenges
+### The Stage 1 challenges
 
-The stage 1 challenges are
+1. [Finite field arithmetic](/snark-challenge/problem-01-field-arithmetic.html)
+2. [Quadratic extension arithmetic](/snark-challenge/problem-02-quadratic-extension-arithmetic.html)
+3. [Cubic extension arithmetic](/snark-challenge/problem-03-cubic-extension-arithmetic.html)
+4. [Elliptic curve operations](/snark-challenge/problem-04-curve-operations.html)
 
-1. [Finite field arithmetic](/snark-challenge/problem-01-field-arithmetic.html). Reward of $50.
-2. [Quadratic extension arithmetic](/snark-challenge/problem-02-quadratic-extension-arithmetic.html). Reward of $25.
-3. [Cubic extension arithmetic](/snark-challenge/problem-03-cubic-extension-arithmetic.html). Reward of $25.
-4. [Elliptic curve operations](/snark-challenge/problem-04-curve-operations.html). Reward of $100.
-
-You'll want to get started with the first challenge, [finite field arithmetic](/snark-challenge/problem-01-field-arithmetic.html),
-and work your way through the others. If you want to get a sense for how all these
-algorithms come together to build the whole prover, check out [this page](/snark-challenge/intro.html).
+You'll want to start with the first challenge, [finite field arithmetic](/snark-challenge/problem-01-field-arithmetic.html),
+and work your way sequentially through the others. If you want to get a sense for how all these
+algorithms come together to build the whole SNARK prover, check out [this page](/snark-challenge/intro.html).
 
 ## Stage 2
 
@@ -92,22 +87,22 @@ start with implementation.
 
 ### Implementation challenges
 
-These challenges all build on the challenges of stage 1. Stage 2 officially starts on
+These challenges all build on the algorithms in Stage 1. Stage 2 officially starts on
 June 3, but we will add information regarding these challenges as they are 
 finalized in case you want to get a head start.
 
-The challenges are
+The challenges are:
 
-1. [Writing the fastest Groth16 SNARK prover](/snark-challenge/problem-07-groth16prove.html) on a machine with these [specs](https://github.com/CodaProtocol/snark-challenge/blob/master/descriptions/testing_platform.markdown)
-    The prizes here total $55,000.
+1. [Writing the fastest Groth16 SNARK prover](/snark-challenge/problem-07-groth16prove.html) on a machine with these [specs](https://github.com/CodaProtocol/snark-challenge/blob/master/descriptions/testing_platform.markdown).
+    * The prizes here total $55,000
     
 2. Writing the fastest in-browser implementation of the Groth16 SNARK verifier.
-    Acceptable submissions would compile to WebAssembly or JavaScript.
-    The fastest entry will receive $10,000.
+    * Acceptable submissions will compile to WebAssembly or JavaScript
+    * The fastest entry will win $10,000!
 
 3. Fastest Groth16 SNARK prover for CPU.
 
-4. The code golf prize: Shortest Groth16 prover.
+4. The code golf prize: shortest Groth16 prover.
 
 5. Most creative Groth16 prover.
 

@@ -1,4 +1,6 @@
-# Quadratic extension arithmetic
+# Stage 1 - Challenge 2: Quadratic extension arithmetic
+
+## Table of Contents
 
 <div class="table-of-contents">
 <ul>
@@ -49,7 +51,7 @@
     - **All submissions:** Swag bag including SNARK challenge T-shirt.
 
 Now that we've implemented arithmetic in a prime-order field
-in a [previous challenge](/snark-challenge/problem-01-field-arithmetic.html), we can implement field extension
+in the [previous challenge](/snark-challenge/problem-01-field-arithmetic.html), we can implement field extension
 arithmetic, which we'll need for multi-exponentiation.
 
 ## Definitions and review
