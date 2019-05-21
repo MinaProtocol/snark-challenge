@@ -88,7 +88,7 @@
     <p>Similar to the complex numbers, the elements of <span class="math inline">\mathbb{F}_q[x] / (x^3 = 11)</span> are sums of the form <span class="math inline">a_0 + a_1 x + a_2 x^2</span> where <span class="math inline">a_0, a_1, a_2</span> are elements of <span class="math inline">\mathbb{F}_q</span>. This is a field extension of <span class="math inline">\mathbb{F}_q</span> since <span class="math inline">\mathbb{F}_q</span> is contained in this field as the elements with <span class="math inline">a_1 = a_2 = 0</span>. For short, we call this field <span class="math inline">\mathbb{F}_{q^3}</span> since it has <span class="math inline">q^3</span> elements.</p>
     <h2 id="the-problem">The problem</h2>
     <p>In code, you can think of an element of <span class="math inline">\mathbb{F}_{q^3}</span> as a tuple <code>(a0, a1, a2)</code> where each of <code>a0</code>, <code>a1</code>, <code>a2</code> is an element of <span class="math inline">\mathbb{F}_q</span> or a struct <code>{ a0 : Fq, a1 : Fq, a2 : Fq }</code>.</p>
-    <p>This problem will have you implement multiplication for <span class="math inline">\mathbb{F}_{q^2}</span>. Addition and multiplication are defined how you might expect:</p>
+    <p>This problem will have you implement multiplication for <span class="math inline">\mathbb{F}_{q^3}</span>. Addition and multiplication are defined how you might expect:</p>
     <p><span class="math display">\displaystyle 
     \begin{aligned}
     (a_0 + a_1 x + a_2 x^2) +  (b_0 + b_1 x + b_2 x^2)
