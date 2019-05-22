@@ -458,6 +458,9 @@ type G2AffinePoint = {
   y : EFieldElement,
 }
 
+// Everything that follows is the same as the "G1" versions of these functions
+// with Add, Mul, etc replaced with EAdd, EMul, etc
+
 function G2pointAdd(P : G2JacobianPoint, Q : G2JacobianPoint) : G2JacobianPoint {
   let X1 = P.x, Y1 = P.y, Z1 = P.z;
   let X2 = Q.x, Y2 = Q.y, Z2 = Q.z;
@@ -497,9 +500,6 @@ function G2pointDouble(P : G2JacobianPoint) : G2JacobianPoint {
   return { x:X3, y:Y3, z:Z3 };
 }
 
-// Since Affine points are just Jacobian points with z=1,
-// we can special case a lot of the operations above to
-// get a more efficient "mixed add" function.
 function G2mixedAdd(P : G2JacobianPoint, Q : G2AffinePoint) : G2JacobianPoint {
   // Many of these can be done in place to save memory
   let X1 = P.x, Y1 = P.y, Z1 = P.z;
