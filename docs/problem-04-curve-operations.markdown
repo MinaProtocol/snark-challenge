@@ -1,4 +1,6 @@
-# Curve operations
+# Stage 1 - Challenge 4: Elliptic curve operations
+
+## Table of Contents
 
 <div class="table-of-contents">
 <ul>

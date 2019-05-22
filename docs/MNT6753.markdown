@@ -1,6 +1,6 @@
 <div class="module">
 <h1>
-MNT6753
+MNT6-753 Elliptic Curve
 </h1>
 <div class="entries">
 <p>This page describes the constants, fields, and groups associated with the MNT6-753 curve.</p>

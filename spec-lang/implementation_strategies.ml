@@ -2,7 +2,7 @@ open Core
 open Util
 open Sectioned_page
 
-let url = sprintf "%s/strategies.html" base_url
+let url = sprintf "%s/implementation-strategies.html" base_url
 
 let page_t (pages : Pages.t) =
   [ ksprintf text

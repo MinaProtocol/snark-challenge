@@ -1,4 +1,6 @@
-# Field arithmetic
+# Stage 1 - Challenge 1: Field arithmetic
+
+## Table of Contents
 
 <div class="table-of-contents">
 <ul>
@@ -78,10 +80,10 @@ where `*` is multiplication in the field <span>&#x1D53D;<sub><a href="/snark-cha
 Your submission will be run and evaluated as follows.
 
 
-0. The submission runner will generate a random sequence of inputs, saved to a file
+1. The submission runner will generate a random sequence of inputs, saved to a file
    `PATH_TO_INPUTS`.
 
-1. Your binary will be compiled with `./build.sh`. This step should produce a binary `./main`.
+2. Your binary will be compiled with `./build.sh`. This step should produce a binary `./main`.
 
 3. Your binary will be invoked with
 
@@ -103,7 +105,7 @@ Your submission will be run and evaluated as follows.
 ## Reference implementation
 
 The output of your submitted program will be checked against 
-the reference implementation at this repo [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic).
+the reference implementation in [this repo](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic).
 The "main" file is [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/main.cpp).
 The core algorithm is implemented [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/algebra/fields/fp.tcc#L161).
 
