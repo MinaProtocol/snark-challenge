@@ -21,10 +21,13 @@ module Participant_set = struct
     | First_n of int
     | First_to of Condition.t
     | Best_performance_at_end
+    | Highest_quality
 
   let to_string = function
     | All ->
         "All submissions"
+    | Highest_quality ->
+        "Highest quality at the end of the competition"
     | First_n n ->
         sprintf "First %d submissions" n
     | Best_performance_at_end ->

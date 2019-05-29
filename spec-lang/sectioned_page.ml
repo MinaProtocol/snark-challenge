@@ -70,3 +70,25 @@ let leaf s = Leaf s
 let text : string -> string item = leaf
 
 let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt
+
+let of_markdown =
+  let header_string level =
+    String.init level ~f:(fun _ -> '#') ^ " " 
+  in
+  let rec of_markdown level lines =
+    let prefix = header_string level in
+    List.group lines
+      ~break:(fun _ x -> String.is_prefix x ~prefix)
+    |> List.map ~f:(function
+        | [] -> assert false
+        | (x :: xs) as seclines ->
+          match String.chop_prefix x ~prefix with 
+          | None -> 
+            (* This is a text section *)
+            leaf (String.concat ~sep:"\n" seclines)
+          | Some header ->
+            sec ~title:(String.strip header)
+              (of_markdown (level + 1) xs)
+      )
+  in
+  Fn.compose (of_markdown 1) String.split_lines

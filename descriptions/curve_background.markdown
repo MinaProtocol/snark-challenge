@@ -1,3 +1,8 @@
+---
+header-includes:
+- \newcommand{\F}{\mathbb{F}}
+---
+
 ## Elliptic curves
 
 An elliptic curve $E$ over a field $\F_q$ is the set of points $(x, y) \in F_q \times \F_q$ satisfying the equation

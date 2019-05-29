@@ -76,10 +76,15 @@ The challenges are
 
 5. Most elegant Groth16 prover.|md}
               pages.groth16 ]
-      ; sec ~title:"Theory challenges"
+      ; sec ~title:"The theory challenge"
           [ ksprintf
               (Fn.compose leaf Markdown.of_string)
-              "A description of the theory challenges will be coming soon!" ]
+              {md|The theory challenge asks participants to
+find a collection of elliptic curves which enable extremely efficient recursive
+composition. The prize is $20,000 for the best construction. You can find a problem
+description, along with more background and resources [here](%s).
+|md} pages.theory
+          ]
       ] ]
 
 let page pages =

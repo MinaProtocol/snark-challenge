@@ -1,3 +1,4 @@
+# Background
 In order to efficiently compose SNARKs together, one wants a collection of
 elliptic curves with certain properties. The goal of this challenge is to discover
 and construct elliptic curves with these properties.
@@ -158,7 +159,7 @@ The reason one imposes this restriction is that if $r_v$ has a large smooth part
 more efficiently perform an FFT over the field $\mathbb{F}_{r_v}$ which is part of the
 SNARK prover.
 
-## Problem specification
+# Problem specification
 The goal of this challenge is to construct a $(k, n)$-smooth lollipop of pairing-friendly curves as described
 above such that every curve in the lollipop has at least 120 bits of security. The quality
 of a lollipop will be defined using a combination of the following criteria:
@@ -172,7 +173,7 @@ of a lollipop will be defined using a combination of the following criteria:
 These parameters affect the efficiency of the overall construction in a specific but
 difficult to specify way, so we will take them all into account when judging submissions.
 
-## The current best
+# The current best
 The best currently-known lollipop of curves is an MNT4/6 cycle with the following quality metrics:
 
 - The length of the stick is 0. (This is the best possible.)
@@ -182,21 +183,21 @@ The best currently-known lollipop of curves is an MNT4/6 cycle with the followin
   while maintaining $128$ bits of security.)
 - $k = 5$
 - $n$ is $819,200$. (For the other curve in the cycle the $5$-smooth part is 
-  $819,200^2 = 671,088,640,000$, which is very good.)
+  $(819,200)^2 = 671,088,640,000$, which is very good.)
 
 Here are the parameters of the 
 [MNT4 curve](https://coinlist.co/build/coda/pages/MNT4753)
 and the
 [MNT6 curve](https://coinlist.co/build/coda/pages/MNT6753).
 
-## Submission format
+# Submission format
 Your submission should consist of the following (the more items included the better):
 
 - The equations and parameters of a lollipop of curves.
 - A mathematical description of the process by which the curves were obtained.
 - Any code used to produce the parameters of the curves in the lollipop.
 
-## Resources
+# Resources
 
 - A [Rust program](https://github.com/imeckler/curve-search) for sampling MNT4/6 cycles.
 - An [excellent set of slides](https://www.cosic.esat.kuleuven.be/ecc2013/files/pierrick_gaudry_2.pdf)

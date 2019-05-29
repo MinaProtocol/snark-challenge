@@ -152,6 +152,7 @@ let site =
   in
   let pages : Pages.t =
     { intro= Intro.url
+    ; theory = Theory.url
     ; implementation_strategies= Implementation_strategies.url
     ; field_arithmetic= problem_url 1 Field_arithmetic.problem
     ; quadratic_extension= problem_url 2 Quadratic_extension.problem
@@ -173,6 +174,7 @@ let site =
     [ File_system.directory "snark-challenge"
         ( page "intro" (Intro.page pages)
         @ page "index" (Stage1.page pages)
+        @ page "theory" (Theory.page pages)
         @ page "strategies" (Implementation_strategies.page pages)
         @ [ File_system.file (File.of_text ~name:".nojekyll" "")
           ; File_system.copy_directory "static" ]
