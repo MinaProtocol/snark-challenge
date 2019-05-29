@@ -83,9 +83,8 @@ The challenges are
 find a collection of elliptic curves which enable extremely efficient recursive
 composition. The prize is $20,000 for the best construction. You can find a problem
 description, along with more background and resources [here](%s).
-|md} pages.theory
-          ]
-      ] ]
+|md}
+              pages.theory ] ] ]
 
 let page pages =
   let t = page pages in

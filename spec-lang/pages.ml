@@ -2,7 +2,7 @@ type url = string
 
 type t =
   { intro: url
-  ; theory : url
+  ; theory: url
   ; implementation_strategies: url
   ; mnt4: url
   ; mnt6: url
