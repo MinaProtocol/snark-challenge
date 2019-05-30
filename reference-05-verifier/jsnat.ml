@@ -3,37 +3,34 @@ open Js_of_ocaml
 
 type t = < > Js.t
 
-let of_int (n : int) : t =
-  Js.Unsafe.global##BigInt n
+let of_int (n : int) : t = Js.Unsafe.global ## BigInt n
 
-let of_jsstring (s : Js.js_string Js.t) : t =
-  Js.Unsafe.global##BigInt s
+let of_jsstring (s : Js.js_string Js.t) : t = Js.Unsafe.global ## BigInt s
 
 let of_string s = of_jsstring (Js.string s)
 
 let equal =
   let f = Js.Unsafe.pure_js_expr "(function(x, y) { return x === y; })" in
-  fun (x:t) (y:t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
-    |> Js.to_bool
+  fun (x : t) (y : t) ->
+    Js.Unsafe.(fun_call f [|inject x; inject y|]) |> Js.to_bool
 
-let shift_right = 
+let shift_right =
   let f =
-    Js.Unsafe.pure_js_expr {js|function(x, n) {
+    Js.Unsafe.pure_js_expr
+      {js|function(x, n) {
       return x >> BigInt(n);
     }|js}
   in
-  fun (x : t) ( n : int) ->
-    Js.Unsafe.(fun_call f [|inject x; inject n|])
+  fun (x : t) (n : int) -> Js.Unsafe.(fun_call f [|inject x; inject n|])
 
-let shift_left = 
+let shift_left =
   let f =
-    Js.Unsafe.pure_js_expr {js|function(x, n) {
+    Js.Unsafe.pure_js_expr
+      {js|function(x, n) {
       return x << BigInt(n);
     }|js}
   in
-  fun (x : t) ( n : int) ->
-    Js.Unsafe.(fun_call f [|inject x; inject n|])
+  fun (x : t) (n : int) -> Js.Unsafe.(fun_call f [|inject x; inject n|])
 
 let log_and =
   let f =
@@ -41,8 +38,7 @@ let log_and =
       return x & y;
     }|js}
   in
-  fun (x : t) (y : t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
+  fun (x : t) (y : t) -> Js.Unsafe.(fun_call f [|inject x; inject y|])
 
 let log_or =
   let f =
@@ -50,24 +46,20 @@ let log_or =
       return x | y;
     }|js}
   in
-  fun (x : t) (y : t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
+  fun (x : t) (y : t) -> Js.Unsafe.(fun_call f [|inject x; inject y|])
 
 let test_bit =
   let one = of_int 1 in
-  fun t i ->
-    equal
-      (log_and one (shift_right t i))
-      one
+  fun t i -> equal (log_and one (shift_right t i)) one
 
 let ( < ) : t -> t -> bool =
   let f = Js.Unsafe.pure_js_expr {js|(function(x, y) { return x < y; })|js} in
-  fun (x:t) (y:t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
+  fun (x : t) (y : t) -> Js.Unsafe.(fun_call f [|inject x; inject y|])
 
 let num_bits =
   let f =
-    Js.Unsafe.pure_js_expr {js|function(x) {
+    Js.Unsafe.pure_js_expr
+      {js|function(x) {
       var zero = BigInt(0);
       x = x >= zero ? x : -x;
       var one = BigInt(1);
@@ -80,8 +72,7 @@ let num_bits =
       return res;
     }|js}
   in
-  fun (x:t) : int ->
-    Js.Unsafe.(fun_call f [| inject x |])
+  fun (x : t) -> (Js.Unsafe.(fun_call f [|inject x|]) : int)
 
 let to_bytes x =
   let n = num_bits x in
@@ -100,42 +91,31 @@ let of_bytes x =
 
 let ( + ) : t -> t -> t =
   let f = Js.Unsafe.pure_js_expr {js|(function(x, y) { return x + y; })|js} in
-  fun (x:t) (y:t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
+  fun (x : t) (y : t) -> Js.Unsafe.(fun_call f [|inject x; inject y|])
 
 let ( - ) : t -> t -> t =
   let f = Js.Unsafe.pure_js_expr {js|(function(x, y) { return x - y; })|js} in
-  fun (x:t) (y:t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
+  fun (x : t) (y : t) -> Js.Unsafe.(fun_call f [|inject x; inject y|])
 
 let ( * ) : t -> t -> t =
   let f = Js.Unsafe.pure_js_expr {js|(function(x, y) { return x * y; })|js} in
-  fun (x:t) (y:t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
+  fun (x : t) (y : t) -> Js.Unsafe.(fun_call f [|inject x; inject y|])
 
 let ( % ) : t -> t -> t =
   let f = Js.Unsafe.pure_js_expr {js|(function(x, y) { return x % y; })|js} in
-  fun (x:t) (y:t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
+  fun (x : t) (y : t) -> Js.Unsafe.(fun_call f [|inject x; inject y|])
 
 let ( // ) : t -> t -> t =
   let f = Js.Unsafe.pure_js_expr {js|(function(x, y) { return x / y; })|js} in
-  fun (x:t) (y:t) ->
-    Js.Unsafe.(fun_call f [|inject x; inject y|])
+  fun (x : t) (y : t) -> Js.Unsafe.(fun_call f [|inject x; inject y|])
 
-let to_string x =
-  Js.to_string (x##toString)
+let to_string x = Js.to_string x##toString
 
-let to_string (t:t) = to_string (Js.Unsafe.coerce t)
+let to_string (t : t) = to_string (Js.Unsafe.coerce t)
 
 let to_int_exn t = Int.of_string (to_string t)
 
-let compare t1 t2 =
-  if equal t1 t2
-  then 0
-  else if t1 < t2
-  then -1
-  else 1
+let compare t1 t2 = if equal t1 t2 then 0 else if t1 < t2 then -1 else 1
 
 module String_hum = struct
   type nonrec t = t
