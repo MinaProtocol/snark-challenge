@@ -51,7 +51,12 @@ have an elliptic curve $E_v$ such that
 - $E_v$ is defined over a field of order $q_v$ with $q_v$ a prime.
 - $E_v$ has a subgroup of order $r_v$ with $r_v$ a prime.
 - $E_v$ is pairing friendly.
-- If $(u, v)$ is an arc in $A$, then $q_u = r_v$.
+- $(u, v)$ is an arc in $A$ iff $q_u = r_v$.
+
+Here is an example of a pairing-friendly graph of curves.
+<div style='width:100%; text-align:center'>
+<img src="static/curvegraph.png" width="500px">
+</div>
 
 Note that to each vertex $v$ we can also associate a SNARK construction (say Groth16)
 for verifying $\mathbb{F}_{r_v}$ arithmetic computations
@@ -65,12 +70,11 @@ can talk about proofs produced by the SNARK construction associated to $u$.
 Or put another way, an edge $(u, v)$ allows us to *re-cast* an
 $\mathbb{F}_{r_u}$ computation as an $\mathbb{F}_{r_v}$ computation.
 
-TODO: Picture here
-Graph:
-
+<!--
 - $E_1 / \mathbb{F}_5 \colon y^2 = x^3 + 4x + 2$ : order 3
 - $E_2 / \mathbb{F}_3 \colon y^2 = x^3 + 2x^2 + 1$ : order 5
 - $E_3 / \mathbb{F}_5 \colon y^2 = x^3 + 2x$ : order 2
+-->
 
 ## Pairing-friendly cycles and recursive composition
 
@@ -245,3 +249,5 @@ for every vertex $v \in V$ we have an associated elliptic-curve
 with 
 
 the following prope -->
+
+[curvegraph]: 
