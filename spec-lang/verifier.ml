@@ -19,11 +19,12 @@ let page (pages : Pages.t) =
                 "Implement the Bowe--Gabizon verifier for [MNT6-753](%s) to \
                  run in the browser using JavaScript and/or WebAssembly."
                 pages.mnt6
-          ; prize= [(Highest_quality, Dollars 10_000)] } ]
+          ; prize= [(Best_performance_at_end Browser, Dollars 10_000)] } ]
     @ Sectioned_page.of_markdown (In_channel.read_all "verifier.markdown")
   in
   let content = Sectioned_page.render_to_markdown page in
-  ksprintf Markdown.of_string !{md|%{Html}
+  ksprintf Markdown.of_string !{md|# Fastest JavaScript/WebAssembly verifier
+%{Html}
 
 %s|md}
     (Sectioned_page.table_of_contents page)

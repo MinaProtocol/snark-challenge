@@ -16,7 +16,7 @@ module Condition = struct
 end
 
 module Device = struct
-  type t = Cpu | Cpu_and_gpu | Mobile
+  type t = Cpu | Cpu_and_gpu | Mobile | Browser
 end
 
 module Participant_set = struct
@@ -43,6 +43,8 @@ module Participant_set = struct
               "Benchark machine, CPU only"
           | Cpu_and_gpu ->
               "Benchark machine, CPU and GPU"
+          | Browser ->
+            "Firefox"
         in
         sprintf "%s: Fastest at end of competition" s
     | First_to (Improve_speed_by n) ->
