@@ -29,12 +29,12 @@
 </div>
 
 This page has suggestions for how to implement the best Groth16 SNARK
-prover ([described here](/snark-challenge/problem-07-groth16prove.html)) to take home up to $75,000 in prizes.
+prover ([described here](/snark-challenge/problem-07-groth16-prover-challenges.html)) to take home up to $75,000 in prizes.
 
 ## Splitting computation between the CPU and GPU
 
 The Groth16 prover consists of 4 $G_1$ multiexponentiations, 1 $G_2$ multiexponentiation,
-and 7 FFTs, as described [here](/snark-challenge/problem-07-groth16prove.html).
+and 7 FFTs, as described [here](/snark-challenge/problem-07-groth16-prover-challenges.html).
 
 1 of the $G_1$ multiexponentiations cannot be computed until all of the FFTs.
 The other 3 $G_1$ multiexponentiations and the $G_2$ multiexponentiation however

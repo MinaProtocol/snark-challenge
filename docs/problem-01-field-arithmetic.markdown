@@ -141,7 +141,7 @@ Montgomery representation is an alternative way of representing elements of $\ma
 multiplication mod $q$ can be computed more efficiently.
 
 Let $q$ be one of [MNT4753.q](/snark-challenge/MNT4753.html#cQ==) or [MNT6753.q](/snark-challenge/MNT6753.html#cQ==) and let $R = 2^{768}$.
-The Montgomery representation of the number $x$ is $(x R) \mod q$. So for example,
+The Montgomery representation of the nubmer $x$ is $(x R) \mod q$. So for example,
 when $q$ is [MNT4753.q](/snark-challenge/MNT4753.html#cQ==), the number 5 is represented as $(5 \cdot 2^{768}) \mod q$ which
 happens to be
 ```

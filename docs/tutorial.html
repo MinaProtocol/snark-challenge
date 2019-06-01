@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/snark-challenge/static/main.css">
+    
+<link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.js" integrity="sha384-2BKqo+exmr9su6dir+qCw08N2ZKRucY4PrGQPPWU1A7FtlCGjmEGFqXCv5nyM5Ij" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/contrib/auto-render.min.js" integrity="sha384-kWPLUVMOks5AQFrykwIup5lo0m3iMkkHrD0uJ4H5cjeGihAutqP0yW0J6dpFiVkI" crossorigin="anonymous"
+    onload="renderMathInElement(document.body);"></script>
+    <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            var blocks = document.querySelectorAll(".math.display");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:true});
+            }
+            blocks = document.querySelectorAll(".math.inline");
+            for (var i = 0; i < blocks.length; i++) {
+              var b = blocks[i];
+              katex.render(b.innerText, b, {displayMode:false});
+            }
+          });
+        </script>
+  </head>
+  <body>
+    <p>Want to learn cutting edge cryptography, GPU programming and get paid to do it? Then you're in the right place.</p>
+    <p>In the tutorial challenges, you'll implement the sub-algorithms you need to implement the full SNARK prover and you'll get paid to do so. The first 25 participants who complete the four challenges in this stage will receive $200 and a <em>SNARK Challenge</em> swag-bag. They'll also be very well positioned to apply their solutions to create submissions for $55,000 of the $75,000 in prizes up for grabs in the other challenges.</p>
+    <p>The challenges in this stage are</p>
+    <ul>
+    <li><p><a href="/snark-challenge/problem-01-field-arithmetic.html">Field arithmetic</a>: <strong>$50 in prizes per participant</strong></p></li>
+    <li><p><a href="/snark-challenge/problem-02-quadratic-extension-arithmetic.html">Quadratic extension arithmetic</a>: <strong>$25 in prizes per participant</strong></p></li>
+    <li><p><a href="/snark-challenge/problem-03-cubic-extension-arithmetic.html">Cubic extension arithmetic</a>: <strong>$25 in prizes per participant</strong></p></li>
+    <li><p><a href="/snark-challenge/problem-04-curve-operations.html">Curve operations</a>: <strong>$100 in prizes per participant</strong></p></li>
+    </ul>
+    <h2 id="broader-context">Broader context</h2>
+    <p>Let's give a quick overview of the SNARK prover so we have an idea of where these challenges lead. The SNARK prover itself consists of two sub-algorithms:</p>
+    <ol style="list-style-type: decimal">
+    <li>Multi-exponentiation on an elliptic curve.</li>
+    <li>Fast fourier transform (FFT) over a finite field.</li>
+    </ol>
+    <p>The cool thing about both of these algorithms is that they're massively parallel and ideally suited to implementation on GPU, which we expect to help take the top prize in the challenge. The multi-exponentiation in particular is just a big <a href="https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf">reduction</a>, although the reduction function requires some work to describe.</p>
+    <p>These 2 algorithms themselves have sub-algorithms which you'll need to implement first. In total, this stage has 4 challenges. After implementing these challenges you'll be well on your way to having a complete GPU implementation of the SNARK prover itself.</p>
+    <p>Click through to each of the challenge pages for starter code and more details.</p>
+  </body>
+</html>

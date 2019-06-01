@@ -180,7 +180,7 @@ curve points which use different coordinate systems.
 The most efficient of these is called
 *Jacobian coordinates*. Formulas for addition and doubling in Jacobian
 coordinates can be found [here](https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#doubling-dbl-2007-bl)
-and a Rust implementation [here](https://github.com/CodaProtocol/pairing/blob/mnt46-753/src/mnt4_753/ec.rs#L305).
+and a Rust implementation [here](https://github.com/CodaProtocol/pairing/blob/mnt46-753/src/mnt4_753/ec.rs#L374).
 
 There is a further technique called "mixed addition" which allows one to add
 a point in Jacobian coordinates to a point in affine coordinates even more efficiently than adding

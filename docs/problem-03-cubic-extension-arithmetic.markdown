@@ -93,7 +93,7 @@ In code, you can think of an element of $\mathbb{F}_{q^3}$ as a tuple
 each of `a0`, `a1`, `a2` is an element of $\mathbb{F}_q$ or a
 struct `{ a0 : Fq, a1 : Fq, a2 : Fq }`.
 
-This problem will have you implement multiplication for $\mathbb{F}_{q^3}$.
+This problem will have you implement multiplication for $\mathbb{F}_{q^2}$.
 Addition and multiplication are defined how you might expect:
 
 $$

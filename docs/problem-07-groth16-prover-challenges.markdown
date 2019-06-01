@@ -1,4 +1,4 @@
-# Groth16Prove
+# Groth16 prover challenges
 
 <div class="table-of-contents">
 <ul>
@@ -39,7 +39,9 @@
 
 - **Problem:** The full Groth16 prover.
 - **Prize:**
-    - **Fastest at end of competition:** $20,000
+    - **Benchark machine, CPU and GPU: Fastest at end of competition:** $20,000
+    - **Benchark machine, CPU only: Fastest at end of competition:** $3,000
+    - **Android or iPhone: Fastest at end of competition:** $3,000
     - **First submission to increase speed by 16x:** $12,000
     - **First submission to increase speed by 8x:** $10,000
     - **First submission to increase speed by 4x:** $8,000
