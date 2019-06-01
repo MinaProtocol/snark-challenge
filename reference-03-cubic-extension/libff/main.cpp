@@ -51,12 +51,14 @@ int main(int argc, char *argv[])
         x.emplace_back(read_mnt6_fq3(inputs));
       }
 
-      Fqe<mnt6753_pp> out_x = Fqe<mnt6753_pp>::one();
+      std::vector<Fqe<mnt6753_pp>> y;
       for (size_t i = 0; i < n; ++i) {
-        out_x = out_x * x[i];
+        y.emplace_back(read_mnt6_fq3(inputs));
       }
 
-      write_mnt6_fq3(outputs, out_x);
+      for (size_t i = 0; i < n; ++i) {
+        write_mnt6_fq3(outputs, x[i] * y[i]);
+      }
     }
     fclose(outputs);
 
