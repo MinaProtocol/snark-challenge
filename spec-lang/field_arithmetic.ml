@@ -227,29 +227,43 @@ let interface : _ Problem.Interface.t =
   let arr field =
     Literal (Type.Array {element= field; length= Some (Name n)})
   in
-  let%map _x =
-    ( ! ) Input "x"
+  let%map _x0 =
+    ( ! ) Input "x0"
       (arr (fq MNT4))
       ~note:
         (Html.markdown
-           "The elements of `x` are represented using the Montgomery \
+           "The elements of `x0` are represented using the Montgomery \
             representation as described below.")
-  and _y =
-    ( ! ) Input "y"
+  and _x1 =
+    ( ! ) Input "x1"
+      (arr (fq MNT4))
+      ~note:
+        (Html.markdown
+           "The elements of `x1` are represented using the Montgomery \
+            representation as described below.")
+  and _y0 =
+    ( ! ) Input "y0"
       (arr (fq MNT6))
       ~note:
         (Html.markdown
-           "The elements of `y` are represented using the Montgomery \
+           "The elements of `y0` are represented using the Montgomery \
             representation as described below.")
-  and _ = !Output "out_x" (fq MNT4)
-  and _ = !Output "out_y" (fq MNT6) in
+  and _y1 =
+    ( ! ) Input "y1"
+      (arr (fq MNT6))
+      ~note:
+        (Html.markdown
+           "The elements of `y1` are represented using the Montgomery \
+            representation as described below.")
+  and _ = !Output "out_x" (arr (fq MNT4))
+  and _ = !Output "out_y" (arr (fq MNT6)) in
   ksprintf Markdown.of_string
     !{md|%s
     
-The output `out_x` should be `x[0] * x[1] * ... * x[n - 1]`
+The output `out_x` should have `out_x[i] = x0[i] * x1[i]`.
 where `*` is multiplication in the field %{Html}.
 
-The output `out_y` should be `y[0] * y[1] * ... * y[n - 1]`
+The output `out_y` should have `out_y[i] = y0[i] * y1[i]`
 where `*` is multiplication in the field %{Html}.
 |md}
     Gpu_message.t
@@ -261,7 +275,7 @@ let problem : Problem.t =
   ; quick_details=
       { description=
           Markdown.of_string
-            "Use a GPU to multiply together an array of elements of a \
+            "Use a GPU to multiply together arrays of elements of a \
              prime-order field."
       ; prize= Prize.stage1 50 }
   ; preamble= Fn.const []

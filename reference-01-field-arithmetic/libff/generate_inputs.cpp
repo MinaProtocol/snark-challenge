@@ -39,7 +39,15 @@ int main(void)
       for (size_t i = 0; i < n; ++i) {
         write_mnt4_fq(output, SHA512_rng<Fq<mnt4753_pp>>(offset + i));
       }
+      offset = rand();
+      for (size_t i = 0; i < n; ++i) {
+        write_mnt4_fq(output, SHA512_rng<Fq<mnt4753_pp>>(offset + i));
+      }
 
+      offset = rand();
+      for (size_t i = 0; i < n; ++i) {
+        write_mnt6_fq(output, SHA512_rng<Fq<mnt6753_pp>>(offset + i));
+      }
       offset = rand();
       for (size_t i = 0; i < n; ++i) {
         write_mnt6_fq(output, SHA512_rng<Fq<mnt6753_pp>>(offset + i));

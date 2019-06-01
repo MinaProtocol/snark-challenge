@@ -46,28 +46,31 @@ int main(int argc, char *argv[])
       size_t elts_read = fread((void *) &n, sizeof(size_t), 1, inputs);
       if (elts_read == 0) { break; }
 
-      std::vector<Fq<mnt4753_pp>> x;
+      std::vector<Fq<mnt4753_pp>> x0;
       for (size_t i = 0; i < n; ++i) {
-        x.emplace_back(read_mnt4_fq(inputs));
+        x0.emplace_back(read_mnt4_fq(inputs));
+      }
+      std::vector<Fq<mnt4753_pp>> x1;
+      for (size_t i = 0; i < n; ++i) {
+        x1.emplace_back(read_mnt4_fq(inputs));
       }
 
-      std::vector<Fq<mnt6753_pp>> y;
+      std::vector<Fq<mnt6753_pp>> y0;
       for (size_t i = 0; i < n; ++i) {
-        y.emplace_back(read_mnt6_fq(inputs));
+        y0.emplace_back(read_mnt6_fq(inputs));
+      }
+      std::vector<Fq<mnt6753_pp>> y1;
+      for (size_t i = 0; i < n; ++i) {
+        y1.emplace_back(read_mnt6_fq(inputs));
       }
 
-      Fq<mnt4753_pp> out_x = Fq<mnt4753_pp>::one();
       for (size_t i = 0; i < n; ++i) {
-        out_x *= x[i];
+        write_mnt4_fq(outputs, x0[i] * x1[i]);
       }
 
-      Fq<mnt6753_pp> out_y = Fq<mnt6753_pp>::one();
       for (size_t i = 0; i < n; ++i) {
-        out_y *= y[i];
+        write_mnt6_fq(outputs, y0[i] * y1[i]);
       }
-
-      write_mnt4_fq(outputs, out_x);
-      write_mnt6_fq(outputs, out_y);
     }
     fclose(outputs);
 
