@@ -107,7 +107,8 @@ function groupMap (x : Fq) : AffineG1 {
 };
 
 /* This should implement the Bowe-Hopwood Pedersen hash function for the MNT6753
- * G1 curve. Please see verifier.ts for more details.
+ * G1 curve. Please see verifier.ts for more details and an almost-complete implementation of
+ * this function.
  */
 function pedersenHash (ts : Array<[boolean, boolean, boolean]>) : Fq {
   throw 'not implemented'
@@ -115,7 +116,8 @@ function pedersenHash (ts : Array<[boolean, boolean, boolean]>) : Fq {
 
 /* This function essentially converts its inputs into bits, feeds that into
  * pedersenHash, then into blake2s, then into groupMap.
- * Please see verifier.ts for more details.
+ * Please see verifier.ts for more details and an almost-complete implementation of
+ * this function.
  */
 function hashToGroup (
   a : AffineG1,
