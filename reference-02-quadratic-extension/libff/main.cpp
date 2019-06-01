@@ -49,12 +49,14 @@ int main(int argc, char *argv[])
         x.emplace_back(read_mnt4_fq2(inputs));
       }
 
-      Fqe<mnt4753_pp> out_x = Fqe<mnt4753_pp>::one();
+      std::vector<Fqe<mnt4753_pp>> y;
       for (size_t i = 0; i < n; ++i) {
-        out_x = out_x * x[i];
+        y.emplace_back(read_mnt4_fq2(inputs));
       }
 
-      write_mnt4_fq2(outputs, out_x);
+      for (size_t i = 0; i < n; ++i) {
+        write_mnt4_fq2(outputs, x[i] * y[i]);
+      }
     }
     fclose(outputs);
 

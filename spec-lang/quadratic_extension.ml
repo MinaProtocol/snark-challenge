@@ -197,11 +197,12 @@ let interface : Markdown.t Problem.Interface.t =
       (Type.Array {element= Type.field (Literal fqe); length= Some (Name n)})
   in
   let%map _x = !Input "x" arr
-  and _output = !Output "y" (Type.field (Literal fqe)) in
+  and _y = !Input "y" arr
+  and _output = !Output "z" arr in
   ksprintf Markdown.of_string
     {md|%s
 
-The output should be `x[0] * x[1] * ... * x[n - 1]`
+The output should be have `z[i] = x[i] * y[i]`
 where `*` is multiplication in the field %s as described above.
 |md}
     Gpu_message.t

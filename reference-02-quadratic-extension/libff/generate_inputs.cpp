@@ -36,6 +36,13 @@ int main(void)
         Fq<mnt4753_pp> c1 = SHA512_rng<Fq<mnt4753_pp>>(offset + 2 * i + 1);
         write_mnt4_fq2(output, Fqe<mnt4753_pp>(c0, c1));
       }
+
+      offset = rand();
+      for (size_t i = 0; i < n; ++i) {
+        Fq<mnt4753_pp> c0 = SHA512_rng<Fq<mnt4753_pp>>(offset + 2 * i);
+        Fq<mnt4753_pp> c1 = SHA512_rng<Fq<mnt4753_pp>>(offset + 2 * i + 1);
+        write_mnt4_fq2(output, Fqe<mnt4753_pp>(c0, c1));
+      }
     }
 }
 
