@@ -1,7 +1,7 @@
 open Core
 open Util
 
-let page (pages : Pages.t) =
+let _page (pages : Pages.t) =
   let open Sectioned_page in
   [ sec ~title:"Stage 1"
       [ {md|Want to learn cutting edge cryptography, GPU programming and get
@@ -86,8 +86,49 @@ description, along with more background and resources [here](%s).
 |md}
               pages.theory ] ] ]
 
-let page pages =
-  let t = page pages in
+let page (pages : Pages.t) =
+  let main =
+    let open Challenge in
+    let programmer_challenges : Challenge.t list =
+      [ challenge "SNARK prover challenges (performance, mobile, creative)"
+          ~url:pages.groth16 ~short:"prover" ~dollars:65_000
+          [ (*
+          challenge "Fastest prover (GPU and CPU)" ~short:"gpu-cpu" ~dollars:55_000 [];
+          challenge "Fastest prover (CPU only)" ~short:"cpu" ~dollars:0 [];
+          challenge "Fastest prover (mobile)" ~short:"mobile" ~dollars:0 [];
+          challenge "Most elegant prover code" ~short:"elegant" ~dollars:0 [];
+*) ]
+      ; challenge "SNARK verifier challenge" ~short:"verifier" ~dollars:10_000
+          [] ]
+    in
+    let stage1_challenges : Challenge.t list =
+      [challenge "Tutorial challenges" ~short:"tutorial" ~dollars:200 []]
+      (*
+      List.map ~f:(Tuple2.uncurry problem)
+      [ Field_arithmetic.problem, 1
+      ; Quadratic_extension.problem, 2
+      ; Cubic_extension.problem, 3
+      ; Curve_operations.problem, 4
+      ]
+*)
+    in
+    let theory_challenges : Challenge.t list =
+      [ challenge "Construct an optimal graph of pairing-friendly curves"
+          ~short:"theory" ~dollars:20_000 [] ]
+    in
+    let challenges c = unlines (List.map c ~f:Challenge.render) in
+    ksprintf Markdown.of_string
+      {md|## For programmers and cryptographers
+%s
+%s
+
+## For cryptographers
+%s
+|md}
+      (challenges programmer_challenges)
+      (challenges stage1_challenges)
+      (challenges theory_challenges)
+  in
   let intro =
     ksprintf Markdown.of_string
       {md|Welcome to the SNARK challenge! The SNARK challenge is a
@@ -96,6 +137,13 @@ for SNARK proving. Participants will be part of an effort that aims
 to have a massive impact on user-protecting cryptographic technology,
 and compete for $100,000 in prizes.
 
+There are two categories of challenges: those for programmers who want
+to implement high-performance cryptography, and those for cryptographers
+who want to advance the state-of-the-art in efficiency of the underlying
+elliptic-curves powering SNARK constructions. Click through to the individual challenge
+pages for more details.
+
+<!--
 The SNARK challenge is divided
 up into two stages. In the first stage, you'll get your feet wet and
 learn about the algorithms underlying the SNARK prover.
@@ -108,21 +156,12 @@ There are $95,000 in prizes including $55,000 for speeding up the
 [Groth16 prover](%s) and $20,000 for developing better cryptographic
 primitives. Here you'll apply GPU programming and techniques for
 speeding up elliptic-curve and finite-field arithmetic to try
-to build the fastest possible [Groth16 prover](%s).|md}
+to build the fastest possible [Groth16 prover](%s).-->|md}
       pages.groth16 pages.groth16
   in
-  let content =
-    Sectioned_page.(render_to_markdown (map ~f:Markdown.to_string t))
-  in
-  ksprintf Markdown.of_string
-    !{md|%{Markdown}
-  
-%{Html}
+  ksprintf Markdown.of_string !{md|%{Markdown}
 
-%s|md}
-    intro
-    (Sectioned_page.table_of_contents t)
-    content
+%{Markdown}|md} intro main
 
 (*
   ksprintf Markdown.of_string
@@ -208,13 +247,4 @@ The prizes are as follows.
     pages.groth16 pages.groth16
     pages.field_arithmetic pages.quadratic_extension pages.cubic_extension
     pages.curve_operations pages.field_arithmetic pages.intro
-*)
-
-(*
-have N elements.
-         split into batches of size k.
-                                      r = 753
-                               window w
-(N / k) * ( (r / w)*MIXED*k + r * DOUBLE )
-
 *)

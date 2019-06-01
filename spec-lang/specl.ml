@@ -173,6 +173,8 @@ let site =
   Site.create
     [ File_system.directory "snark-challenge"
         ( page "intro" (Intro.page pages)
+        @ page "tutorial" (Tutorial.page pages)
+        @ page "verifier" (Verifier.page pages)
         @ page "index" (Stage1.page pages)
         @ page "theory" (Theory.page pages)
         @ page "strategies" (Implementation_strategies.page pages)

@@ -270,11 +270,13 @@ It should be a great place to start.
       ] ]
 
 let problem : Problem.t =
-  { title= "Groth16Prove"
+  { title= "Groth16 prover challenges"
   ; quick_details=
       { description= Markdown.of_string "The full Groth16 prover."
       ; prize=
-          [ (Best_performance_at_end, Dollars 20_000)
+          [ (Best_performance_at_end Cpu_and_gpu, Dollars 20_000)
+          ; (Best_performance_at_end Cpu, Dollars 3_000)
+          ; (Best_performance_at_end Mobile, Dollars 3_000)
           ; (First_to (Improve_speed_by 16), Dollars 12_000)
           ; (First_to (Improve_speed_by 8), Dollars 10_000)
           ; (First_to (Improve_speed_by 4), Dollars 8_000)
