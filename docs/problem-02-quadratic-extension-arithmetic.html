@@ -125,14 +125,15 @@
     <ul>
     <li>n : <span>uint64</span></li>
     <li>x : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span>, <a href="#bg==">n</a>)</span></li>
+    <li>y : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span>, <a href="#bg==">n</a>)</span></li>
     </ul>
     <h3 id="output">Output</h3>
     <ul>
-    <li>y : <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span></li>
+    <li>z : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span>, <a href="#bg==">n</a>)</span></li>
     </ul>
     <h3 id="expected-behavior">Expected behavior</h3>
     <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
-    <p>The output should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span> as described above.</p>
+    <p>The output should be have <code>z[i] = x[i] * y[i]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a><sup>2</sup></sub></span> as described above.</p>
     <h2 id="submission-guidelines">Submission guidelines</h2>
     <p>Your submission will be run and evaluated as follows.</p>
     <ol start="0" style="list-style-type: decimal">

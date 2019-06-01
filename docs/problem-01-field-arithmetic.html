@@ -68,7 +68,7 @@
     </div>
     <h2 id="quick-details">Quick details</h2>
     <ul>
-    <li><strong>Problem:</strong> Use a GPU to multiply together an array of elements of a prime-order field.</li>
+    <li><strong>Problem:</strong> Use a GPU to multiply together arrays of elements of a prime-order field.</li>
     <li><strong>Prize:</strong>
     <ul>
     <li><strong>First 25 submissions:</strong> $50</li>
@@ -79,24 +79,32 @@
     <h3 id="input">Input</h3>
     <ul>
     <li>n : <span>uint64</span></li>
-    <li>x : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+    <li>x0 : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
     <p>
-    The elements of <code>x</code> are represented using the Montgomery representation as described below.
+    The elements of <code>x0</code> are represented using the Montgomery representation as described below.
     </p></li>
-    <li>y : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+    <li>x1 : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
     <p>
-    The elements of <code>y</code> are represented using the Montgomery representation as described below.
+    The elements of <code>x1</code> are represented using the Montgomery representation as described below.
+    </p></li>
+    <li>y0 : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+    <p>
+    The elements of <code>y0</code> are represented using the Montgomery representation as described below.
+    </p></li>
+    <li>y1 : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+    <p>
+    The elements of <code>y1</code> are represented using the Montgomery representation as described below.
     </p></li>
     </ul>
     <h3 id="output">Output</h3>
     <ul>
-    <li>out_x : <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span></li>
-    <li>out_y : <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span></li>
+    <li>out_x : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span></li>
+    <li>out_y : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span></li>
     </ul>
     <h3 id="expected-behavior">Expected behavior</h3>
     <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
-    <p>The output <code>out_x</code> should be <code>x[0] * x[1] * ... * x[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>.</p>
-    <p>The output <code>out_y</code> should be <code>y[0] * y[1] * ... * y[n - 1]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>.</p>
+    <p>The output <code>out_x</code> should have <code>out_x[i] = x0[i] * x1[i]</code>. where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>.</p>
+    <p>The output <code>out_y</code> should have <code>out_y[i] = y0[i] * y1[i]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>.</p>
     <h2 id="submission-guidelines">Submission guidelines</h2>
     <p>Your submission will be run and evaluated as follows.</p>
     <ol start="0" style="list-style-type: decimal">

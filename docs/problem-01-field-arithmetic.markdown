@@ -40,7 +40,7 @@
 
 ## Quick details
 
-- **Problem:** Use a GPU to multiply together an array of elements of a prime-order field.
+- **Problem:** Use a GPU to multiply together arrays of elements of a prime-order field.
 - **Prize:**
     - **First 25 submissions:** $50
     - **All submissions:** Swag bag including SNARK challenge T-shirt.
@@ -52,24 +52,28 @@
 ### Input
 
 - n : <span>uint64</span>
-- x : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
-    <p>The elements of <code>x</code> are represented using the Montgomery representation as described below.</p>
-- y : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
-    <p>The elements of <code>y</code> are represented using the Montgomery representation as described below.</p>
+- x0 : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+    <p>The elements of <code>x0</code> are represented using the Montgomery representation as described below.</p>
+- x1 : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+    <p>The elements of <code>x1</code> are represented using the Montgomery representation as described below.</p>
+- y0 : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+    <p>The elements of <code>y0</code> are represented using the Montgomery representation as described below.</p>
+- y1 : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+    <p>The elements of <code>y1</code> are represented using the Montgomery representation as described below.</p>
 
 ### Output
 
-- out_x : <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>
-- out_y : <span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>
+- out_x : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
+- out_y : <span>Array(<span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span>
 
 ### Expected behavior
 
 Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found [here]().
     
-The output `out_x` should be `x[0] * x[1] * ... * x[n - 1]`
+The output `out_x` should have `out_x[i] = x0[i] * x1[i]`.
 where `*` is multiplication in the field <span>&#x1D53D;<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>.
 
-The output `out_y` should be `y[0] * y[1] * ... * y[n - 1]`
+The output `out_y` should have `out_y[i] = y0[i] * y1[i]`
 where `*` is multiplication in the field <span>&#x1D53D;<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>.
 
 
