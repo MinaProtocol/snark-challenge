@@ -100,11 +100,8 @@ which is the Montgomery representation of the product of the inputs, exactly as 
           (q MNT4) (q MNT6) (q MNT4) ]
   ; sec ~title:"Starter code"
       [ md
-          {md|- This [repo](https://github.com/CodaProtocol/snark-challenge-cuda-starter) has some CUDA starter code,
-   just to illustrate how to build it on the benchmark machine.
-- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
-It should be a great place to start.
-|md}
+          {md|- [This repo](https://github.com/codaprotocol/cuda-fixnum)
+          has a CUDA implementation of this challenge.|md}
       ]
   ; sec ~title:"Other resources"
       [ md
@@ -277,7 +274,15 @@ let problem : Problem.t =
           Markdown.of_string
             "Use a GPU to multiply together arrays of elements of a \
              prime-order field."
-      ; prize= Prize.stage1 50 }
+      ; prize=
+          [ ( Markdown (Markdown.of_string "Note")
+            , Markdown
+                (Markdown.of_string
+                   {md|The prizes for this tutorial challenge have ended, but
+              you can use the CUDA reference implementation
+              [here](https://github.com/data61/cuda-fixnum) to
+              easily get started on the next [tutorial challenge](https://coinlist.co/build/coda/pages/problem-02-quadratic-extension-arithmetic).|md})
+            ) ] }
   ; preamble= Fn.const []
   ; postamble= preamble
   ; interface

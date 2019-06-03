@@ -4,6 +4,12 @@
 <li>
 <a href="#quick-details">1: Quick details</a>
 </li>
+<li>
+<a href="#submission-format">2: Submission format</a>
+</li>
+<li>
+<a href="#starter-code">3: Starter code</a>
+</li>
 </ul>
 </div>
 
@@ -47,7 +53,9 @@ If you only want to replace the Pedersen hash, you can just implement
 `pedersenHash` and the rest of the functions will be filled in with default
 implementations.
 
+
 ## Submission format
+
 Your submission be a file called `main.js` containing implementations of
 any of the following 5 functions:
 ```typescript
@@ -140,3 +148,12 @@ type VerificationKey = {
   query : Array<AffineG1>,
 };
 ```
+
+
+## Starter code
+
+- You can find a complete OCaml implementation (which compiles to JavaScript with js_of_ocaml) [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-05-verifier).
+- This TypeScript/JavaScript [template](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-05-verifier/template.ts) is a great place to get started.
+- You can find TypeScript/JavaScript implementations of `pedersenHash`, `groupMap`, and `hashToGroup`.
+  [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-05-verifier/verifier.ts), with
+  the implementation of finite-field arithmetic stubbed out.

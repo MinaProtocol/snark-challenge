@@ -42,8 +42,10 @@
 
 - **Problem:** Use a GPU to multiply together arrays of elements of a prime-order field.
 - **Prize:**
-    - **First 25 submissions:** $50
-    - **All submissions:** Swag bag including SNARK challenge T-shirt.
+    - **Note:** The prizes for this tutorial challenge have ended, but
+              you can use the CUDA reference implementation
+              [here](https://github.com/data61/cuda-fixnum) to
+              easily get started on the next [tutorial challenge](https://coinlist.co/build/coda/pages/problem-02-quadratic-extension-arithmetic).
 
 ## Problem specification
 
@@ -198,11 +200,8 @@ which is the Montgomery representation of the product of the inputs, exactly as 
 
 ### Starter code
 
-- This [repo](https://github.com/CodaProtocol/snark-challenge-cuda-starter) has some CUDA starter code,
-   just to illustrate how to build it on the benchmark machine.
-- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
-It should be a great place to start.
-
+- [This repo](https://github.com/codaprotocol/cuda-fixnum)
+          has a CUDA implementation of this challenge.
 
 ### Other resources
 

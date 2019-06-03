@@ -23,7 +23,8 @@ let page (pages : Pages.t) =
     @ Sectioned_page.of_markdown (In_channel.read_all "verifier.markdown")
   in
   let content = Sectioned_page.render_to_markdown page in
-  ksprintf Markdown.of_string !{md|# Fastest JavaScript/WebAssembly verifier
+  ksprintf Markdown.of_string
+    !{md|# Fastest JavaScript/WebAssembly verifier
 %{Html}
 
 %s|md}

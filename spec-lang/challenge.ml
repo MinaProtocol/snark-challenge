@@ -30,9 +30,16 @@ let rec render =
       if List.is_empty sub_challenges then sprintf "[%s](%s)" name url
       else name
     in
-    sprintf "- %s: **$%s in prizes%s**\n%s" name
-      (Int.to_string_hum ~delimiter:',' dollars)
-      (if per_person then " per participant" else "")
+    let prizes =
+      if dollars = 0 then
+        "**This challenge has ended, but please read the page for more info \
+         as the solution will be useful in the other challenges.**"
+      else
+        sprintf "**$%s in prizes%s**"
+          (Int.to_string_hum ~delimiter:',' dollars)
+          (if per_person then " per participant" else "")
+    in
+    sprintf "- %s: %s\n%s" name prizes
       ( List.map sub_challenges ~f:(fun t ->
             let s = indent (render t) in
             s )

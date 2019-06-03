@@ -2,13 +2,15 @@ open Core
 open Util
 
 module Reward = struct
-  type t = Dollars of int | Swag_bag
+  type t = Dollars of int | Swag_bag | Markdown of Markdown.t
 
   let to_string = function
     | Swag_bag ->
         "Swag bag including SNARK challenge T-shirt."
     | Dollars d ->
         sprintf "$%s" (Int.to_string_hum ~delimiter:',' d)
+    | Markdown md ->
+        Markdown.to_string md
 end
 
 module Condition = struct
@@ -26,6 +28,9 @@ module Participant_set = struct
     | First_to of Condition.t
     | Best_performance_at_end of Device.t
     | Highest_quality
+    | Most_elegant
+    | Shortest
+    | Markdown of Markdown.t
 
   let to_string = function
     | All ->
@@ -44,11 +49,18 @@ module Participant_set = struct
           | Cpu_and_gpu ->
               "Benchark machine, CPU and GPU"
           | Browser ->
-            "Firefox"
+              "Firefox"
         in
         sprintf "%s: Fastest at end of competition" s
     | First_to (Improve_speed_by n) ->
         sprintf "First submission to increase speed by %dx" n
+    | Most_elegant ->
+        "Most elegant (as decided by a panel of judges)"
+    | Shortest ->
+        "Shortest submission which is within a factor of 2 speed of the \
+         reference:"
+    | Markdown md ->
+        Markdown.to_string md
 end
 
 type t = (Participant_set.t * Reward.t) list
@@ -57,7 +69,8 @@ let dollar_amount (t : t) =
   List.sum
     (module Int)
     t
-    ~f:(fun (_, d) -> match d with Reward.Swag_bag -> 0 | Dollars d -> d)
+    ~f:(fun (_, d) ->
+      match d with Reward.Swag_bag | Markdown _ -> 0 | Dollars d -> d )
 
 let render xs =
   let open Html in

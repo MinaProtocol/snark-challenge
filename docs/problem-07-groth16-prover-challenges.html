@@ -69,15 +69,25 @@
     <li><strong>Prize:</strong>
     <ul>
     <li><strong>Benchark machine, CPU and GPU: Fastest at end of competition:</strong> $20,000</li>
-    <li><strong>Benchark machine, CPU only: Fastest at end of competition:</strong> $3,000</li>
-    <li><strong>Android or iPhone: Fastest at end of competition:</strong> $3,000</li>
+    <li><strong>Benchark machine, CPU only: Fastest at end of competition:</strong> $2,500</li>
+    <li><strong>Android or iPhone: Fastest at end of competition:</strong> $2,500</li>
+    <li><strong>Shortest submission which is within a factor of 2 speed of the reference::</strong> $2,500</li>
+    <li><strong>Most elegant (as decided by a panel of judges):</strong> $2,500</li>
     <li><strong>First submission to increase speed by 16x:</strong> $12,000</li>
     <li><strong>First submission to increase speed by 8x:</strong> $10,000</li>
     <li><strong>First submission to increase speed by 4x:</strong> $8,000</li>
     <li><strong>First submission to increase speed by 2x:</strong> $5,000</li>
     </ul></li>
     </ul>
-    <p>This is the full Groth16 prover, or a slightly simplified version of it. It is the main event of the SNARK Challenge. It requires performing 7 <a href="/snark-challenge/problem-06-curve-operation.html">FFTs</a>, 4 <a href="/snark-challenge/problem-05-multi-exponentiation.html">multiexponentiations</a> in <span class="math inline">G_1</span> and 1 multiexponentiation in <span class="math inline">G_2</span>. How exactly is described below. The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.</p>
+    <p>This is the full Groth16 prover, or a slightly simplified version of it. It is the main event of the SNARK Challenge. Note that there are many prizes here, and so many ways to win.</p>
+    <p>It requires performing 7 <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform">FFTs</a>, 4 <a href="/snark-challenge/problem-05-multi-exponentiation.html">multiexponentiations</a> in <span class="math inline">G_1</span> and 1 multiexponentiation in <span class="math inline">G_2</span>. How exactly is described below.</p>
+    <p>This video gives a high-level description of a lot of the SNARK prover and a walk-through of a partial JavaScript implementation. <iframe width="560" height="315" src="https://www.youtube.com/embed/81uR9W5PZ5M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+    Here is a diagram of the various parts of the prover and how they fit together:
+    <div>
+    <p><img src='static/ladder.png'></p>
+    </div>
+    <p>Check out <a href="/snark-challenge/intro.html">this page</a> for a fuller high-level description.</p>
+    <p>The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.</p>
     <h2 id="problem-specification">Problem specification</h2>
     <p>The following problem is defined for any choice of (<a name="Rg==">F</a>, <a name="JEdfMSQ="><span class="math inline">G_1</span></a>, <a name="JEdfMiQ="><span class="math inline">G_2</span></a>) in</p>
     <ul>

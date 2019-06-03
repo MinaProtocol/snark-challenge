@@ -33,8 +33,7 @@
 
 - **Problem:** Compute the multi-exponentiation of an array of (scalar, curve-point) pairs for the 4 relevant groups.
 - **Prize:**
-    - **First 25 submissions:** $0
-    - **All submissions:** Swag bag including SNARK challenge T-shirt.
+
 
 ## Problem specification
 

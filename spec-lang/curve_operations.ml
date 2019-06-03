@@ -144,12 +144,9 @@ let postamble (pages : Pages.t) =
   let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ sec ~title:"Starter code"
       [ md
-          {md|- This [repo](https://github.com/CodaProtocol/snark-challenge-cuda-starter) has some CUDA starter code,
-   just to illustrate how to build it on the benchmark machine.
-- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
-It should be a great place to start.
-|md}
-      ]
+          {md|- This [repo](https://github.com/codaprotocol/cuda-fixnum) has a CUDA solution for the [first challenge](%s),
+          which is somewhat similar to this one. You can clone that repo to get started.|md}
+          pages.field_arithmetic ]
   ; md
       {md|Please see [this page](%s) for a more full list of implementation techniques.|md}
       pages.implementation_strategies

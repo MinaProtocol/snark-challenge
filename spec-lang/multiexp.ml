@@ -58,7 +58,7 @@ let problem : Problem.t =
           Markdown.of_string
             "Compute the multi-exponentiation of an array of (scalar, \
              curve-point) pairs for the 4 relevant groups."
-      ; prize= Prize.stage1 0 }
+      ; prize= [] }
   ; preamble= [] |> Fn.const
   ; title= "Multi-exponentiation"
   ; reference_implementation= {repo= ""; main= ""; core= ""}

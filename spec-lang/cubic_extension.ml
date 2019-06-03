@@ -244,17 +244,14 @@ where `*` is multiplication in the field %{Html} as described above.|md}
     Gpu_message.t
     (Type.Field.render (Literal fqe))
 
-let postamble _ =
+let postamble (pages : Pages.t) =
   let open Sectioned_page in
   let md fmt = ksprintf (fun s -> leaf (Markdown.of_string s)) fmt in
   [ sec ~title:"Starter code"
       [ md
-          {md|- This [repo](https://github.com/CodaProtocol/snark-challenge-cuda-starter) has some CUDA starter code,
-   just to illustrate how to build it on the benchmark machine.
-- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
-It should be a great place to start.
-|md}
-      ]
+          {md|- This [repo](https://github.com/codaprotocol/cuda-fixnum) has a CUDA solution for the [first challenge](%s),
+          which is very similar to this one. You can clone that repo to get started.|md}
+          pages.field_arithmetic ]
   ; sec ~title:"Efficiency tricks"
       [ md
           {md|The pseduocode above does 9 $\mathbb{F}_q$ multiplications, 2 multiplications

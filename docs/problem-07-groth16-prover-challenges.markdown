@@ -40,17 +40,31 @@
 - **Problem:** The full Groth16 prover.
 - **Prize:**
     - **Benchark machine, CPU and GPU: Fastest at end of competition:** $20,000
-    - **Benchark machine, CPU only: Fastest at end of competition:** $3,000
-    - **Android or iPhone: Fastest at end of competition:** $3,000
+    - **Benchark machine, CPU only: Fastest at end of competition:** $2,500
+    - **Android or iPhone: Fastest at end of competition:** $2,500
+    - **Shortest submission which is within a factor of 2 speed of the reference::** $2,500
+    - **Most elegant (as decided by a panel of judges):** $2,500
     - **First submission to increase speed by 16x:** $12,000
     - **First submission to increase speed by 8x:** $10,000
     - **First submission to increase speed by 4x:** $8,000
     - **First submission to increase speed by 2x:** $5,000
 
 This is the full Groth16 prover, or a slightly simplified version of it. It is the main
-event of the SNARK Challenge.
-It requires performing 7 [FFTs](/snark-challenge/problem-06-curve-operation.html), 4 [multiexponentiations](/snark-challenge/problem-05-multi-exponentiation.html) in $G_1$ and 1 multiexponentiation in $G_2$. How
+event of the SNARK Challenge. Note that there are many prizes here, and so many ways to win.
+
+It requires performing 7 [FFTs](https://en.wikipedia.org/wiki/Fast_Fourier_transform), 4 [multiexponentiations](/snark-challenge/problem-05-multi-exponentiation.html) in $G_1$ and 1 multiexponentiation in $G_2$. How
 exactly is described below.
+
+This video gives a high-level description of a lot of the SNARK prover and a walk-through
+of a partial JavaScript implementation.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/81uR9W5PZ5M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Here is a diagram of the various parts of the prover and how they fit together:
+<div>
+  <img src='static/ladder.png'>
+</div>
+Check out [this page](/snark-challenge/intro.html) for a fuller high-level description.
+
 The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.
 
 ## Problem specification

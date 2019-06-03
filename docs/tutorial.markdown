@@ -10,7 +10,7 @@ create submissions for $55,000 of the $75,000 in prizes up for grabs in the othe
 
 The challenges in this stage are
 
-- [Field arithmetic](/snark-challenge/problem-01-field-arithmetic.html): **$50 in prizes per participant**
+- [Field arithmetic](/snark-challenge/problem-01-field-arithmetic.html): **This challenge has ended, but please read the page for more info as the solution will be useful in the other challenges.**
 
 - [Quadratic extension arithmetic](/snark-challenge/problem-02-quadratic-extension-arithmetic.html): **$25 in prizes per participant**
 

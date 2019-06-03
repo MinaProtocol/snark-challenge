@@ -250,11 +250,23 @@ perform 4 multiexponentiations in %s and 1 multiexponentiation in %s.
 let preamble (pages : Pages.t) =
   ksprintf Markdown.of_string
     {md|This is the full Groth16 prover, or a slightly simplified version of it. It is the main
-event of the SNARK Challenge.
-It requires performing 7 [FFTs](%s), 4 [multiexponentiations](%s) in $G_1$ and 1 multiexponentiation in $G_2$. How
+event of the SNARK Challenge. Note that there are many prizes here, and so many ways to win.
+
+It requires performing 7 [FFTs](https://en.wikipedia.org/wiki/Fast_Fourier_transform), 4 [multiexponentiations](%s) in $G_1$ and 1 multiexponentiation in $G_2$. How
 exactly is described below.
+
+This video gives a high-level description of a lot of the SNARK prover and a walk-through
+of a partial JavaScript implementation.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/81uR9W5PZ5M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+Here is a diagram of the various parts of the prover and how they fit together:
+<div>
+  <img src='static/ladder.png'>
+</div>
+Check out [this page](%s) for a fuller high-level description.
+
 The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.|md}
-    pages.fft pages.multi_exponentiation
+    pages.multi_exponentiation pages.intro
   |> Sectioned_page.leaf |> List.return
 
 let postamble _ =
@@ -275,8 +287,10 @@ let problem : Problem.t =
       { description= Markdown.of_string "The full Groth16 prover."
       ; prize=
           [ (Best_performance_at_end Cpu_and_gpu, Dollars 20_000)
-          ; (Best_performance_at_end Cpu, Dollars 3_000)
-          ; (Best_performance_at_end Mobile, Dollars 3_000)
+          ; (Best_performance_at_end Cpu, Dollars 2_500)
+          ; (Best_performance_at_end Mobile, Dollars 2_500)
+          ; (Shortest, Dollars 2_500)
+          ; (Most_elegant, Dollars 2_500)
           ; (First_to (Improve_speed_by 16), Dollars 12_000)
           ; (First_to (Improve_speed_by 8), Dollars 10_000)
           ; (First_to (Improve_speed_by 4), Dollars 8_000)

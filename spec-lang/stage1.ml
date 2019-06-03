@@ -141,23 +141,7 @@ There are two categories of challenges: those for programmers who want
 to implement high-performance cryptography, and those for cryptographers
 who want to advance the state-of-the-art in efficiency of the underlying
 elliptic-curves powering SNARK constructions. Click through to the individual challenge
-pages for more details.
-
-<!--
-The SNARK challenge is divided
-up into two stages. In the first stage, you'll get your feet wet and
-learn about the algorithms underlying the SNARK prover.
-Think of this stage as a paid training for the ultimate challenge
-of writing a super-fast SNARK prover. There are $5,000 in prizes in
-this stage.
-
-The second stage is the main stage of the competition.
-There are $95,000 in prizes including $55,000 for speeding up the
-[Groth16 prover](%s) and $20,000 for developing better cryptographic
-primitives. Here you'll apply GPU programming and techniques for
-speeding up elliptic-curve and finite-field arithmetic to try
-to build the fastest possible [Groth16 prover](%s).-->|md}
-      pages.groth16 pages.groth16
+pages for more details.|md}
   in
   ksprintf Markdown.of_string !{md|%{Markdown}
 
