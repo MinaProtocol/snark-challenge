@@ -68,9 +68,9 @@
     <li><strong>Problem:</strong> The full Groth16 prover.</li>
     <li><strong>Prize:</strong>
     <ul>
-    <li><strong>Benchark machine, CPU and GPU: Fastest at end of competition:</strong> $20,000</li>
-    <li><strong>Benchark machine, CPU only: Fastest at end of competition:</strong> $2,500</li>
-    <li><strong>Android or iPhone: Fastest at end of competition:</strong> $2,500</li>
+    <li><strong>Fastest at end of competition when run on our benchark machine, CPU and GPU:</strong> $20,000</li>
+    <li><strong>Fastest at end of competition when run on our benchark machine, CPU only:</strong> $2,500</li>
+    <li><strong>Fastest at end of competition when run on Android or iPhone:</strong> $2,500</li>
     <li><strong>Shortest submission which is within a factor of 2 speed of the reference::</strong> $2,500</li>
     <li><strong>Most elegant (as decided by a panel of judges):</strong> $2,500</li>
     <li><strong>First submission to increase speed by 16x:</strong> $12,000</li>
@@ -80,7 +80,7 @@
     </ul></li>
     </ul>
     <p>This is the full Groth16 prover, or a slightly simplified version of it. It is the main event of the SNARK Challenge. Note that there are many prizes here, and so many ways to win.</p>
-    <p>It requires performing 7 <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform">FFTs</a>, 4 <a href="/snark-challenge/problem-05-multi-exponentiation.html">multiexponentiations</a> in <span class="math inline">G_1</span> and 1 multiexponentiation in <span class="math inline">G_2</span>. How exactly is described below.</p>
+    <p>It requires performing 7 <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform">FFTs</a>, 4 <a href="/snark-challenge/problem-05-multi-exponentiation.html">multiexponentiations</a> in <span class="math inline">\(G_1\)</span> and 1 multiexponentiation in <span class="math inline">\(G_2\)</span>. How exactly is described below.</p>
     <p>This video gives a high-level description of a lot of the SNARK prover and a walk-through of a partial JavaScript implementation. <iframe width="560" height="315" src="https://www.youtube.com/embed/81uR9W5PZ5M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
     Here is a diagram of the various parts of the prover and how they fit together:
     <div>
@@ -89,10 +89,10 @@
     <p>Check out <a href="/snark-challenge/intro.html">this page</a> for a fuller high-level description.</p>
     <p>The majority of the time is spent the multiexponentiations, so optimization efforts should be focussed there initially.</p>
     <h2 id="problem-specification">Problem specification</h2>
-    <p>The following problem is defined for any choice of (<a name="Rg==">F</a>, <a name="JEdfMSQ="><span class="math inline">G_1</span></a>, <a name="JEdfMiQ="><span class="math inline">G_2</span></a>) in</p>
+    <p>The following problem is defined for any choice of (<a name="Rg==">F</a>, <a name="JEdfMSQ="><span class="math inline">\(G_1\)</span></a>, <a name="JEdfMiQ="><span class="math inline">\(G_2\)</span></a>) in</p>
     <ul>
-    <li><code>MNT4753</code>: (<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>, <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>, <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a>)</li>
-    <li><code>MNT6753</code>: (<span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>, <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>, <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a>)</li>
+    <li><code>MNT4753</code>: (<span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cg==">MNT4753.r</a></sub></span>, <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">\(G_1\)</span></a>, <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">\(G_2\)</span></a>)</li>
+    <li><code>MNT6753</code>: (<span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cg==">MNT6753.r</a></sub></span>, <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">\(G_1\)</span></a>, <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">\(G_2\)</span></a>)</li>
     </ul>
     <p>You can click on the above types to see how they will be represented in the files given to your program. <code>uint64</code> values are represented in little-endian byte order. Arrays are represented as sequences of values, with no length prefix and no separators between elements. Structs are also represented this way.</p>
     <h3 id="parameters">Parameters</h3>
@@ -100,17 +100,17 @@
     <ul>
     <li>d : <span>uint64</span>
     <p>
-    <span class="math inline">d + 1</span> is guaranteed to be a power of <span class="math inline">2</span> in the MNT4753 case and of the form <span class="math inline">2^x 5^y</span> in the MNT6753 case.
+    <span class="math inline">(d + 1)</span> is guaranteed to be a power of <span class="math inline">(2)</span> in the MNT4753 case and of the form <span class="math inline">(2^x 5^y)</span> in the MNT6753 case.
     </p></li>
     <li>m : <span>uint64</span></li>
     <li>ca : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
     <li>cb : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
     <li>cc : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
-    <li>A : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
-    <li>B1 : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
-    <li>B2 : <span>Array(<a href="#JEdfMiQ="><span class="math inline">G_2</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
-    <li>L : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <span><a href="#bQ==">m</a>-1</span>)</span></li>
-    <li>T : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <a href="#ZA==">d</a>)</span></li>
+    <li>A : <span>Array(<a href="#JEdfMSQ="><span class="math inline">\(G_1\)</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
+    <li>B1 : <span>Array(<a href="#JEdfMSQ="><span class="math inline">\(G_1\)</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
+    <li>B2 : <span>Array(<a href="#JEdfMiQ="><span class="math inline">\(G_2\)</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
+    <li>L : <span>Array(<a href="#JEdfMSQ="><span class="math inline">\(G_1\)</span></a>, <span><a href="#bQ==">m</a>-1</span>)</span></li>
+    <li>T : <span>Array(<a href="#JEdfMSQ="><span class="math inline">\(G_1\)</span></a>, <a href="#ZA==">d</a>)</span></li>
     </ul>
     <h3 id="input">Input</h3>
     <ul>
@@ -119,67 +119,67 @@
     </ul>
     <h3 id="output">Output</h3>
     <ul>
-    <li>proof : <span>{ <span>A : <a href="#JEdfMSQ="><span class="math inline">G_1</span></a></span>, <span>B : <a href="#JEdfMiQ="><span class="math inline">G_2</span></a></span>, <span>C : <a href="#JEdfMSQ="><span class="math inline">G_1</span></a></span> }</span></li>
+    <li>proof : <span>{ <span>A : <a href="#JEdfMSQ="><span class="math inline">\(G_1\)</span></a></span>, <span>B : <a href="#JEdfMiQ="><span class="math inline">\(G_2\)</span></a></span>, <span>C : <a href="#JEdfMSQ="><span class="math inline">\(G_1\)</span></a></span> }</span></li>
     </ul>
     <h3 id="expected-behavior">Expected behavior</h3>
     <p>This problem is a version of the <a href="https://eprint.iacr.org/2016/260.pdf">Groth16 SNARK prover</a>, simplified to the difficult core of the problem.</p>
-    <p>If <span class="math inline">P, Q</span> are points on an elliptic curve (either <span class="math inline">G_1</span> or <span class="math inline">G_2</span>) and <span class="math inline">s : F</span>, then <span class="math inline">P + Q</span> denotes the sum of the points as described <a href="https://en.wikipedia.org/wiki/Elliptic_curve#The_group_law">here</a> and <span class="math inline">s \times P</span> denotes the scalar-multiplication of <span class="math inline">P</span> by <span class="math inline">s</span> as described <a href="https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Basics">here</a>.</p>
+    <p>If <span class="math inline">\(P, Q\)</span> are points on an elliptic curve (either <span class="math inline">\(G_1\)</span> or <span class="math inline">\(G_2\)</span>) and <span class="math inline">\(s : F\)</span>, then <span class="math inline">\(P + Q\)</span> denotes the sum of the points as described <a href="https://en.wikipedia.org/wiki/Elliptic_curve#The_group_law">here</a> and <span class="math inline">\(s \times P\)</span> denotes the scalar-multiplication of <span class="math inline">\(P\)</span> by <span class="math inline">\(s\)</span> as described <a href="https://en.wikipedia.org/wiki/Elliptic_curve_point_multiplication#Basics">here</a>.</p>
     <p>The output should be as follows.</p>
     <ul>
-    <li>A = <span class="math display">\displaystyle \sum_{i=0}^{m} w[i] \times A[i]</span></li>
-    <li>B = <span class="math display">\displaystyle \sum_{i=0}^{m} w[i] \times B2[i]</span></li>
-    <li>C = <span class="math display">\displaystyle \sum_{i=2}^{m} w[i] \times L[i - 2] + \sum_{i=0}^{d - 1} H[i] \times T[i] + r \sum_{i=0}^{m} w[i] \times B1[i]</span></li>
+    <li>A = <span class="math display">\[\sum_{i=0}^{m} w[i] \times A[i]\]</span></li>
+    <li>B = <span class="math display">\[\sum_{i=0}^{m} w[i] \times B2[i]\]</span></li>
+    <li>C = <span class="math display">\[\sum_{i=2}^{m} w[i] \times L[i - 2] + \sum_{i=0}^{d - 1} H[i] \times T[i] + r \sum_{i=0}^{m} w[i] \times B1[i]\]</span></li>
     </ul>
     <p>where</p>
     <ul>
-    <li><p>Let <span class="math inline">\omega = \sigma^{(r - 1) / (d + 1)}</span>. This guarantees that we have <span class="math inline">\omega^{d + 1} = 1</span>. Look at the MNT4753 or MNT6753 parameter pages to find the value of <span class="math inline">\sigma</span> in each case.</p>
-    <p>H is an array of the coefficients of the polynomial <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> where <span class="math inline">a, b, c</span> are the degree d polynomials specified by</p></li>
+    <li><p>Let <span class="math inline">\(\omega = \sigma^{(r - 1) / (d + 1)}\)</span>. This guarantees that we have <span class="math inline">\(\omega^{d + 1} = 1\)</span>. Look at the MNT4753 or MNT6753 parameter pages to find the value of <span class="math inline">\(\sigma\)</span> in each case.</p>
+    <p>H is an array of the coefficients of the polynomial <span class="math inline">\(h(x) = \frac{a(x) b(x) - c(x)}{z(x)}\)</span> where <span class="math inline">\(a, b, c\)</span> are the degree d polynomials specified by</p></li>
     </ul>
-    <p><span class="math display">\displaystyle 
+    <p><span class="math display">\[
     \begin{aligned}
       a(\omega^i) &amp;= ca[i] \\
       b(\omega^i) &amp;= cb[i] \\
       c(\omega^i) &amp;= cc[i] \\
     \end{aligned}
-    </span></p>
-    <p>for <span class="math inline">0 \leq i &lt; d + 1</span> and where <span class="math inline">z</span> is the polynomial <span class="math display">\displaystyle 
+    \]</span></p>
+    <p>for <span class="math inline">\(0 \leq i &lt; d + 1\)</span> and where <span class="math inline">\(z\)</span> is the polynomial <span class="math display">\[
     \begin{aligned}
       z(x)
       &amp;= (x - 1)(x - \omega^1) \dots (x - \omega^{d}) \\
       &amp;= x^{d} - 1
     \end{aligned}
-    </span></p>
-    <p>One would want to obtain the coefficients of <span class="math inline">h</span> by computing its evaluations on <span class="math inline">\omega^0, \dots, \omega^{d}</span> as <code>(d[i] * d[i] - d[i]) / z(ω_i)</code> for each <code>i</code>. This won't work however as <span class="math inline">z(\omega^i) = 0</span> for each <span class="math inline">i</span>. Alternatively, one can do the following.</p>
-    <ol style="list-style-type: decimal">
-    <li>Perform 3 inverse FFTs to compute the coefficients of <span class="math inline">a, b</span> and <span class="math inline">c</span>.</li>
-    <li><p>Use the coefficients of these polynomials to compute the evaluations of of <span class="math inline">a, b, c</span> on the &quot;shifted set&quot; <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span>.</p>
-    <p>Let's say <code>ea</code> is an array with <code>ea[i]</code> being the i<sup>th</sup> coefficient of the polynomial <code>a</code>. Then we can evaluate <code>a</code> on the set <span class="math inline">\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}</span> by computing <code>sa = ea.map((ai, i) =&gt; sigma**i * ai)</code> and then performing an FFT on <code>sa</code>. Analogously for the polynomials <span class="math inline">b</span> and <span class="math inline">c</span> to obtain evaluation arrays <code>eb</code> and <code>ec</code>.</p>
+    \]</span></p>
+    <p>One would want to obtain the coefficients of <span class="math inline">\(h\)</span> by computing its evaluations on <span class="math inline">\(\omega^0, \dots, \omega^{d}\)</span> as <code>(d[i] * d[i] - d[i]) / z(ω_i)</code> for each <code>i</code>. This won’t work however as <span class="math inline">\(z(\omega^i) = 0\)</span> for each <span class="math inline">\(i\)</span>. Alternatively, one can do the following.</p>
+    <ol type="1">
+    <li>Perform 3 inverse FFTs to compute the coefficients of <span class="math inline">\(a, b\)</span> and <span class="math inline">\(c\)</span>.</li>
+    <li><p>Use the coefficients of these polynomials to compute the evaluations of of <span class="math inline">\(a, b, c\)</span> on the “shifted set” <span class="math inline">\(\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}\)</span>.</p>
+    <p>Let’s say <code>ea</code> is an array with <code>ea[i]</code> being the i<sup>th</sup> coefficient of the polynomial <code>a</code>. Then we can evaluate <code>a</code> on the set <span class="math inline">\(\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}\)</span> by computing <code>sa = ea.map((ai, i) =&gt; sigma**i * ai)</code> and then performing an FFT on <code>sa</code>. Analogously for the polynomials <span class="math inline">\(b\)</span> and <span class="math inline">\(c\)</span> to obtain evaluation arrays <code>eb</code> and <code>ec</code>.</p>
     In all this step requires 3 FFTs.</li>
-    <li><p>Note that <span class="math inline">z(\sigma \omega^i) = \sigma^{d} \omega^{d} - 1 = \sigma^{d} - 1</span>. So, having computed <code>sa, sb, sc</code>, you can compute the evaluations of <span class="math inline">h(x) = \frac{a(x) b(x) - c(x)}{z(x)}</span> on the shifted set as <code>sh[i] = (sa[i] * sb[i] - sc[i]) / (sigma**d - 1)</code>.</p></li>
-    <li><p>Finally, we can now obtain the coefficients <code>H</code> of <span class="math inline">h</span> by performing an inverse FFT on <code>sh</code> to obtain <code>shifted_H</code> and then computing <code>H[i] = shifted_H[i] / sigma</code>.</p></li>
+    <li><p>Note that <span class="math inline">\(z(\sigma \omega^i) = \sigma^{d} \omega^{d} - 1 = \sigma^{d} - 1\)</span>. So, having computed <code>sa, sb, sc</code>, you can compute the evaluations of <span class="math inline">\(h(x) = \frac{a(x) b(x) - c(x)}{z(x)}\)</span> on the shifted set as <code>sh[i] = (sa[i] * sb[i] - sc[i]) / (sigma**d - 1)</code>.</p></li>
+    <li><p>Finally, we can now obtain the coefficients <code>H</code> of <span class="math inline">\(h\)</span> by performing an inverse FFT on <code>sh</code> to obtain <code>shifted_H</code> and then computing <code>H[i] = shifted_H[i] / sigma</code>.</p></li>
     </ol>
-    <p>All in all, we have to do 3 FFTs and 4 inverse FFTs to compute the array <code>H</code>, perform 4 multiexponentiations in <span class="math inline">G_1</span> and 1 multiexponentiation in <span class="math inline">G_2</span>.</p>
+    <p>All in all, we have to do 3 FFTs and 4 inverse FFTs to compute the array <code>H</code>, perform 4 multiexponentiations in <span class="math inline">\(G_1\)</span> and 1 multiexponentiation in <span class="math inline">\(G_2\)</span>.</p>
     <p>.</p>
     <h2 id="submission-guidelines">Submission guidelines</h2>
     <p>Your submission will be run and evaluated as follows.</p>
-    <ol start="0" style="list-style-type: decimal">
+    <ol start="0" type="1">
     <li>The submission-runner will randomly generate the parameters and save them to files <code>PATH_TO_MNT4753_PARAMETERS</code> and <code>PATH_TO_MNT6753_PARAMETERS</code>.</li>
     <li><p>Your binary <code>main</code> will be run with</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS
-    <span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS</code></pre></div>
+    <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" data-line-number="1">    <span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS</a>
+    <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS</a></code></pre></div>
     <p>where <code>PATH_TO_X_PARAMETERS</code> will be replaced by the actual path.</p>
     Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to files <code>./MNT4753_preprocessed</code> and <code>./MNT6753_preprocessed</code>.</li>
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
     <li><p>Your binary will be compiled with <code>./build.sh</code>. This step should produce a binary <code>./main</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
-    <span class="ex">./main</span> MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
-    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
-    <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
+    <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" data-line-number="1">    <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</a>
+    <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="ex">./main</span> MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</a></code></pre></div>
+    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">“Input”</a> section.</p>
+    <p>It should create a file called “outputs” at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">“Output”</a> section.</p>
     <p>It can, if it likes, read the preprocessed files created in step 1 in order to help it solve the problem.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
-    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover">here</a>. The &quot;main&quot; file is <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover/libsnark/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-07-groth16-prover/libsnark/main.cpp#L199">here</a>.</p>
+    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover">here</a>. The “main” file is <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover/libsnark/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-07-groth16-prover/libsnark/main.cpp#L199">here</a>.</p>
     <h2 id="further-discussion-and-background">Further discussion and background</h2>
     <h3 id="starter-code">Starter code</h3>
     <ul>

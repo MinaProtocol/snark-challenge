@@ -17,7 +17,7 @@
 
 - **Problem:** Implement the Bowe--Gabizon verifier for [MNT6-753](/snark-challenge/MNT6753.html) to run in the browser using JavaScript and/or WebAssembly.
 - **Prize:**
-    - **Firefox: Fastest at end of competition:** $10,000
+    - **Fastest at end of competition when run on Firefox:** $10,000
 
 The [Bowe--Gabizon SNARK](https://eprint.iacr.org/2018/187.pdf) is
 a variation on the Groth16 SNARK. This challenge involves implementing the

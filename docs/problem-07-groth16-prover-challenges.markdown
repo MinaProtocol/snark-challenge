@@ -39,9 +39,9 @@
 
 - **Problem:** The full Groth16 prover.
 - **Prize:**
-    - **Benchark machine, CPU and GPU: Fastest at end of competition:** $20,000
-    - **Benchark machine, CPU only: Fastest at end of competition:** $2,500
-    - **Android or iPhone: Fastest at end of competition:** $2,500
+    - **Fastest at end of competition when run on our benchark machine, CPU and GPU:** $20,000
+    - **Fastest at end of competition when run on our benchark machine, CPU only:** $2,500
+    - **Fastest at end of competition when run on Android or iPhone:** $2,500
     - **Shortest submission which is within a factor of 2 speed of the reference::** $2,500
     - **Most elegant (as decided by a panel of judges):** $2,500
     - **First submission to increase speed by 16x:** $12,000
@@ -87,7 +87,7 @@ represented this way.
 The parameters will be generated once and your submission will be allowed to preprocess them in any way you like before being invoked on multiple inputs.
 
 - d : <span>uint64</span>
-    <p><span class="math inline">d + 1</span> is guaranteed to be a power of <span class="math inline">2</span> in the MNT4753 case and of the form <span class="math inline">2^x 5^y</span> in the MNT6753 case.</p>
+    <p><span class="math inline">\(d + 1\)</span> is guaranteed to be a power of <span class="math inline">\(2\)</span> in the MNT4753 case and of the form <span class="math inline">\(2^x 5^y\)</span> in the MNT6753 case.</p>
 - m : <span>uint64</span>
 - ca : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span>
 - cb : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span>

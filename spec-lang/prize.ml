@@ -45,13 +45,13 @@ module Participant_set = struct
           | Mobile ->
               "Android or iPhone"
           | Cpu ->
-              "Benchark machine, CPU only"
+              "our benchark machine, CPU only"
           | Cpu_and_gpu ->
-              "Benchark machine, CPU and GPU"
+              "our benchark machine, CPU and GPU"
           | Browser ->
               "Firefox"
         in
-        sprintf "%s: Fastest at end of competition" s
+        sprintf "Fastest at end of competition when run on %s" s
     | First_to (Improve_speed_by n) ->
         sprintf "First submission to increase speed by %dx" n
     | Most_elegant ->
