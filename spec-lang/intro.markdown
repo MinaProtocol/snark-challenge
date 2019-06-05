@@ -7,16 +7,18 @@ This page is meant to be your jumping-off point to start the challenge. It's spl
 - Introduction. We describe the challenge at a high level and explain how you can win part of the $100k prize pool.
 - Quick Start. This tutorial gets you up and running by showing how to start a project and make a submission.  
 - Further Resources. We've compiled a wealth of resources that might be helpful in improving your submission.
+
 ## Introduction
 
 We're offering $100k in cash to improve zk-SNARK cryptography. The main prize is *speeding up the zk-SNARK prover*, for which we're offering a total of $70k. That's broken down as follows:
+
 - $7k to the first team that gets a 2x speedup
 - $8k to the first team that gets a 4x speedup
 - $10k to the first team that gets an 8x speedup
 - $15k to the first team that gets a 16x speedup
 - $30k to the fastest prover at the end of the contest
 
-We're also offering prizes for the best SNARK verifier written in javascript ($10k) and the best elliptic curve improvements ($20k).
+We're also offering prizes for the best SNARK verifier written in JavasCript ($10k) and the best elliptic curve improvements ($20k).
 
 And finally, *we're giving $500 to the first ten teams* that finish a tutorial that walks you through the main components of the SNARK prover. 
 
@@ -99,8 +101,7 @@ every time you make a change.
 
 Commit and push your change.
 ```bash
-git commit -am 'try to speed things up'
-git push
+git commit -am 'try to speed things up' && git push
 ```
 
 ## Submit
@@ -123,13 +124,13 @@ resources that can help get you started.
 
 ### Further resources
 
-- *Prover Tutorial*. For those who haven't implemented elliptic curve cryptography before we recommend you start with [this tutorial](https://coinlist.co/build/coda/pages/tutorial). As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
-- Prover Spec Page. Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.
+- [**Prover Tutorial**](https://coinlist.co/build/coda/pages/tutorial). For those who haven't implemented elliptic curve cryptography before we recommend you start with [this tutorial](https://coinlist.co/build/coda/pages/tutorial). As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
+- [**Prover spec page**](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges). Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.
 
 ### Other challenges
 
 In addition to this challenge, we're running two others, which you may be interested in doing depending on your background:
 
-- [Verifier](https://coinlist.co/build/coda/pages/verifier). This is a good challenge for those with JavaScript or WebAssembly expertise, with $10,000 in prizes for the fastest implementation.
-- [Curve search](https://coinlist.co/build/coda/pages/theory). This challenge is aimed at improving the underlying elliptic curves, with $20,000 in prizes for the best curves.
+- [**Verifier**](https://coinlist.co/build/coda/pages/verifier). This is a good challenge for those with JavaScript or WebAssembly expertise, with $10,000 in prizes for the fastest implementation.
+- [**Curve search**](https://coinlist.co/build/coda/pages/theory). This challenge is aimed at improving the underlying elliptic curves, with $20,000 in prizes for the best curves.
 
