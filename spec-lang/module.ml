@@ -43,13 +43,24 @@ module Page = struct
             [h3 [] [text "Binary representation"]; Representation.render r] ]
 
   let render {title; entries} =
+    let module Css = struct
+      let entry = if for_coinlist then "s-marginBottom1 s-padding1" else "entry"
+      let value = if for_coinlist then "u-backgroundBlueLightest" else "value"
+      let field = if for_coinlist then "u-backgroundGrayLighter" else "field"
+      let type_ = if for_coinlist then "u-backgroundGrayLighter" else "type"
+
+      let entry_value = sprintf "%s %s" entry value
+      let entry_field = sprintf "%s %s" entry field
+      let entry_type = sprintf "%s %s" entry type_
+    end
+    in
     let open Html in
     let entry (e : Entry.t) =
       match e with
       | Html h ->
           h
       | Value_declaration {name; type_; value} ->
-          div [class_ "entry value"]
+          div [class_ Css.entry_value]
             [ Name.render_declaration name
             ; text ":"
             ; Type.render type_
@@ -74,7 +85,7 @@ module Page = struct
               List.init degree ~f:(fun i -> sprintf "a_%d" i)
               |> String.concat ~sep:", "
             in
-            div [class_ "entry field"]
+            div [class_ Css.entry_field]
               ( [ span []
                     [ Type.Field.render (Literal field)
                     ; text " is constructed as "
@@ -89,7 +100,7 @@ module Page = struct
                     elt tup ]
               @ render_representation representation )
         | Prime {order} ->
-            div [class_ "entry field"]
+            div [class_ Css.entry_field]
               ( [ Type.Field.render (Literal field)
                 ; text "is the field of integers mod "
                 ; Integer.render order ]
@@ -97,7 +108,7 @@ module Page = struct
         | _ ->
             failwith "TODO" )
       | Type_declaration {name; type_; representation} ->
-          div [class_ "entry type"]
+          div [class_ Css.entry_type]
             ( [Name.render_declaration name; text "="; Type.render type_]
             @ render_representation representation )
     in
