@@ -1,0 +1,12 @@
+(executables
+  (names runner main)
+  (libraries
+    snarkette
+    bowe_gabizon_hash
+    num
+    core_kernel)
+  (preprocess (pps ppx_jane ppx_deriving.eq js_of_ocaml-ppx))
+  (js_of_ocaml (flags
+  --debuginfo --pretty --sourcemap
+  +nat.js)) )
+; to compile "runner.ml" to javascript type "dune build runner.bc.js"
