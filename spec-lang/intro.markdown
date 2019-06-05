@@ -4,13 +4,13 @@ Welcome to the SNARK Challenge! By participating, you're joining researchers, en
 
 This page is meant to be your jumping-off point to start the challenge. It's split into three sections:
 
-- Introduction. We describe the challenge at a high level and explain how you can win part of the $100k prize pool.
-- Quick Start. This tutorial gets you up and running by showing how to start a project and make a submission.  
-- Further Resources. We've compiled a wealth of resources that might be helpful in improving your submission.
+- [Introduction](#introduction). We describe the challenge at a high level and explain how you can win part of the $100k prize pool.
+- [Quick start](#quick-start). This tutorial gets you up and running by showing how to start a project and make a submission.  
+- [Further resources and challenges](#further-resources-and-challenges). We've compiled a wealth of resources that might be helpful in improving your submission.
 
 ## Introduction
 
-We're offering $100k in cash to improve zk-SNARK cryptography. The main prize is *speeding up the zk-SNARK prover*, for which we're offering a total of $70k. That's broken down as follows:
+We're offering $105k in cash to improve zk-SNARK cryptography. The main prize is *speeding up the zk-SNARK prover*, for which we're offering a total of $70k. That's broken down as follows:
 
 - $7k to the first team that gets a 2x speedup
 - $8k to the first team that gets a 4x speedup
@@ -20,9 +20,9 @@ We're offering $100k in cash to improve zk-SNARK cryptography. The main prize is
 
 We're also offering prizes for the best SNARK verifier written in JavasCript ($10k) and the best elliptic curve improvements ($20k).
 
-And finally, *we're giving $500 to the first ten teams* that finish a tutorial that walks you through the main components of the SNARK prover. 
+And finally, we're giving $500 to the first ten teams that finish a tutorial that walks you through the main components of the SNARK prover.
 
-## Quick Start
+## Quick start
 
 To start, we'll show you how to go through the submission workflow for the problem of speeding
 up the SNARK prover.
