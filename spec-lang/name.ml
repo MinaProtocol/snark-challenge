@@ -30,7 +30,7 @@ let base_url =
   | None ->
       "/snark-challenge"
   | Some _ ->
-      "/build/coda/pages/"
+      "/build/coda/pages"
 
 let module_url m = sprintf "%s/%s.html" base_url m
 

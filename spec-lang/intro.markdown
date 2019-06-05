@@ -31,8 +31,7 @@ At a high level, it consists of these steps:
 
 ### Fork the git repo with reference code.
 
-TODO: Link
-Go [here](https://github.com/CodaProtocol/snark-challenge) to fork the reference repo. Once you've
+Go [here](https://github.com/CodaProtocol/snark-challenge-prover-reference) to fork the reference repo. Once you've
 forked it, run
 ```bash
 git clone https://github.com/YOUR_USER_NAME/snark-challenge-prover.git
@@ -41,6 +40,10 @@ to clone it.
 
 Now, install the dependencies as follows (it may be differ slightly for
 other distros):
+
+- On Mac:
+
+        $  ./macos-setup.sh
 
 * On Ubuntu 16.04 LTS:
 
@@ -57,8 +60,6 @@ other distros):
 * On Fedora 20:
 
         $ sudo yum install gcc-c++ cmake make git gmp-devel procps-ng-devel python-markdown
-
-TODO Mac
 
 ## Compile and test
 
@@ -122,13 +123,13 @@ resources that can help get you started.
 
 ### Further resources
 
-- *Prover Tutorial*. For those who haven't implemented elliptic curve cryptography before we recommend you start with this tutorial. As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
+- *Prover Tutorial*. For those who haven't implemented elliptic curve cryptography before we recommend you start with [this tutorial](https://coinlist.co/build/coda/pages/tutorial). As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
 - Prover Spec Page. Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.
 
 ### Other challenges
 
 In addition to this challenge, we're running two others, which you may be interested in doing depending on your background:
 
-- [Verifier](). This is a good challenge for those with JavaScript or WebAssembly expertise, with $10,000 in prizes for the fastest implementation.
-- [Curve search](). This challenge is aimed at improving the underlying elliptic curves, with $20,000 in prizes for the best curves.
+- [Verifier](https://coinlist.co/build/coda/pages/verifier). This is a good challenge for those with JavaScript or WebAssembly expertise, with $10,000 in prizes for the fastest implementation.
+- [Curve search](https://coinlist.co/build/coda/pages/theory). This challenge is aimed at improving the underlying elliptic curves, with $20,000 in prizes for the best curves.
 

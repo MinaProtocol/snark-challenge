@@ -86,7 +86,7 @@ description, along with more background and resources [here](%s).
 |md}
               pages.theory ] ] ]
 
-let page (pages : Pages.t) =
+let _page (pages : Pages.t) =
   let main =
     let open Challenge in
     let programmer_challenges : Challenge.t list =
@@ -132,21 +132,15 @@ let page (pages : Pages.t) =
   in
   let intro =
     ksprintf Markdown.of_string
-      {md|Welcome to the SNARK challenge! The SNARK challenge is a
-global competition to advance the state-of-the-art in performance
-for SNARK proving. Participants will be part of an effort that aims
-to have a massive impact on user-protecting cryptographic technology,
-and compete for over $100,000 in prizes.
-
-There are two categories of challenges: those for programmers who want
-to implement high-performance cryptography, and those for cryptographers
-who want to advance the state-of-the-art in efficiency of the underlying
-elliptic-curves powering SNARK constructions. Click through to the individual challenge
-pages for more details.|md}
+      {md|
+      |md}
   in
   ksprintf Markdown.of_string !{md|%{Markdown}
 
 %{Markdown}|md} intro main
+
+let page (_pages : Pages.t) =
+  Markdown.of_string (In_channel.read_all "intro.markdown")
 
 (*
   ksprintf Markdown.of_string
