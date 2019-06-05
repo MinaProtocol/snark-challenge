@@ -15,13 +15,33 @@ module Make (Inputs : Inputs_intf.S) = struct
     Bigint.(test_bit (of_field y0) 0)
     :: List.concat_map (Fqe.parts x) ~f:Field.to_bits
 
+  let time_depth = ref 0
+
+  let time =
+    fun lab f ->
+      let start = Time.now () in
+      incr time_depth;
+      let y =
+        f ()
+      in
+      decr time_depth;
+      let stop = Time.now () in
+      printf !"%s%s: %{sexp:Time.Span.t}\n%!" (String.init (2 * !time_depth) ~f:(fun _ -> ' ' ))
+        lab (Time.diff stop start);
+      y
+  ;;
+
   let random_oracle =
     let field_to_bits = Fn.compose Array.of_list Field.to_bits in
     fun x ->
-      field_to_bits x |> Blake2.bits_to_string |> Blake2.digest_string
+      field_to_bits x |> Blake2.bits_to_string
+      |> (fun x -> time "blake2" (fun () -> Blake2.digest_string x))
       |> Blake2.to_raw_string |> Blake2.string_to_bits |> Array.to_list
 
+
   let hash ?message ~a ~b ~c ~delta_prime =
+    time "bghash" (fun () ->
+    time "pedersen" (fun () ->
     pedersen
       Fold.(
         group3 ~default:false
@@ -29,8 +49,8 @@ module Make (Inputs : Inputs_intf.S) = struct
           +> of_list (g2_to_bits b)
           +> of_list (g1_to_bits c)
           +> of_list (g2_to_bits delta_prime)
-          +> of_array (Option.value ~default:[||] message) ))
+          +> of_array (Option.value ~default:[||] message) )) )
     |> random_oracle |> Field.of_bits
     |> Group_map.to_group (module Field) ~params
-    |> G1.of_affine_coordinates
+    |> G1.of_affine_coordinates)
 end

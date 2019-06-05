@@ -3,6 +3,10 @@ open Snarkette
 open Fold_lib
 open Mnt6753
 
+(* With libsnark and the 298 bit curves, the hash took 1.82ms and
+   the rest of the verifier took 12.28ms, so it seems to be worth optimizing
+   the hash as well. *)
+
 module H = Bowe_gabizon_hash.Make (struct
   module Field = struct
     include Mnt6753.Fq
@@ -43,21 +47,44 @@ module V = Bowe_gabizon.Make (struct
   let hash = H.hash
 end)
 
-let fake_vk =
-  { V.Verification_key.g_alpha_h_beta= Fq6.one
-  ; h_delta= G2.one
-  ; query= [|G1.one; G1.one|] }
+let fake_vk : V.Verification_key.t =
+  {g_alpha_h_beta= Fq6.one; h_delta= G2.one; query= [|G1.one; G1.one|]}
 
-let fake_proof =
-  { V.Proof.a= G1.one
-  ; b= G2.one
-  ; c= G1.(negate one)
-  ; delta_prime= G2.one
-  ; z= G1.one }
+let fails_on_second_check : V.Proof.t =
+  let delta_prime = G2.one in
+  let a = G1.one in
+  let b = G2.one in
+  let c = G1.(negate one) in
+  let z = G1.one in
+  {a; b; c; z; delta_prime}
+
+(*
+
+  e(a, b)
+  === alphaBeta
+      * e(G1.add(vk.query[0], G1.scale(input, vk.query[1])), G2.one)
+      * e(proof.c, proof.deltaPrime)
+
+  e(1, 1)
+  === 
+  e(vk.query[0] + G1.scale(input, vk.query[1]), 1)
+  * e(c, deltaPrime)
+
+*)
+let good_proof : V.Proof.t =
+  let d = N.of_int (Random.int (1 lsl 30)) in
+  let delta_prime = G2.scale fake_vk.h_delta d in
+  let a = G1.one in
+  let b = G2.one in
+  let c = G1.(negate one) in
+  let z = G1.scale (H.hash ~a ~b ~c ~delta_prime ?message:None) d in
+  {a; b; c; z; delta_prime}
 
 let input = N.of_int 1
 
 let () =
   printf
     !"%{sexp:unit Or_error.t}\n%!"
-    (V.verify (V.Verification_key.Processed.create fake_vk) [input] fake_proof)
+    (V.verify
+       (V.Verification_key.Processed.create fake_vk)
+       [input] fails_on_second_check)

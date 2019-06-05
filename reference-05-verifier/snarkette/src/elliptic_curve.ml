@@ -15,7 +15,7 @@ end)
     val b : Fq.t
 end) =
 struct
-  type t = {x: Fq.t; y: Fq.t; z: Fq.t} [@@deriving bin_io, sexp]
+  type t = {x: Fq.t; y: Fq.t; z: Fq.t} [@@deriving bin_io, sexp, compare]
 
   let zero = {x= Fq.zero; y= Fq.one; z= Fq.zero}
 
