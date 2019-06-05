@@ -1,12 +1,4 @@
-/* This file contains specifications of the following functions
- * - `pedersenHash`
- * - `groupMap`
- * - `hashToGroup`
- *
- * These specifications are given as typescript code, assuming
- * implementations for field arithmetic mod q and mod r, where
- * q and r are as given here: https://coinlist.co/build/coda/pages/MNT6753
- */
+// This file requires the file crypto_lib.js to be loaded already!
 var FqT = /** @class */ (function () {
     function FqT() {
     }
