@@ -1,3 +1,6 @@
+// This file requires the file crypto_lib.js to be loaded already!
+
+
 /* This file contains specifications of the following functions
  * - `pedersenHash`
  * - `groupMap`
