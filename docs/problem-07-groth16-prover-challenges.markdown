@@ -229,5 +229,5 @@ The core algorithm is implemented [here](https://github.com/CodaProtocol/snark-c
 - This [repo](https://github.com/CodaProtocol/snark-challenge-cuda-starter) has some CUDA starter code,
    just to illustrate how to build it on the benchmark machine.
 
-- This [library](https://github.com/data61/cuda-fixnum) implements prime-order field arithmetic in CUDA.
-It should be a great place to start.
+- This [repo](https://github.com/CodaProtocol/cuda-fixnum) shows how to read in data in the binary format we're using
+  and code for performing prime-order field arithmetic in CUDA.

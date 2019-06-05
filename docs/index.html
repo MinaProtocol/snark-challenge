@@ -28,17 +28,78 @@
         </script>
   </head>
   <body>
-    <p>Welcome to the SNARK challenge! The SNARK challenge is a global competition to advance the state-of-the-art in performance for SNARK proving. Participants will be part of an effort that aims to have a massive impact on user-protecting cryptographic technology, and compete for over $100,000 in prizes.</p>
-    <p>There are two categories of challenges: those for programmers who want to implement high-performance cryptography, and those for cryptographers who want to advance the state-of-the-art in efficiency of the underlying elliptic-curves powering SNARK constructions. Click through to the individual challenge pages for more details.</p>
-    <h2 id="for-programmers-and-cryptographers">For programmers and cryptographers</h2>
+    <h1 id="start-here">Start here</h1>
+    <p>Welcome to the SNARK Challenge! By participating, you're joining researchers, engineers, students, and hackers from around the world to try and improve the world's cryptography commons. Along the way, you'll learn about zk-SNARKs, a cutting-edge cryptographic primitive that's being used widely in blockchain and cryptocurrency applications, numerical algorithms, and high performance computing.</p>
+    <p>This page is meant to be your jumping-off point to start the challenge. It's split into three sections:</p>
     <ul>
-    <li><p><a href="/snark-challenge/problem-07-groth16-prover-challenges.html">SNARK prover challenges (performance, mobile, creative)</a>: <strong>$70,000 in prizes</strong></p></li>
-    <li><p><a href="/snark-challenge/verifier.html">SNARK verifier challenge</a>: <strong>$10,000 in prizes</strong></p></li>
-    <li><p><a href="/snark-challenge/tutorial.html">Tutorial challenges</a>: <strong>$500 in prizes for each of the first 10 participants</strong></p></li>
+    <li>Introduction. We describe the challenge at a high level and explain how you can win part of the $100k prize pool.</li>
+    <li>Quick Start. This tutorial gets you up and running by showing how to start a project and make a submission.<br />
+    </li>
+    <li>Further Resources. We've compiled a wealth of resources that might be helpful in improving your submission. ## Introduction</li>
     </ul>
-    <h2 id="for-cryptographers">For cryptographers</h2>
+    <p>We're offering $100k in cash to improve zk-SNARK cryptography. The main prize is <em>speeding up the zk-SNARK prover</em>, for which we're offering a total of $70k. That's broken down as follows: - $7k to the first team that gets a 2x speedup - $8k to the first team that gets a 4x speedup - $10k to the first team that gets an 8x speedup - $15k to the first team that gets a 16x speedup - $30k to the fastest prover at the end of the contest</p>
+    <p>We're also offering prizes for the best SNARK verifier written in javascript ($10k) and the best elliptic curve improvements ($20k).</p>
+    <p>And finally, <em>we're giving $500 to the first ten teams</em> that finish a tutorial that walks you through the main components of the SNARK prover.</p>
+    <h2 id="quick-start">Quick Start</h2>
+    <p>To start, we'll show you how to go through the submission workflow for the problem of speeding up the SNARK prover. At a high level, it consists of these steps: 1. Fork the git repo with reference code. 2. Compile and test. 3. Submit.</p>
+    <h3 id="fork-the-git-repo-with-reference-code.">Fork the git repo with reference code.</h3>
+    <p>Go <a href="https://github.com/CodaProtocol/snark-challenge-prover-reference">here</a> to fork the reference repo. Once you've forked it, run</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">git</span> clone https://github.com/YOUR_USER_NAME/snark-challenge-prover.git</code></pre></div>
+    <p>to clone it.</p>
+    <p>Now, install the dependencies as follows (it may be differ slightly for other distros):</p>
     <ul>
-    <li><a href="/snark-challenge/theory.html">Construct an optimal graph of pairing-friendly curves</a>: <strong>$20,000 in prizes</strong></li>
+    <li><p>On Mac:</p>
+    <pre><code>$  ./macos-setup.sh</code></pre></li>
+    <li><p>On Ubuntu 16.04 LTS:</p>
+    <pre><code>$ sudo apt-get install build-essential cmake git libgmp3-dev libprocps4-dev python-markdown libboost-all-dev libssl-dev</code></pre></li>
+    <li><p>On Ubuntu 14.04 LTS:</p>
+    <pre><code>$ sudo apt-get install build-essential cmake git libgmp3-dev libprocps3-dev python-markdown libboost-all-dev libssl-dev</code></pre></li>
+    <li><p>On Fedora 21 through 23:</p>
+    <pre><code>$ sudo yum install gcc-c++ cmake make git gmp-devel procps-ng-devel python2-markdown</code></pre></li>
+    <li><p>On Fedora 20:</p>
+    <pre><code>$ sudo yum install gcc-c++ cmake make git gmp-devel procps-ng-devel python-markdown</code></pre></li>
+    </ul>
+    <h2 id="compile-and-test">Compile and test</h2>
+    <p>Once that's done, build with</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./build.sh</span></code></pre></div>
+    <p>This will create three binaries. We won't go through them in detail right now but the <a href="https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges">problem page</a> has more info.</p>
+    <p>To test the prover, run the following command:</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./generate_parameters</span> <span class="kw">&amp;&amp;</span> <span class="ex">./generate_inputs</span> 
+    <span class="bu">time</span> ./main compute parameters inputs outputs</code></pre></div>
+    <p>This will save your program's output to the file <code>./outputs</code>.</p>
+    <p>Now let's make a change to the implementation and re-compile. Find the line</p>
+    <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="at">const</span> multi_exp_method method = multi_exp_method_BDLO12;</code></pre></div>
+    <p>It should be line 22. Comment it out and uncomment the next line</p>
+    <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="at">const</span> multi_exp_method method = multi_exp_method_bos_coster;</code></pre></div>
+    <p>Recompile and run with</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./build.sh</span> <span class="kw">&amp;&amp;</span> <span class="bu">time</span> ./main compute parameters inputs outputs</code></pre></div>
+    <p>The program should now be significantly faster!</p>
+    <p>Note that there is no need to rerun <code>./generate_parameters &amp;&amp; ./generate_inputs</code> every time you make a change.</p>
+    <p>Commit and push your change.</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">git</span> commit -am <span class="st">&#39;try to speed things up&#39;</span>
+    <span class="fu">git</span> push</code></pre></div>
+    <h2 id="submit">Submit</h2>
+    <p>Go to <a href="https://coinlist.co/build/coda/projects/new">this page</a> to create a submission.</p>
+    <ul>
+    <li>Pick a team name and a description like &quot;quick start&quot;.</li>
+    <li>Paste in your github repo URL from step 1.</li>
+    <li>Select NVIDIA for the architecture (it's not actually important in this case since the reference code doesn't use the GPU).</li>
+    <li>Select <code>nvidia/cuda:10.1-devel</code> for the docker image.</li>
+    <li>Select &quot;Groth16 optimzation&quot; for the problem.</li>
+    <li>Click submit!</li>
+    </ul>
+    <h2 id="further-resources-and-challenges">Further resources and challenges</h2>
+    <p>Now that you've gotten your feet wet, you're probably ready to start figuring out how to speed up the SNARK prover. Depending on your background and experience, we've provided a few different resources that can help get you started.</p>
+    <h3 id="further-resources">Further resources</h3>
+    <ul>
+    <li><em>Prover Tutorial</em>. For those who haven't implemented elliptic curve cryptography before we recommend you start with <a href="https://coinlist.co/build/coda/pages/tutorial">this tutorial</a>. As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!</li>
+    <li>Prover Spec Page. Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.</li>
+    </ul>
+    <h3 id="other-challenges">Other challenges</h3>
+    <p>In addition to this challenge, we're running two others, which you may be interested in doing depending on your background:</p>
+    <ul>
+    <li><a href="https://coinlist.co/build/coda/pages/verifier">Verifier</a>. This is a good challenge for those with JavaScript or WebAssembly expertise, with $10,000 in prizes for the fastest implementation.</li>
+    <li><a href="https://coinlist.co/build/coda/pages/theory">Curve search</a>. This challenge is aimed at improving the underlying elliptic curves, with $20,000 in prizes for the best curves.</li>
     </ul>
   </body>
 </html>
