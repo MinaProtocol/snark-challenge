@@ -44,16 +44,21 @@ module Page = struct
 
   let render {title; entries} =
     let module Css = struct
-      let entry = if for_coinlist then "s-marginBottom1 s-padding1" else "entry"
+      let entry =
+        if for_coinlist then "s-marginBottom1 s-padding1" else "entry"
+
       let value = if for_coinlist then "u-backgroundBlueLightest" else "value"
+
       let field = if for_coinlist then "u-backgroundGrayLighter" else "field"
+
       let type_ = if for_coinlist then "u-backgroundGrayLighter" else "type"
 
       let entry_value = sprintf "%s %s" entry value
+
       let entry_field = sprintf "%s %s" entry field
+
       let entry_type = sprintf "%s %s" entry type_
-    end
-    in
+    end in
     let open Html in
     let entry (e : Entry.t) =
       match e with
