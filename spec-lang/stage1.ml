@@ -130,11 +130,8 @@ let _page (pages : Pages.t) =
       (challenges stage1_challenges)
       (challenges theory_challenges)
   in
-  let intro =
-    ksprintf Markdown.of_string
-      {md|
-      |md}
-  in
+  let intro = ksprintf Markdown.of_string {md|
+      |md} in
   ksprintf Markdown.of_string !{md|%{Markdown}
 
 %{Markdown}|md} intro main

@@ -71,7 +71,7 @@ where the types are defined as follows, with `Fq` representing an element
 of [MNT4-753.$\mathbb{F}_q$](https://coinlist.co/build/coda/pages/MNT6753#cQ==).
 Please see 
 
-- [this page](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-05-verifier/template.ts)
+- [this page](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-05-verifier/spec.ts)
   for specifications of the behavior of `boweGabizonVerifier` and `verifierCore`.
 - [this page](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-05-verifier/verifier.ts)
   for specifications of the behavior of `pedersenHash`, `groupMap`, and `hashToGroup`.
@@ -128,7 +128,7 @@ type VerificationKey = {
 
 # Starter code
 - You can find a complete OCaml implementation (which compiles to JavaScript with js_of_ocaml) [here](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-05-verifier).
-- This TypeScript/JavaScript [template](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-05-verifier/template.ts) is a great place to get started.
+- This TypeScript/JavaScript [spec](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-05-verifier/spec.ts) is a great place to get started.
 - You can find TypeScript/JavaScript implementations of `pedersenHash`, `groupMap`, and `hashToGroup`.
   [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-05-verifier/verifier.ts), with
   the implementation of finite-field arithmetic stubbed out.
