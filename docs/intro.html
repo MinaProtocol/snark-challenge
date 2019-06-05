@@ -29,25 +29,25 @@
   </head>
   <body>
     <p>The Groth16 SNARK prover is not such a complicated algorithm, but it does involve several steps, each of which builds on the next. The prover must be implemented for two settings of parameters: the parameters associated with the curve <a href="/snark-challenge/MNT4753.html">MNT4-753</a> and those associated with the curve <a href="/snark-challenge/MNT6753.html">MNT6-753</a>.</p>
-    <p>Once a collection of parameters <span class="math inline">\((r, q, e, G_1, G_2)\)</span> is fixed, the sub-problems making up the SNARK prover are</p>
-    <ol type="1">
-    <li><ol type="a">
-    <li>Addition and multiplication mod <span class="math inline">\(q\)</span>.</li>
-    <li>Addition and multiplication mod <span class="math inline">\(r\)</span>.</li>
+    <p>Once a collection of parameters <span class="math inline">(r, q, e, G_1, G_2)</span> is fixed, the sub-problems making up the SNARK prover are</p>
+    <ol style="list-style-type: decimal">
+    <li><ol style="list-style-type: lower-alpha">
+    <li>Addition and multiplication mod <span class="math inline">q</span>.</li>
+    <li>Addition and multiplication mod <span class="math inline">r</span>.</li>
     </ol>
-    It is possible for the “modulus” (here either <span class="math inline">\(q\)</span> or <span class="math inline">\(r\)</span>) to be a parameter in one’s code, so typically 1a and 1b will share an implementation.</li>
-    <li>Arithmetic in the extension field <span class="math inline">\(\mathbb{F}_{q^e}\)</span>. This is pretty straightforward to implement once step 1a is complete, though the implementation will differ between MNT4 and MNT6.</li>
-    <li><ol type="a">
-    <li>The group operation in <span class="math inline">\(G_1\)</span>. This is easy to implement after completing 1a.</li>
-    <li>The group operation in <span class="math inline">\(G_2\)</span>. This is easy to implement after completing 2 and typically can share an implementation with the <span class="math inline">\(G_1\)</span> group operation if working in a language with generics or templates. The only difference between the two being which field operations (i.e., multiplication and addition) are used: those of <span class="math inline">\(\mathbb{F}_q\)</span> for <span class="math inline">\(G_1\)</span> and those of <span class="math inline">\(\mathbb{F}_{q^e}\)</span> for <span class="math inline">\(G_2\)</span>.</li>
+    It is possible for the &quot;modulus&quot; (here either <span class="math inline">q</span> or <span class="math inline">r</span>) to be a parameter in one's code, so typically 1a and 1b will share an implementation.</li>
+    <li>Arithmetic in the extension field <span class="math inline">\mathbb{F}_{q^e}</span>. This is pretty straightforward to implement once step 1a is complete, though the implementation will differ between MNT4 and MNT6.</li>
+    <li><ol style="list-style-type: lower-alpha">
+    <li>The group operation in <span class="math inline">G_1</span>. This is easy to implement after completing 1a.</li>
+    <li>The group operation in <span class="math inline">G_2</span>. This is easy to implement after completing 2 and typically can share an implementation with the <span class="math inline">G_1</span> group operation if working in a language with generics or templates. The only difference between the two being which field operations (i.e., multiplication and addition) are used: those of <span class="math inline">\mathbb{F}_q</span> for <span class="math inline">G_1</span> and those of <span class="math inline">\mathbb{F}_{q^e}</span> for <span class="math inline">G_2</span>.</li>
     </ol></li>
-    <li><ol type="a">
-    <li>Multi-exponentiation in <span class="math inline">\(G_1\)</span>. There are many techniques for computing this efficiently, but they all essentially rely on the group operation from 3a.</li>
-    <li>Multi-exponentiation in <span class="math inline">\(G_2\)</span>. Again, this is similar to 4a and could share an implementation which was generic over the group operation.</li>
+    <li><ol style="list-style-type: lower-alpha">
+    <li>Multi-exponentiation in <span class="math inline">G_1</span>. There are many techniques for computing this efficiently, but they all essentially rely on the group operation from 3a.</li>
+    <li>Multi-exponentiation in <span class="math inline">G_2</span>. Again, this is similar to 4a and could share an implementation which was generic over the group operation.</li>
     </ol></li>
-    <li>The fast-fourier-transform (FFT) over the field <span class="math inline">\(\mathbb{F}_r\)</span>. This only depends on 1b.</li>
+    <li>The fast-fourier-transform (FFT) over the field <span class="math inline">\mathbb{F}_r</span>. This only depends on 1b.</li>
     </ol>
-    <p>Finally, the Groth16 SNARK prover itself simply performs 4 multi-exponentiations in <span class="math inline">\(G_1\)</span>, 1 multi-exponentiation in <span class="math inline">\(G_2\)</span>, and a few FFTs, combining the results together in a [simple way].</p>
+    <p>Finally, the Groth16 SNARK prover itself simply performs 4 multi-exponentiations in <span class="math inline">G_1</span>, 1 multi-exponentiation in <span class="math inline">G_2</span>, and a few FFTs, combining the results together in a [simple way].</p>
     The dependencies between all these algorithms are illustrated in this image:
     <div>
     <p><img src='/snark-challenge/static/ladder.png'></p>

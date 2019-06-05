@@ -77,59 +77,59 @@
     <li><strong>Problem:</strong> Add together an array of elements of each of the four relevant elliptic curves.</li>
     <li><strong>Prize:</strong>
     <ul>
-    <li><strong>First 25 submissions:</strong> $100</li>
+    <li><strong>First 25 submissions:</strong> $200</li>
     <li><strong>All submissions:</strong> Swag bag including SNARK challenge T-shirt.</li>
     </ul></li>
     </ul>
-    <p>In this challenge you’ll use the field arithmetic built up in <a href="/snark-challenge/problem-01-field-arithmetic.html">this</a>, <a href="/snark-challenge/problem-02-quadratic-extension-arithmetic.html">this</a> and <a href="/snark-challenge/problem-03-cubic-extension-arithmetic.html">this challenge</a> to implement the group operation for several elliptic curves.</p>
+    <p>In this challenge you'll use the field arithmetic built up in <a href="/snark-challenge/problem-01-field-arithmetic.html">this</a>, <a href="/snark-challenge/problem-02-quadratic-extension-arithmetic.html">this</a> and <a href="/snark-challenge/problem-03-cubic-extension-arithmetic.html">this challenge</a> to implement the group operation for several elliptic curves.</p>
     <h2 id="definition-of-curve-addition">Definition of curve addition</h2>
-    <p>Fix a field <span class="math inline">\(\mathbb{F}\)</span>. For example, one of the fields described on the parameter pages for <a href="/snark-challenge/MNT4753.html">MNT4-753</a> and <a href="/snark-challenge/MNT6753.html">MNT6-753</a>. Then fix numbers <span class="math inline">\(a, b\)</span> in <span class="math inline">\(\mathbb{F}\)</span>. The set of points <span class="math inline">\((x, y)\)</span> such that <span class="math inline">\(y^2 = x^3 + a x + b\)</span> is called an elliptic curve over the field <span class="math inline">\(\mathbb{F}\)</span>.</p>
-    <p>Elliptic curves are the essential tool powering SNARKs. They’re useful because we can define a kind of “addition” of points on a given curve. This is also called the “group operation” for the curve. Let’s define this “addition” as follows using pseudocode, where <code>+, *, /</code> are all taking place in the field <span class="math inline">\(\mathbb{F}\)</span>.</p>
-    <div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb1-1" data-line-number="1"></a>
-    <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">var</span> curve_add <span class="op">=</span> (p<span class="op">,</span> q) <span class="op">=&gt;</span> <span class="op">{</span></a>
-    <a class="sourceLine" id="cb1-3" data-line-number="3">  <span class="kw">var</span> s <span class="op">=</span> (<span class="va">p</span>.<span class="at">y</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">y</span>) / (<span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">x</span>)<span class="op">;</span></a>
-    <a class="sourceLine" id="cb1-4" data-line-number="4">  <span class="kw">var</span> x <span class="op">=</span> s<span class="op">*</span>s <span class="op">-</span> <span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">x</span><span class="op">;</span></a>
-    <a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="cf">return</span> <span class="op">{</span></a>
-    <a class="sourceLine" id="cb1-6" data-line-number="6">    <span class="dt">x</span><span class="op">:</span> x<span class="op">,</span></a>
-    <a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="dt">y</span><span class="op">:</span> s<span class="op">*</span>(<span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> x) <span class="op">-</span> <span class="va">p</span>.<span class="at">y</span></a>
-    <a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="op">};</span></a>
-    <a class="sourceLine" id="cb1-9" data-line-number="9"><span class="op">};</span></a></code></pre></div>
-    <p>Note that this definition doesn’t work in the case that <code>p.x = q.x</code>. This case splits into the case <code>p.y = q.y</code> (in which case its called “doubling” and there is a separate formula) and the case <code>p.y = -q.y</code> in which case a special “identity” value should be returned.</p>
+    <p>Fix a field <span class="math inline">\mathbb{F}</span>. For example, one of the fields described on the parameter pages for <a href="/snark-challenge/MNT4753.html">MNT4-753</a> and <a href="/snark-challenge/MNT6753.html">MNT6-753</a>. Then fix numbers <span class="math inline">a, b</span> in <span class="math inline">\mathbb{F}</span>. The set of points <span class="math inline">(x, y)</span> such that <span class="math inline">y^2 = x^3 + a x + b</span> is called an elliptic curve over the field <span class="math inline">\mathbb{F}</span>.</p>
+    <p>Elliptic curves are the essential tool powering SNARKs. They're useful because we can define a kind of &quot;addition&quot; of points on a given curve. This is also called the &quot;group operation&quot; for the curve. Let's define this &quot;addition&quot; as follows using pseudocode, where <code>+, *, /</code> are all taking place in the field <span class="math inline">\mathbb{F}</span>.</p>
+    <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">
+    <span class="kw">var</span> curve_add <span class="op">=</span> (p<span class="op">,</span> q) <span class="op">=&gt;</span> <span class="op">{</span>
+      <span class="kw">var</span> s <span class="op">=</span> (<span class="va">p</span>.<span class="at">y</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">y</span>) / (<span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">x</span>)<span class="op">;</span>
+      <span class="kw">var</span> x <span class="op">=</span> s<span class="op">*</span>s <span class="op">-</span> <span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> <span class="va">q</span>.<span class="at">x</span><span class="op">;</span>
+      <span class="cf">return</span> <span class="op">{</span>
+        <span class="dt">x</span><span class="op">:</span> x<span class="op">,</span>
+        <span class="dt">y</span><span class="op">:</span> s<span class="op">*</span>(<span class="va">p</span>.<span class="at">x</span> <span class="op">-</span> x) <span class="op">-</span> <span class="va">p</span>.<span class="at">y</span>
+      <span class="op">};</span>
+    <span class="op">};</span></code></pre></div>
+    <p>Note that this definition doesn't work in the case that <code>p.x = q.x</code>. This case splits into the case <code>p.y = q.y</code> (in which case its called &quot;doubling&quot; and there is a separate formula) and the case <code>p.y = -q.y</code> in which case a special &quot;identity&quot; value should be returned.</p>
     <p>For efficiency, one uses a different, more complicated formula for adding curve points. This will be discussed in the techniques section below.</p>
     <h2 id="problem-specification">Problem specification</h2>
     <h3 id="input">Input</h3>
     <ul>
     <li>n : <span>uint64</span></li>
-    <li>g4_1 : <span>Array(<a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">\(G_1\)</span></a>, <a href="#bg==">n</a>)</span></li>
-    <li>g4_2 : <span>Array(<a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">\(G_2\)</span></a>, <a href="#bg==">n</a>)</span></li>
-    <li>g6_1 : <span>Array(<a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">\(G_1\)</span></a>, <a href="#bg==">n</a>)</span></li>
-    <li>g6_2 : <span>Array(<a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">\(G_2\)</span></a>, <a href="#bg==">n</a>)</span></li>
+    <li>g4_1 : <span>Array(<a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>, <a href="#bg==">n</a>)</span></li>
+    <li>g4_2 : <span>Array(<a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a>, <a href="#bg==">n</a>)</span></li>
+    <li>g6_1 : <span>Array(<a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>, <a href="#bg==">n</a>)</span></li>
+    <li>g6_2 : <span>Array(<a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a>, <a href="#bg==">n</a>)</span></li>
     </ul>
     <h3 id="output">Output</h3>
     <ul>
-    <li>h4_1 : <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">\(G_1\)</span></a></li>
-    <li>h4_2 : <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">\(G_2\)</span></a></li>
-    <li>h6_1 : <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">\(G_1\)</span></a></li>
-    <li>h6_2 : <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">\(G_2\)</span></a></li>
+    <li>h4_1 : <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a></li>
+    <li>h4_2 : <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a></li>
+    <li>h6_1 : <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a></li>
+    <li>h6_2 : <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a></li>
     </ul>
     <h3 id="expected-behavior">Expected behavior</h3>
-    <p>Your implementation should use one or both of the benchmark machine’s GPUs to solve this problem. The machine’s specifications can be found <a href="">here</a>.</p>
-    <p><code>h4_1</code> should be <code>g4_1[0] + g4_1[1] + ... + g4_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">\(G_1\)</span></a>.</p>
-    <p><code>h4_2</code> should be <code>g4_2[0] + g4_2[1] + ... + g4_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">\(G_2\)</span></a>.</p>
-    <p><code>h6_1</code> should be <code>g6_1[0] + g6_1[1] + ... + g6_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">\(G_1\)</span></a>.</p>
-    <p><code>h6_2</code> should be <code>g6_2[0] + g6_2[1] + ... + g6_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">\(G_2\)</span></a>.</p>
+    <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
+    <p><code>h4_1</code> should be <code>g4_1[0] + g4_1[1] + ... + g4_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMSQ=">MNT4753.<span class="math inline">G_1</span></a>.</p>
+    <p><code>h4_2</code> should be <code>g4_2[0] + g4_2[1] + ... + g4_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT4753.html#JEdfMiQ=">MNT4753.<span class="math inline">G_2</span></a>.</p>
+    <p><code>h6_1</code> should be <code>g6_1[0] + g6_1[1] + ... + g6_1[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMSQ=">MNT6753.<span class="math inline">G_1</span></a>.</p>
+    <p><code>h6_2</code> should be <code>g6_2[0] + g6_2[1] + ... + g6_2[n - 1]</code> where <code>+</code> is the group operation for the curve <a href="/snark-challenge/MNT6753.html#JEdfMiQ=">MNT6753.<span class="math inline">G_2</span></a>.</p>
     <h2 id="submission-guidelines">Submission guidelines</h2>
     <p>Your submission will be run and evaluated as follows.</p>
-    <ol start="0" type="1">
+    <ol start="0" style="list-style-type: decimal">
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
     <li><p>Your binary will be compiled with <code>./build.sh</code>. This step should produce a binary <code>./main</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
-    <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" data-line-number="1">    <span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</a></code></pre></div>
-    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">“Input”</a> section.</p>
-    <p>It should create a file called “outputs” at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">“Output”</a> section.</p></li>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+    <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
-    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations">here</a>. The “main” file is <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations/libff/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-04-curve-operations/libff/algebra/curves/mnt753/mnt4753/mnt4753_g1.cpp#L135">here</a>.</p>
+    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations">here</a>. The &quot;main&quot; file is <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-04-curve-operations/libff/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-04-curve-operations/libff/algebra/curves/mnt753/mnt4753/mnt4753_g1.cpp#L135">here</a>.</p>
     <h2 id="further-discussion-and-background">Further discussion and background</h2>
     <h3 id="starter-code">Starter code</h3>
     <ul>
@@ -138,9 +138,9 @@
     <p>Please see <a href="/snark-challenge/strategies.html">this page</a> for a more full list of implementation techniques.</p>
     <h3 id="techniques">Techniques</h3>
     <h4 id="coordinate-systems">Coordinate systems</h4>
-    <p>Points in the form <span class="math inline">\((x, y)\)</span> as above are said to be represented using <em>affine coordinates</em> and the above definition is <em>affine</em> curve addition.</p>
+    <p>Points in the form <span class="math inline">(x, y)</span> as above are said to be represented using <em>affine coordinates</em> and the above definition is <em>affine</em> curve addition.</p>
     <p>There are more efficient ways of adding curve points which use different coordinate systems. The most efficient of these is called <em>Jacobian coordinates</em>. Formulas for addition and doubling in Jacobian coordinates can be found <a href="https://www.hyperelliptic.org/EFD/g1p/auto-shortw-jacobian.html#doubling-dbl-2007-bl">here</a> and a Rust implementation <a href="https://github.com/CodaProtocol/pairing/blob/mnt46-753/src/mnt4_753/ec.rs#L374">here</a>.</p>
-    <p>There is a further technique called “mixed addition” which allows one to add a point in Jacobian coordinates to a point in affine coordinates even more efficiently than adding two points in Jacobian coordinates. This technique can yield large efficiency gains but makes taking advantage of parallelism more complicated.</p>
+    <p>There is a further technique called &quot;mixed addition&quot; which allows one to add a point in Jacobian coordinates to a point in affine coordinates even more efficiently than adding two points in Jacobian coordinates. This technique can yield large efficiency gains but makes taking advantage of parallelism more complicated.</p>
     <h3 id="parallelism">Parallelism</h3>
     <p>This problem is an instance of a <em>reduction</em> and is inherently parallel.</p>
   </body>

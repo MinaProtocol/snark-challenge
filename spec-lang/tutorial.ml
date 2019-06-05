@@ -9,7 +9,7 @@ paid to do it? Then you're in the right place.
 
 In the tutorial challenges, you'll implement the sub-algorithms you need to
 implement the full SNARK prover and you'll get paid to do so.
-The first 25 participants who complete the four challenges in this stage
+The first 10 participants who complete the four challenges in this stage
 will receive $200 and a *SNARK Challenge* swag-bag.
 They'll also be very well positioned to apply their solutions to
 create submissions for $55,000 of the $75,000 in prizes up for grabs in the other challenges.

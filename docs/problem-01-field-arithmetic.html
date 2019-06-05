@@ -71,7 +71,7 @@
     <li><strong>Problem:</strong> Use a GPU to multiply together arrays of elements of a prime-order field.</li>
     <li><strong>Prize:</strong>
     <ul>
-    <li><strong>Note:</strong> The prizes for this tutorial challenge have ended, but you can use the CUDA reference implementation <a href="https://github.com/data61/cuda-fixnum">here</a> to easily get started on the next <a href="https://coinlist.co/build/coda/pages/problem-02-quadratic-extension-arithmetic">tutorial challenge</a>.</li>
+    <li><strong>Note:</strong> The prizes for this tutorial challenge have ended, but you can use the CUDA reference implementation <a href="https://github.com/codaprotocol/cuda-fixnum">here</a> to easily get started on the next <a href="https://coinlist.co/build/coda/pages/problem-02-quadratic-extension-arithmetic">tutorial challenge</a>.</li>
     </ul></li>
     </ul>
     <h2 id="problem-specification">Problem specification</h2>
@@ -101,43 +101,43 @@
     <li>out_y : <span>Array(<span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>, <a href="#bg==">n</a>)</span></li>
     </ul>
     <h3 id="expected-behavior">Expected behavior</h3>
-    <p>Your implementation should use one or both of the benchmark machine’s GPUs to solve this problem. The machine’s specifications can be found <a href="">here</a>.</p>
+    <p>Your implementation should use one or both of the benchmark machine's GPUs to solve this problem. The machine's specifications can be found <a href="">here</a>.</p>
     <p>The output <code>out_x</code> should have <code>out_x[i] = x0[i] * x1[i]</code>. where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a></sub></span>.</p>
     <p>The output <code>out_y</code> should have <code>out_y[i] = y0[i] * y1[i]</code> where <code>*</code> is multiplication in the field <span>𝔽<sub><a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a></sub></span>.</p>
     <h2 id="submission-guidelines">Submission guidelines</h2>
     <p>Your submission will be run and evaluated as follows.</p>
-    <ol start="0" type="1">
+    <ol start="0" style="list-style-type: decimal">
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
     <li><p>Your binary will be compiled with <code>./build.sh</code>. This step should produce a binary <code>./main</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
-    <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb1-1" data-line-number="1">    <span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</a></code></pre></div>
-    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">“Input”</a> section.</p>
-    <p>It should create a file called “outputs” at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">“Output”</a> section.</p></li>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> compute PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+    <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
-    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic">here</a>. The “main” file is <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/algebra/fields/fp.tcc#L161">here</a>.</p>
+    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-01-field-arithmetic">here</a>. The &quot;main&quot; file is <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-01-field-arithmetic/libff/algebra/fields/fp.tcc#L161">here</a>.</p>
     <h2 id="further-discussion-and-background">Further discussion and background</h2>
     <p>The basic operations needed for the SNARK prover algorithm are multiplication and addition of integers.</p>
-    <p>Usually when programming we’re used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">\(2^{32}\)</span> or <span class="math inline">\(2^{64}\)</span>) respectively.</p>
-    <p>For the SNARK prover though, the integers involved are a lot bigger. For our purposes, the integers are 753 bits and are represented using arrays of native integers. For example, we could represent them using an array of 12 64-bit integers (since <span class="math inline">\(12 \cdot 64 = 768 &gt; 753\)</span>) or an array of 24 32-bit integers (since <span class="math inline">\(24 \cdot 32 = 768 &gt; 753\)</span>). And instead of computing mod <span class="math inline">\(2^{753}\)</span>, we’ll compute mod <span class="math inline">\(q\)</span> where <span class="math inline">\(q\)</span> is either <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>.</p>
-    <p>Each element of such an array is called a “limb”. For example, we would say that we can represent a <span class="math inline">\(2^{768}\)</span> bit integer using 12 64-bit limbs.</p>
-    <p>We call the set of numbers <span class="math inline">\(0, \dots, q - 1\)</span> by the name <span class="math inline">\(\mathbb{F}_q\)</span>. This set forms a field, which means we can add, multiply, and divide numbers in the set. Addition and multiplication happen mod q. It might seem weird that we can divide, but it turns out for any <span class="math inline">\(a, b\)</span> in <span class="math inline">\(\mathbb{F}_q\)</span>, there is a number <span class="math inline">\(c\)</span> in <span class="math inline">\(\mathbb{F}_q\)</span> such that <span class="math inline">\((c b) \mod q = a\)</span>. In this case we say <span class="math inline">\(a / b = c\)</span> so that <span class="math inline">\((a / b) b \mod q = c b \mod q = a\)</span> as you’d expect.</p>
+    <p>Usually when programming we're used to working with 32-bit or 64-bit integers and addition and multiplication mod <span class="math inline">2^{32}</span> or <span class="math inline">2^{64}</span>) respectively.</p>
+    <p>For the SNARK prover though, the integers involved are a lot bigger. For our purposes, the integers are 753 bits and are represented using arrays of native integers. For example, we could represent them using an array of 12 64-bit integers (since <span class="math inline">12 \cdot 64 = 768 &gt; 753</span>) or an array of 24 32-bit integers (since <span class="math inline">24 \cdot 32 = 768 &gt; 753</span>). And instead of computing mod <span class="math inline">2^{753}</span>, we'll compute mod <span class="math inline">q</span> where <span class="math inline">q</span> is either <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a>.</p>
+    <p>Each element of such an array is called a &quot;limb&quot;. For example, we would say that we can represent a <span class="math inline">2^{768}</span> bit integer using 12 64-bit limbs.</p>
+    <p>We call the set of numbers <span class="math inline">0, \dots, q - 1</span> by the name <span class="math inline">\mathbb{F}_q</span>. This set forms a field, which means we can add, multiply, and divide numbers in the set. Addition and multiplication happen mod q. It might seem weird that we can divide, but it turns out for any <span class="math inline">a, b</span> in <span class="math inline">\mathbb{F}_q</span>, there is a number <span class="math inline">c</span> in <span class="math inline">\mathbb{F}_q</span> such that <span class="math inline">(c b) \mod q = a</span>. In this case we say <span class="math inline">a / b = c</span> so that <span class="math inline">(a / b) b \mod q = c b \mod q = a</span> as you'd expect.</p>
     <h3 id="montgomery-representation">Montgomery representation</h3>
-    <p>Montgomery representation is an alternative way of representing elements of <span class="math inline">\(\mathbb{F}_q\)</span> so that multiplication mod <span class="math inline">\(q\)</span> can be computed more efficiently.</p>
-    <p>Let <span class="math inline">\(q\)</span> be one of <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a> and let <span class="math inline">\(R = 2^{768}\)</span>. The Montgomery representation of the nubmer <span class="math inline">\(x\)</span> is <span class="math inline">\((x R) \mod q\)</span>. So for example, when <span class="math inline">\(q\)</span> is <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>, the number 5 is represented as <span class="math inline">\((5 \cdot 2^{768}) \mod q\)</span> which happens to be</p>
+    <p>Montgomery representation is an alternative way of representing elements of <span class="math inline">\mathbb{F}_q</span> so that multiplication mod <span class="math inline">q</span> can be computed more efficiently.</p>
+    <p>Let <span class="math inline">q</span> be one of <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a> or <a href="/snark-challenge/MNT6753.html#cQ==">MNT6753.q</a> and let <span class="math inline">R = 2^{768}</span>. The Montgomery representation of the nubmer <span class="math inline">x</span> is <span class="math inline">(x R) \mod q</span>. So for example, when <span class="math inline">q</span> is <a href="/snark-challenge/MNT4753.html#cQ==">MNT4753.q</a>, the number 5 is represented as <span class="math inline">(5 \cdot 2^{768}) \mod q</span> which happens to be</p>
     <pre><code>15141386232259939182423724568694911114488003694957216858820448966622494022908702997737632032507442391226452946698823665470952711443326537357991482811741996884665155234620507693793230633117754640516203527639390490866666926222409</code></pre>
     <p>This number then is represented as a little-endian length 12 array of 64-bit integers.</p>
     <p>In summary, we represent the number <code>x</code> as an array <code>a</code> with</p>
-    <div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb3-1" data-line-number="1">a.<span class="bu">map</span>((ai, i) <span class="op">=&gt;</span> (<span class="dv">2</span><span class="op">**</span>i) <span class="op">*</span> ai).<span class="bu">sum</span>() <span class="op">==</span> (x <span class="op">*</span> R) <span class="op">%</span> q</a></code></pre></div>
-    <p>Let us see how multplication works in this setting. We’ll use pseudocode with <code>%</code> for <span class="math inline">\(\mathrm{mod}\)</span>.</p>
+    <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">a.<span class="bu">map</span>((ai, i) <span class="op">=&gt;</span> (<span class="dv">2</span><span class="op">**</span>i) <span class="op">*</span> ai).<span class="bu">sum</span>() <span class="op">==</span> (x <span class="op">*</span> R) <span class="op">%</span> q</code></pre></div>
+    <p>Let us see how multplication works in this setting. We'll use pseudocode with <code>%</code> for <span class="math inline">\mathrm{mod}</span>.</p>
     <p>Given the Montgomery representation <code>X = (x * R) % q</code> of <code>x</code> and <code>Y = (y * R) % q</code> of <code>y</code>, we want to compute the Montgomery representation of <code>(x * y) % q</code>, which is <code>(x * y * R) % q</code>.</p>
     <p>We have</p>
-    <div class="sourceCode" id="cb4"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb4-1" data-line-number="1">X <span class="op">*</span> Y</a>
-    <a class="sourceLine" id="cb4-2" data-line-number="2"><span class="op">==</span> ((x <span class="op">*</span> R) <span class="op">%</span> q) <span class="op">*</span> ((y <span class="op">*</span> R) <span class="op">%</span> q)</a>
-    <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="op">==</span> (x <span class="op">*</span> y <span class="op">*</span> R <span class="op">*</span> R) <span class="op">%</span> q</a></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">X <span class="op">*</span> Y
+    <span class="op">==</span> ((x <span class="op">*</span> R) <span class="op">%</span> q) <span class="op">*</span> ((y <span class="op">*</span> R) <span class="op">%</span> q)
+    <span class="op">==</span> (x <span class="op">*</span> y <span class="op">*</span> R <span class="op">*</span> R) <span class="op">%</span> q</code></pre></div>
     <p>So, if we had a function <code>div_R</code> for letting us divide by <code>R</code> mod <code>q</code>, we would be able to compute the Montgomery representation of <code>x * y</code> from <code>X</code> and <code>Y</code> as <code>div_R(X * Y)</code>.</p>
-    <p>To recap, to implement multiplication mod <span class="math inline">\(q\)</span>, we need to implement two functions:</p>
-    <ol type="1">
+    <p>To recap, to implement multiplication mod <span class="math inline">q</span>, we need to implement two functions:</p>
+    <ol style="list-style-type: decimal">
     <li>Big integer multiplication, which takes two <code>k</code> limb integers and returns the <code>2 * k</code>-limb integer which is their product.</li>
     <li><code>div_R</code>, which takes a <code>2 * k</code>-limb integer <code>Z</code> and returns the <code>k</code>-limb integer equal to <code>(Z * r) % q</code>, where <code>r</code> is the inverse of <code>R</code>. That is, the number with <code>(R * r) % q = 1</code>.</li>
     </ol>
@@ -154,10 +154,10 @@
     </ul>
     <h3 id="other-resources">Other resources</h3>
     <ul>
-    <li>Algorithms for big-integer multiplication and <code>div_R</code> (often called Montgomery reduction) are given <a href="http://cacr.uwaterloo.ca/hac/about/chap14.pdf">here</a>, where our <span class="math inline">\(q\)</span> is called <span class="math inline">\(m\)</span>.</li>
+    <li>Algorithms for big-integer multiplication and <code>div_R</code> (often called Montgomery reduction) are given <a href="http://cacr.uwaterloo.ca/hac/about/chap14.pdf">here</a>, where our <span class="math inline">q</span> is called <span class="math inline">m</span>.</li>
     <li>A C++ implementation of Montgomery reduction can be found <a href="https://github.com/scipr-lab/libff/blob/master/libff/algebra/fields/fp.tcc#L161">here</a>.</li>
     <li><a href="https://cryptojedi.org/peter/data/pairing-20131122.pdf">These slides</a> may have useful insights for squeezing out extra performance.</li>
-    <li>This problem is sometimes called big integer multiplication, multi-precision multiplication, or more specifically “modular multiplication”. You can find lots of great resources by searching for these terms along with “GPU”.</li>
+    <li>This problem is sometimes called big integer multiplication, multi-precision multiplication, or more specifically &quot;modular multiplication&quot;. You can find lots of great resources by searching for these terms along with &quot;GPU&quot;.</li>
     </ul>
   </body>
 </html>

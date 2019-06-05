@@ -48,7 +48,7 @@
 
 - **Problem:** Add together an array of elements of each of the four relevant elliptic curves.
 - **Prize:**
-    - **First 25 submissions:** $100
+    - **First 25 submissions:** $200
     - **All submissions:** Swag bag including SNARK challenge T-shirt.
 
 In this challenge you'll use the field arithmetic built up 

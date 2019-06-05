@@ -79,71 +79,71 @@
     </ul>
     <h2 id="background">Background</h2>
     <p>In order to efficiently compose SNARKs together, one wants a collection of elliptic curves with certain properties. The goal of this challenge is to discover and construct elliptic curves with these properties.</p>
-    <p>Let’s understand in more detail what these properties are.</p>
+    <p>Let's understand in more detail what these properties are.</p>
     <h3 id="three-facts-about-snarks">Three facts about SNARKs</h3>
     <p>First, the basics.</p>
-    <p>If <span class="math inline">\(E\)</span> is an <a href="https://en.wikipedia.org/wiki/Elliptic_curve">elliptic curve</a> defined over the field <span class="math inline">\(\mathbb{F}_q\)</span> with a prime order <span class="math inline">\(r\)</span> subgroup, we say <span class="math inline">\(E\)</span> is pairing-friendly if <span class="math inline">\(r\)</span> divides <span class="math inline">\(q^k - 1\)</span> for some <span class="math inline">\(k \leq 50\)</span>. The <em>embedding degree of <span class="math inline">\(E\)</span></em> is defined to be the smallest such <span class="math inline">\(k\)</span>.</p>
-    <p><strong>Fact 1:</strong> A pairing-friendly elliptic curve with an order <span class="math inline">\(r\)</span> subgroup yields a SNARK construction for proving things about computations that use <span class="math inline">\(\mathbb{F}_r\)</span> arithmetic.</p>
-    <p>If you don’t know what pairing-friendly curves are, please click on the above links for some background.</p>
-    <p>Now, if we want to compose proofs together, we’ll need a SNARK for the computation of <em>verifying</em> those proofs. For this, it’s useful to know the following fact about what kind of computation the SNARK verifier performs.</p>
-    <p><strong>Fact 2:</strong> An elliptic-curve defined over <span class="math inline">\(\mathbb{F}_q\)</span> yields a SNARK construction whose verification algorithm is efficiently expressed using <span class="math inline">\(\mathbb{F}_r\)</span> arithmetic. This is because the Groth16 verifier just checks a few pairing equations.</p>
+    <p>If <span class="math inline">E</span> is an <a href="https://en.wikipedia.org/wiki/Elliptic_curve">elliptic curve</a> defined over the field <span class="math inline">\mathbb{F}_q</span> with a prime order <span class="math inline">r</span> subgroup, we say <span class="math inline">E</span> is pairing-friendly if <span class="math inline">r</span> divides <span class="math inline">q^k - 1</span> for some <span class="math inline">k \leq 50</span>. The <em>embedding degree of <span class="math inline">E</span></em> is defined to be the smallest such <span class="math inline">k</span>.</p>
+    <p><strong>Fact 1:</strong> A pairing-friendly elliptic curve with an order <span class="math inline">r</span> subgroup yields a SNARK construction for proving things about computations that use <span class="math inline">\mathbb{F}_r</span> arithmetic.</p>
+    <p>If you don't know what pairing-friendly curves are, please click on the above links for some background.</p>
+    <p>Now, if we want to compose proofs together, we'll need a SNARK for the computation of <em>verifying</em> those proofs. For this, it's useful to know the following fact about what kind of computation the SNARK verifier performs.</p>
+    <p><strong>Fact 2:</strong> An elliptic-curve defined over <span class="math inline">\mathbb{F}_q</span> yields a SNARK construction whose verification algorithm is efficiently expressed using <span class="math inline">\mathbb{F}_r</span> arithmetic. This is because the Groth16 verifier just checks a few pairing equations.</p>
     <p>Combining these two facts yields the following fact.</p>
-    <p><strong>Fact 3:</strong> If you want to compose two (or more) SNARKs produced using a construction based on an elliptic curve <span class="math inline">\(E_1\)</span> defined over a field <span class="math inline">\(\mathbb{F}_q\)</span>, you need an elliptic curve <span class="math inline">\(E_2\)</span> with a subgroup of order <span class="math inline">\(q\)</span>.</p>
-    <p>That is, to check <span class="math inline">\(E_1\)</span>’s verifier, by fact 2 you need a SNARK which can check <span class="math inline">\(\mathbb{F}_q\)</span> arithmetic, which by fact 1 means you need a curve with an order <span class="math inline">\(\mathbb{q}\)</span> subgroup.</p>
+    <p><strong>Fact 3:</strong> If you want to compose two (or more) SNARKs produced using a construction based on an elliptic curve <span class="math inline">E_1</span> defined over a field <span class="math inline">\mathbb{F}_q</span>, you need an elliptic curve <span class="math inline">E_2</span> with a subgroup of order <span class="math inline">q</span>.</p>
+    <p>That is, to check <span class="math inline">E_1</span>'s verifier, by fact 2 you need a SNARK which can check <span class="math inline">\mathbb{F}_q</span> arithmetic, which by fact 1 means you need a curve with an order <span class="math inline">\mathbb{q}</span> subgroup.</p>
     <p>This naturally leads to the definition of a <em>pairing-friendly graph of elliptic curves</em>, which classifies arrangements of elliptic curves which enable composition of pairing-based SNARKs.</p>
     <h3 id="pairing-friendly-graphs-of-curves">Pairing-friendly graphs of curves</h3>
-    <p><strong>Definition:</strong> A <em>paring-friendly graph of elliptic curves</em> is a directed graph <span class="math inline">\(G = (V, A)\)</span> along with some data associated to every vertex. Namely, for each vertex <span class="math inline">\(v \in V\)</span> we have an elliptic curve <span class="math inline">\(E_v\)</span> such that</p>
+    <p><strong>Definition:</strong> A <em>paring-friendly graph of elliptic curves</em> is a directed graph <span class="math inline">G = (V, A)</span> along with some data associated to every vertex. Namely, for each vertex <span class="math inline">v \in V</span> we have an elliptic curve <span class="math inline">E_v</span> such that</p>
     <ul>
-    <li><span class="math inline">\(E_v\)</span> is defined over a field of order <span class="math inline">\(q_v\)</span> with <span class="math inline">\(q_v\)</span> a prime.</li>
-    <li><span class="math inline">\(E_v\)</span> has a subgroup of order <span class="math inline">\(r_v\)</span> with <span class="math inline">\(r_v\)</span> a prime.</li>
-    <li><span class="math inline">\(E_v\)</span> is pairing friendly.</li>
-    <li><span class="math inline">\((u, v)\)</span> is an arc in <span class="math inline">\(A\)</span> iff <span class="math inline">\(q_u = r_v\)</span>.</li>
+    <li><span class="math inline">E_v</span> is defined over a field of order <span class="math inline">q_v</span> with <span class="math inline">q_v</span> a prime.</li>
+    <li><span class="math inline">E_v</span> has a subgroup of order <span class="math inline">r_v</span> with <span class="math inline">r_v</span> a prime.</li>
+    <li><span class="math inline">E_v</span> is pairing friendly.</li>
+    <li><span class="math inline">(u, v)</span> is an arc in <span class="math inline">A</span> iff <span class="math inline">q_u = r_v</span>.</li>
     </ul>
     Here is an example of a pairing-friendly graph of curves.
     <div style="width:100%; text-align:center">
     <p><img src="static/curvegraph.png" width="500px"></p>
     </div>
-    <p>Note that to each vertex <span class="math inline">\(v\)</span> we can also associate a SNARK construction (say Groth16) for verifying <span class="math inline">\(\mathbb{F}_{r_v}\)</span> arithmetic computations obtained using the elliptic curve associated to that vertex combined with fact 1.</p>
-    <p>This definition tells us that we can compose proofs whenever there’s an edge.</p>
-    <p>Or put another way, if <span class="math inline">\((u, v)\)</span> is an edge, the SNARK construction associated to <span class="math inline">\(v\)</span> can talk about proofs produced by the SNARK construction associated to <span class="math inline">\(u\)</span>.</p>
-    <p>Or put another way, an edge <span class="math inline">\((u, v)\)</span> allows us to <em>re-cast</em> an <span class="math inline">\(\mathbb{F}_{r_u}\)</span> computation as an <span class="math inline">\(\mathbb{F}_{r_v}\)</span> computation.</p>
+    <p>Note that to each vertex <span class="math inline">v</span> we can also associate a SNARK construction (say Groth16) for verifying <span class="math inline">\mathbb{F}_{r_v}</span> arithmetic computations obtained using the elliptic curve associated to that vertex combined with fact 1.</p>
+    <p>This definition tells us that we can compose proofs whenever there's an edge.</p>
+    <p>Or put another way, if <span class="math inline">(u, v)</span> is an edge, the SNARK construction associated to <span class="math inline">v</span> can talk about proofs produced by the SNARK construction associated to <span class="math inline">u</span>.</p>
+    <p>Or put another way, an edge <span class="math inline">(u, v)</span> allows us to <em>re-cast</em> an <span class="math inline">\mathbb{F}_{r_u}</span> computation as an <span class="math inline">\mathbb{F}_{r_v}</span> computation.</p>
     <!--
     - $E_1 / \mathbb{F}_5 \colon y^2 = x^3 + 4x + 2$ : order 3
     - $E_2 / \mathbb{F}_3 \colon y^2 = x^3 + 2x^2 + 1$ : order 5
     - $E_3 / \mathbb{F}_5 \colon y^2 = x^3 + 2x$ : order 2
     -->
     <h3 id="pairing-friendly-cycles-and-recursive-composition">Pairing-friendly cycles and recursive composition</h3>
-    <p>When you check Coda’s blockchain, you are checking a proof, that is checking a proof, that is checking a proof, … and on and on until reaching the genesis block. It’s important therefore that it be possible to compose proofs arbitrarily many times.</p>
-    <p>For this, we’d need a pairing-friendly graph that contains an arbitrarily long path of curves. There are two ways of achieving this:</p>
-    <ol type="1">
+    <p>When you check Coda's blockchain, you are checking a proof, that is checking a proof, that is checking a proof, ... and on and on until reaching the genesis block. It's important therefore that it be possible to compose proofs arbitrarily many times.</p>
+    <p>For this, we'd need a pairing-friendly graph that contains an arbitrarily long path of curves. There are two ways of achieving this:</p>
+    <ol style="list-style-type: decimal">
     <li>Find a graph of curves which is extremely big, bigger than the number of times we want to compose proofs.</li>
     <li>Find a graph of curves which contains a cycle, that way we can make arbitrarily long paths by just going around the cycle as many times as we need.</li>
     </ol>
     <p>Pairing-friendly elliptic curves are pretty rare, so I doubt option 1 is going to fly. Option 2 however is in fact realistic and Coda is built on the pairing-friendly cycle consisting of the curves <a href="https://coinlist.co/build/coda/pages/MNT4753">MNT4-753</a> and <a href="https://coinlist.co/build/coda/pages/MNT6753">MNT6-753</a>.</p>
     <h3 id="beyond-cycles">Beyond cycles</h3>
-    <p>So, if we want to do unbounded composition, we need a graph with a cycle. What’s not clear though is why you would want anything but a cycle. That is, what is the use of the vertices in the graph that do not lie on the cycle?</p>
+    <p>So, if we want to do unbounded composition, we need a graph with a cycle. What's not clear though is why you would want anything but a cycle. That is, what is the use of the vertices in the graph that do not lie on the cycle?</p>
     <p>The problem stems from the fact that we actually only know of one way to construct cycles of elliptic curves (namely, via MNT4/MNT6 cycles) and the curves in these cycles have bad parameters from an efficiency perspective: the curves have relatively low embedding degree (4 and 6) which means we must take the size of base field to be quite large (on the order of 768 bits) in order to achieve roughly 128 <a href="https://en.wikipedia.org/wiki/Security_level">bits of security</a>.</p>
-    <p>In Coda, this inefficiency affects not only the SNARK prover but leaks into the rest of the application as well. The reason is that our SNARK needs to certify all cryptographic computations in Coda (signatures, hashes, etc.) and so those primitives need to be efficiently described using <span class="math inline">\(\mathbb{F}_r\)</span> arithmetic (where <span class="math inline">\(r\)</span> is the order of one of the curves in our cycle). But <span class="math inline">\(r\)</span> is large (about 753 bits in our case) which means outside of the SNARK, our cryptographic operations are a lot slower than they could be.</p>
-    <p>Moreover, <a href="https://arxiv.org/pdf/1803.02067.pdf">this paper</a> of Chiesa, Chua, and Weidner rules out a few potential strategies for constructing other cycles of elliptic curves. So, if we cannot find new cycles (though you may very well be able to, we just don’t know how yet) we need another technique for reducing the impact of the large field size in known cycles.</p>
-    <p>This is where the other vertices in a pairing-friendly graph of curves come into play. Suppose our graph has a vertex <span class="math inline">\(v\)</span> from which we can reach a cycle. Suppose moreover that <span class="math inline">\(r_v\)</span> and/or <span class="math inline">\(q_v\)</span> were relatively small compared to the parameters of the curves on the cycle. Say, <span class="math inline">\(r\)</span> could be on the order of <span class="math inline">\(2^{256}\)</span>. Then we’d be in a good position: we could perform the bulk of the computation in our proofs in <span class="math inline">\(\mathbb{F}_r\)</span> using the SNARK construction associated to <span class="math inline">\(v\)</span>, and then just use the big curves in the cycle for composition and combining proofs. That is, just use the cycle for the relatively small computation of checking other verifiers.</p>
+    <p>In Coda, this inefficiency affects not only the SNARK prover but leaks into the rest of the application as well. The reason is that our SNARK needs to certify all cryptographic computations in Coda (signatures, hashes, etc.) and so those primitives need to be efficiently described using <span class="math inline">\mathbb{F}_r</span> arithmetic (where <span class="math inline">r</span> is the order of one of the curves in our cycle). But <span class="math inline">r</span> is large (about 753 bits in our case) which means outside of the SNARK, our cryptographic operations are a lot slower than they could be.</p>
+    <p>Moreover, <a href="https://arxiv.org/pdf/1803.02067.pdf">this paper</a> of Chiesa, Chua, and Weidner rules out a few potential strategies for constructing other cycles of elliptic curves. So, if we cannot find new cycles (though you may very well be able to, we just don't know how yet) we need another technique for reducing the impact of the large field size in known cycles.</p>
+    <p>This is where the other vertices in a pairing-friendly graph of curves come into play. Suppose our graph has a vertex <span class="math inline">v</span> from which we can reach a cycle. Suppose moreover that <span class="math inline">r_v</span> and/or <span class="math inline">q_v</span> were relatively small compared to the parameters of the curves on the cycle. Say, <span class="math inline">r</span> could be on the order of <span class="math inline">2^{256}</span>. Then we'd be in a good position: we could perform the bulk of the computation in our proofs in <span class="math inline">\mathbb{F}_r</span> using the SNARK construction associated to <span class="math inline">v</span>, and then just use the big curves in the cycle for composition and combining proofs. That is, just use the cycle for the relatively small computation of checking other verifiers.</p>
     <h3 id="lollipops">Lollipops</h3>
-    <p>Note that the construction described in the preceding paragraph doesn’t use the whole graph but just a subgraph consisting of a path terminating in a cycle.</p>
-    <p>Let’s give such a graph a name.</p>
-    <p><strong>Definition:</strong> A <em>lollipop of pairing-friendly curves</em> is a graph of pairing-friendly curves which consists of a path terminating in a cycle. We’ll call the path the “stick” of the lollipop. Note that a <em>cycle</em> of curves is a special case of a lollipop where the stick has length 0.</p>
+    <p>Note that the construction described in the preceding paragraph doesn't use the whole graph but just a subgraph consisting of a path terminating in a cycle.</p>
+    <p>Let's give such a graph a name.</p>
+    <p><strong>Definition:</strong> A <em>lollipop of pairing-friendly curves</em> is a graph of pairing-friendly curves which consists of a path terminating in a cycle. We'll call the path the &quot;stick&quot; of the lollipop. Note that a <em>cycle</em> of curves is a special case of a lollipop where the stick has length 0.</p>
     <h3 id="one-more-restriction-on-the-curves">One more restriction on the curves</h3>
-    <p>There is one more constraint we should place on the curves in any graph we consider if we want to get efficient SNARK constructions. Namely, for every vertex <span class="math inline">\(v\)</span> in a given graph, we would like <span class="math inline">\(r_v - 1\)</span> to have a large <em>smooth part</em>.</p>
+    <p>There is one more constraint we should place on the curves in any graph we consider if we want to get efficient SNARK constructions. Namely, for every vertex <span class="math inline">v</span> in a given graph, we would like <span class="math inline">r_v - 1</span> to have a large <em>smooth part</em>.</p>
     <p>The <em>smooth part</em> of a number is the largest divisor of that number which is <em><a href="https://en.wikipedia.org/wiki/Smooth_number">smooth</a></em>. Smooth means all the prime factors of that number are small. This smallness can be quantified: for example, a 7-smooth number is a number whose prime factors are all at most 7. Likewise, we can talk about the 7-smooth part of a number, which is the largest divisor of that number which is 7-smooth</p>
-    <p><strong>Definition:</strong> Let’s define a <span class="math inline">\((k, n)\)</span>-smooth pairing-friendly graph of curves to be a pairing friendly graph of curves such that for every vertex <span class="math inline">\(v\)</span> in the graph, the <span class="math inline">\(k\)</span>-smooth part of <span class="math inline">\(r_v - 1\)</span> is at least <span class="math inline">\(n\)</span>.</p>
-    <p>For concreteness, a reasonable value of <span class="math inline">\(k\)</span> is at most 13, and a reasonable value for <span class="math inline">\(n\)</span> is at least 100,000. Smaller <span class="math inline">\(k\)</span> and larger <span class="math inline">\(n\)</span> would be better.</p>
-    <p>The reason one imposes this restriction is that if <span class="math inline">\(r_v\)</span> has a large smooth part, one can more efficiently perform an FFT over the field <span class="math inline">\(\mathbb{F}_{r_v}\)</span> which is part of the SNARK prover.</p>
+    <p><strong>Definition:</strong> Let's define a <span class="math inline">(k, n)</span>-smooth pairing-friendly graph of curves to be a pairing friendly graph of curves such that for every vertex <span class="math inline">v</span> in the graph, the <span class="math inline">k</span>-smooth part of <span class="math inline">r_v - 1</span> is at least <span class="math inline">n</span>.</p>
+    <p>For concreteness, a reasonable value of <span class="math inline">k</span> is at most 13, and a reasonable value for <span class="math inline">n</span> is at least 100,000. Smaller <span class="math inline">k</span> and larger <span class="math inline">n</span> would be better.</p>
+    <p>The reason one imposes this restriction is that if <span class="math inline">r_v</span> has a large smooth part, one can more efficiently perform an FFT over the field <span class="math inline">\mathbb{F}_{r_v}</span> which is part of the SNARK prover.</p>
     <h2 id="problem-specification">Problem specification</h2>
-    <p>The goal of this challenge is to construct a <span class="math inline">\((k, n)\)</span>-smooth lollipop of pairing-friendly curves as described above such that every curve in the lollipop has at least 120 bits of security. The quality of a lollipop will be defined using a combination of the following criteria:</p>
+    <p>The goal of this challenge is to construct a <span class="math inline">(k, n)</span>-smooth lollipop of pairing-friendly curves as described above such that every curve in the lollipop has at least 120 bits of security. The quality of a lollipop will be defined using a combination of the following criteria:</p>
     <ul>
     <li>The length of the stick. (Shorter is better.)</li>
     <li>The length of the cycle. (Shorter is better.)</li>
-    <li>The sizes of <span class="math inline">\(r_v\)</span> and <span class="math inline">\(q_v\)</span> where <span class="math inline">\(v\)</span> is the vertex at the base of the stick. (Smaller is better.)</li>
-    <li>The size of <span class="math inline">\(k\)</span>. (Smaller is better).</li>
-    <li>The size of <span class="math inline">\(n\)</span>. (Larger is better).</li>
+    <li>The sizes of <span class="math inline">r_v</span> and <span class="math inline">q_v</span> where <span class="math inline">v</span> is the vertex at the base of the stick. (Smaller is better.)</li>
+    <li>The size of <span class="math inline">k</span>. (Smaller is better).</li>
+    <li>The size of <span class="math inline">n</span>. (Larger is better).</li>
     </ul>
     <p>These parameters affect the efficiency of the overall construction in a specific but difficult to specify way, so we will take them all into account when judging submissions.</p>
     <h2 id="the-current-best">The current best</h2>
@@ -151,9 +151,9 @@
     <ul>
     <li>The length of the stick is 0. (This is the best possible.)</li>
     <li>The length of the cycle is 2. (This is the best possible.)</li>
-    <li><span class="math inline">\(r_v\)</span> and <span class="math inline">\(q_v\)</span> are both on the order of <span class="math inline">\(2^{753}\)</span> for both vertices <span class="math inline">\(v\)</span>. (These parameters are poor. <span class="math inline">\(2^{256}\)</span> would be the absolute best one could achieve while maintaining <span class="math inline">\(128\)</span> bits of security.)</li>
-    <li><span class="math inline">\(k = 5\)</span></li>
-    <li><span class="math inline">\(n\)</span> is <span class="math inline">\(819,200\)</span>. (For the other curve in the cycle the <span class="math inline">\(5\)</span>-smooth part is <span class="math inline">\((819,200)^2 = 671,088,640,000\)</span>, which is very good.)</li>
+    <li><span class="math inline">r_v</span> and <span class="math inline">q_v</span> are both on the order of <span class="math inline">2^{753}</span> for both vertices <span class="math inline">v</span>. (These parameters are poor. <span class="math inline">2^{256}</span> would be the absolute best one could achieve while maintaining <span class="math inline">128</span> bits of security.)</li>
+    <li><span class="math inline">k = 5</span></li>
+    <li><span class="math inline">n</span> is <span class="math inline">819,200</span>. (For the other curve in the cycle the <span class="math inline">5</span>-smooth part is <span class="math inline">(819,200)^2 = 671,088,640,000</span>, which is very good.)</li>
     </ul>
     <p>Here are the parameters of the <a href="https://coinlist.co/build/coda/pages/MNT4753">MNT4 curve</a> and the <a href="https://coinlist.co/build/coda/pages/MNT6753">MNT6 curve</a>.</p>
     <h2 id="submission-format">Submission format</h2>
@@ -166,7 +166,7 @@
     <h2 id="resources">Resources</h2>
     <ul>
     <li>A <a href="https://github.com/imeckler/curve-search">Rust program</a> for sampling MNT4/6 cycles.</li>
-    <li>An <a href="https://www.cosic.esat.kuleuven.be/ecc2013/files/pierrick_gaudry_2.pdf">excellent set of slides</a> describing pairing-friendly curves. Slide 14 in particular is a “cheat sheet” for constructing such curves.</li>
+    <li>An <a href="https://www.cosic.esat.kuleuven.be/ecc2013/files/pierrick_gaudry_2.pdf">excellent set of slides</a> describing pairing-friendly curves. Slide 14 in particular is a &quot;cheat sheet&quot; for constructing such curves.</li>
     <li>A <a href="https://eprint.iacr.org/2006/372.pdf">great paper</a> giving a more in depth discussion of most of the known constructions of pairing friendly curves.</li>
     <li>A <a href="https://arxiv.org/pdf/1803.02067.pdf">paper</a> ruling out certain avenues to constructing pairing-friendly lollipops.</li>
     <li>A <a href="https://github.com/zcash/zcash/issues/3425">Github thread</a> about constructing pairing-friendly lollipops.</li>

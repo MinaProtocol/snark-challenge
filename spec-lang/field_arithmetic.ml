@@ -280,7 +280,7 @@ let problem : Problem.t =
                 (Markdown.of_string
                    {md|The prizes for this tutorial challenge have ended, but
               you can use the CUDA reference implementation
-              [here](https://github.com/data61/cuda-fixnum) to
+              [here](https://github.com/codaprotocol/cuda-fixnum) to
               easily get started on the next [tutorial challenge](https://coinlist.co/build/coda/pages/problem-02-quadratic-extension-arithmetic).|md})
             ) ] }
   ; preamble= Fn.const []

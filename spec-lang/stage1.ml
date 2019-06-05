@@ -9,7 +9,7 @@ paid to do it? Then you're in the right place.
 
 In this stage, you'll implement the sub-algorithms you need to
 implement the full SNARK prover and you'll get paid to do so.
-The first 25 participants who complete the four challenges in this stage
+The first 10 participants who complete the four challenges in this stage
 will receive $200 and a *SNARK Challenge* swag-bag.
 They'll also be very well positioned to apply their solutions to
 create submissions for $55,000 of the $75,000 in prizes up for grabs in the second stage.
@@ -91,7 +91,7 @@ let page (pages : Pages.t) =
     let open Challenge in
     let programmer_challenges : Challenge.t list =
       [ challenge "SNARK prover challenges (performance, mobile, creative)"
-          ~url:pages.groth16 ~short:"prover" ~dollars:65_000
+          ~url:pages.groth16 ~short:"prover" ~dollars:70_000
           [ (*
           challenge "Fastest prover (GPU and CPU)" ~short:"gpu-cpu" ~dollars:55_000 [];
           challenge "Fastest prover (CPU only)" ~short:"cpu" ~dollars:0 [];
@@ -102,7 +102,8 @@ let page (pages : Pages.t) =
           [] ]
     in
     let stage1_challenges : Challenge.t list =
-      [challenge "Tutorial challenges" ~short:"tutorial" ~dollars:200 []]
+      [ challenge ~per_person:true "Tutorial challenges" ~short:"tutorial"
+          ~dollars:500 [] ]
       (*
       List.map ~f:(Tuple2.uncurry problem)
       [ Field_arithmetic.problem, 1
@@ -135,7 +136,7 @@ let page (pages : Pages.t) =
 global competition to advance the state-of-the-art in performance
 for SNARK proving. Participants will be part of an effort that aims
 to have a massive impact on user-protecting cryptographic technology,
-and compete for $100,000 in prizes.
+and compete for over $100,000 in prizes.
 
 There are two categories of challenges: those for programmers who want
 to implement high-performance cryptography, and those for cryptographers

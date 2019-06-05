@@ -286,15 +286,11 @@ let problem : Problem.t =
   ; quick_details=
       { description= Markdown.of_string "The full Groth16 prover."
       ; prize=
-          [ (Best_performance_at_end Cpu_and_gpu, Dollars 20_000)
-          ; (Best_performance_at_end Cpu, Dollars 2_500)
-          ; (Best_performance_at_end Mobile, Dollars 2_500)
-          ; (Shortest, Dollars 2_500)
-          ; (Most_elegant, Dollars 2_500)
-          ; (First_to (Improve_speed_by 16), Dollars 12_000)
-          ; (First_to (Improve_speed_by 8), Dollars 10_000)
+          [ (Best_performance_at_end Cpu_and_gpu, Dollars 30_000)
+          ; (First_to (Improve_speed_by 2), Dollars 7_000)
           ; (First_to (Improve_speed_by 4), Dollars 8_000)
-          ; (First_to (Improve_speed_by 2), Dollars 5_000) ] }
+          ; (First_to (Improve_speed_by 8), Dollars 10_000)
+          ; (First_to (Improve_speed_by 16), Dollars 15_000) ] }
   ; preamble
   ; interface
   ; reference_implementation=

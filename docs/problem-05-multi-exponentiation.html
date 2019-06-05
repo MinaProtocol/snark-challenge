@@ -91,40 +91,40 @@
     <h3 id="expected-behavior">Expected behavior</h3>
     <p>The output should be the multiexponentiation with the scalars <code>s</code> on the bases <code>g</code>. In other words, the group element <code>s[0] * g[0] + s[1] * g[1] + ... + s[n - 1] * g[n - 1]</code>.</p>
     <p>In pseduocode, something like</p>
-    <div class="sourceCode" id="cb1"><pre class="sourceCode javascript"><code class="sourceCode javascript"><a class="sourceLine" id="cb1-1" data-line-number="1"></a>
-    <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">var</span> g <span class="op">=</span> [g0<span class="op">,</span> g1<span class="op">,</span> ..<span class="op">,</span> gn]<span class="op">;</span></a>
-    <a class="sourceLine" id="cb1-3" data-line-number="3"></a>
-    <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">var</span> multiexp <span class="op">=</span> (s) <span class="op">=&gt;</span> <span class="op">{</span></a>
-    <a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="kw">var</span> res <span class="op">=</span> G_identity<span class="op">;</span></a>
-    <a class="sourceLine" id="cb1-6" data-line-number="6">  <span class="cf">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="va">s</span>.<span class="at">length</span><span class="op">;</span> <span class="op">++</span>i) <span class="op">{</span></a>
-    <a class="sourceLine" id="cb1-7" data-line-number="7">    <span class="kw">var</span> sg <span class="op">=</span> <span class="at">G_scale</span>(s[i]<span class="op">,</span> g[i])<span class="op">;</span></a>
-    <a class="sourceLine" id="cb1-8" data-line-number="8">    res <span class="op">=</span> <span class="at">G_add</span>(res<span class="op">,</span> sg)<span class="op">;</span></a>
-    <a class="sourceLine" id="cb1-9" data-line-number="9">  <span class="op">}</span></a>
-    <a class="sourceLine" id="cb1-10" data-line-number="10">  <span class="cf">return</span> res<span class="op">;</span></a>
-    <a class="sourceLine" id="cb1-11" data-line-number="11"><span class="op">}</span></a></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript">
+    <span class="kw">var</span> g <span class="op">=</span> [g0<span class="op">,</span> g1<span class="op">,</span> ..<span class="op">,</span> gn]<span class="op">;</span>
+    
+    <span class="kw">var</span> multiexp <span class="op">=</span> (s) <span class="op">=&gt;</span> <span class="op">{</span>
+      <span class="kw">var</span> res <span class="op">=</span> G_identity<span class="op">;</span>
+      <span class="cf">for</span> (<span class="kw">var</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> <span class="va">s</span>.<span class="at">length</span><span class="op">;</span> <span class="op">++</span>i) <span class="op">{</span>
+        <span class="kw">var</span> sg <span class="op">=</span> <span class="at">G_scale</span>(s[i]<span class="op">,</span> g[i])<span class="op">;</span>
+        res <span class="op">=</span> <span class="at">G_add</span>(res<span class="op">,</span> sg)<span class="op">;</span>
+      <span class="op">}</span>
+      <span class="cf">return</span> res<span class="op">;</span>
+    <span class="op">}</span></code></pre></div>
     <h2 id="submission-guidelines">Submission guidelines</h2>
     <p>Your submission will be run and evaluated as follows.</p>
-    <ol start="0" type="1">
+    <ol start="0" style="list-style-type: decimal">
     <li>The submission-runner will randomly generate the parameters and save them to files <code>PATH_TO_MNT4753_PARAMETERS</code> and <code>PATH_TO_MNT4753_PARAMETERS</code> and <code>PATH_TO_MNT6753_PARAMETERS</code> and <code>PATH_TO_MNT6753_PARAMETERS</code>.</li>
     <li><p>Your binary <code>main</code> will be run with</p>
-    <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb2-1" data-line-number="1">    <span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS</a>
-    <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS</a>
-    <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS</a>
-    <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS</a></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS
+    <span class="ex">./main</span> MNT4753 preprocess PATH_TO_MNT4753_PARAMETERS
+    <span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS
+    <span class="ex">./main</span> MNT6753 preprocess PATH_TO_MNT6753_PARAMETERS</code></pre></div>
     <p>where <code>PATH_TO_X_PARAMETERS</code> will be replaced by the actual path.</p>
     Your binary can at this point, if you like, do some preprocessing of the parameters and save any state it would like to files <code>./MNT4753_preprocessed</code> and <code>./MNT4753_preprocessed</code> and <code>./MNT6753_preprocessed</code> and <code>./MNT6753_preprocessed</code>.</li>
     <li><p>The submission runner will generate a random sequence of inputs, saved to a file <code>PATH_TO_INPUTS</code>.</p></li>
     <li><p>Your binary will be compiled with <code>./build.sh</code>. This step should produce a binary <code>./main</code>.</p></li>
     <li><p>Your binary will be invoked with</p>
-    <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb3-1" data-line-number="1">    <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</a>
-    <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</a>
-    <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="ex">./main</span> MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</a>
-    <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="ex">./main</span> MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</a></code></pre></div>
-    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">“Input”</a> section.</p>
-    <p>It should create a file called “outputs” at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">“Output”</a> section.</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">    <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+    <span class="ex">./main</span> MNT4753 compute PATH_TO_MNT4753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+    <span class="ex">./main</span> MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS
+    <span class="ex">./main</span> MNT6753 compute PATH_TO_MNT6753_PARAMETERS PATH_TO_INPUTS PATH_TO_OUTPUTS</code></pre></div>
+    <p>and its runtime will be recorded. The file <code>PATH_TO_INPUTS</code> will contain a sequence of inputs, each of which is of the form specified in the <a href="#input">&quot;Input&quot;</a> section.</p>
+    <p>It should create a file called &quot;outputs&quot; at the path <code>PATH_TO_OUTPUTS</code> which contains a sequence of outputs, each of which is of the form specified in the <a href="#output">&quot;Output&quot;</a> section.</p>
     <p>It can, if it likes, read the preprocessed files created in step 1 in order to help it solve the problem.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
-    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="">here</a>. The “main” file is <a href="">here</a>. The core algorithm is implemented <a href="">here</a>.</p>
+    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="">here</a>. The &quot;main&quot; file is <a href="">here</a>. The core algorithm is implemented <a href="">here</a>.</p>
   </body>
 </html>

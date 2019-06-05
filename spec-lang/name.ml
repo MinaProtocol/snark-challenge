@@ -25,7 +25,12 @@ let to_string {qualification; ident} =
   | In_current_scope ->
       ident
 
-let base_url = "/snark-challenge"
+let base_url =
+  match Sys.getenv "FOR_COINLIST" with
+  | None ->
+      "/snark-challenge"
+  | Some _ ->
+      "/build/coda/pages/"
 
 let module_url m = sprintf "%s/%s.html" base_url m
 

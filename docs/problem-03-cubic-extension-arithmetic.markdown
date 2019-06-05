@@ -45,7 +45,7 @@
 
 - **Problem:** Multiply together an array of elements of a cubic extension field.
 - **Prize:**
-    - **First 25 submissions:** $25
+    - **First 25 submissions:** $150
     - **All submissions:** Swag bag including SNARK challenge T-shirt.
 
 Now that we've implemented arithmetic in a prime-order field

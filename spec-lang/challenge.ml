@@ -37,7 +37,7 @@ let rec render =
       else
         sprintf "**$%s in prizes%s**"
           (Int.to_string_hum ~delimiter:',' dollars)
-          (if per_person then " per participant" else "")
+          (if per_person then " for each of the first 10 participants" else "")
     in
     sprintf "- %s: %s\n%s" name prizes
       ( List.map sub_challenges ~f:(fun t ->

@@ -257,7 +257,7 @@ let problem : Problem.t =
           Markdown.of_string
             "Multiply together an array of elements of a quadratic extension \
              field."
-      ; prize= Prize.stage1 25 }
+      ; prize= Prize.stage1 150 }
   ; preamble
   ; interface
   ; reference_implementation=

@@ -209,7 +209,7 @@ let problem : Problem.t =
           Markdown.of_string
             "Add together an array of elements of each of the four relevant \
              elliptic curves."
-      ; prize= Prize.stage1 100 }
+      ; prize= Prize.stage1 200 }
   ; preamble
   ; interface
   ; reference_implementation=
