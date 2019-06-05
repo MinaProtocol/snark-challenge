@@ -4,13 +4,13 @@ paid to do it? Then you're in the right place.
 In the tutorial challenges, you'll implement the sub-algorithms you need to
 implement the full SNARK prover and you'll get paid to do so.
 The first 10 participants who complete the four challenges in this stage
-will receive $200 and a *SNARK Challenge* swag-bag.
+will receive $500 and a *SNARK Challenge* swag-bag.
 They'll also be very well positioned to apply their solutions to
-create submissions for $55,000 of the $75,000 in prizes up for grabs in the other challenges.
+create submissions for $70,000 of the $105,000 in prizes up for grabs in the other challenges.
 
 The challenges in this stage are
 
-- [Field arithmetic](/snark-challenge/problem-01-field-arithmetic.html): **This challenge has ended, but please read the page for more info as the solution will be useful in the other challenges.**
+- [Field arithmetic](/snark-challenge/problem-01-field-arithmetic.html): **This challenge has ended, but please read the page for more info as the [solution](https://github.com/codaprotocol/cuda-fixnum) has been released and will be useful in the other challenges.**
 
 - [Quadratic extension arithmetic](/snark-challenge/problem-02-quadratic-extension-arithmetic.html): **$150 in prizes for each of the first 10 participants**
 

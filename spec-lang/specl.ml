@@ -127,9 +127,9 @@ let markdown_wrap cs = Html.div [] (head @ cs)
 
 let html_wrap cs =
   let open Html in
-  node "html" [] [node "head" [] head; node "body" [] cs]
+  node "html" [] [node "head" [] head; node "body" [] [cs]]
 
-let wrap = html_wrap
+let wrap = if for_coinlist then Fn.id else html_wrap
 
 let problem_url i (p : Problem.t) =
   sprintf "%s/problem-%02d-%s.html" base_url i (Problem.slug p)
@@ -150,24 +150,28 @@ let site =
     ; Fft.problem
     ; Simple_groth16_prove.problem ]
   in
+  let process_url =
+    if for_coinlist then String.chop_suffix_exn ~suffix:".html" else Fn.id
+  in
   let pages : Pages.t =
-    { intro= Intro.url
-    ; theory= Theory.url
-    ; implementation_strategies= Implementation_strategies.url
-    ; field_arithmetic= problem_url 1 Field_arithmetic.problem
-    ; quadratic_extension= problem_url 2 Quadratic_extension.problem
-    ; cubic_extension= problem_url 3 Cubic_extension.problem
-    ; curve_operations= problem_url 4 Curve_operations.problem
-    ; multi_exponentiation= problem_url 5 Multiexp.problem
-    ; fft= problem_url 6 Fft.problem
-    ; groth16= problem_url 7 Simple_groth16_prove.problem
-    ; mnt4= Name.module_url Module.mnt4753.name
-    ; mnt6= Name.module_url Module.mnt6753.name }
+    { intro= Intro.url |> process_url
+    ; theory= Theory.url |> process_url
+    ; implementation_strategies= Implementation_strategies.url |> process_url
+    ; field_arithmetic= problem_url 1 Field_arithmetic.problem |> process_url
+    ; quadratic_extension=
+        problem_url 2 Quadratic_extension.problem |> process_url
+    ; cubic_extension= problem_url 3 Cubic_extension.problem |> process_url
+    ; curve_operations= problem_url 4 Curve_operations.problem |> process_url
+    ; multi_exponentiation= problem_url 5 Multiexp.problem |> process_url
+    ; fft= problem_url 6 Fft.problem |> process_url
+    ; groth16= problem_url 7 Simple_groth16_prove.problem |> process_url
+    ; mnt4= Name.module_url Module.mnt4753.name |> process_url
+    ; mnt6= Name.module_url Module.mnt6753.name |> process_url }
   in
   let page name md =
     let md = Markdown.to_string md in
     [ File_system.file
-        (File.of_html ~name:(sprintf "%s.html" name) (wrap [Html.markdown md]))
+        (File.of_html ~name:(sprintf "%s.html" name) (wrap (Html.markdown md)))
     ; File_system.file (File.of_text ~name:(sprintf "%s.markdown" name) md) ]
   in
   Site.create
@@ -184,7 +188,7 @@ let site =
               File_system.file
                 (File.of_html
                    ~name:(Filename.basename (Name.module_url m.name))
-                   (wrap [Module.(Page.render (to_page env m))])) )
+                   (wrap Module.(Page.render (to_page env m)))) )
         @ List.map modules ~f:(fun m ->
               File_system.file
                 (File.of_text
@@ -201,9 +205,9 @@ let site =
                 (File.of_html
                    ~name:(Filename.basename (problem_url (i + 1) p))
                    (wrap
-                      [ Html.markdown
-                          (Problem.render ~pages p |> Markdown.to_string) ]))
-          ) ) ]
+                      (Html.markdown
+                         (Problem.render ~pages p |> Markdown.to_string)))) )
+        ) ]
 
 let () =
   let open Async in

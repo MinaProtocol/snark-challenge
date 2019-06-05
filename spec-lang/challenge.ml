@@ -33,7 +33,8 @@ let rec render =
     let prizes =
       if dollars = 0 then
         "**This challenge has ended, but please read the page for more info \
-         as the solution will be useful in the other challenges.**"
+         as the [solution](https://github.com/codaprotocol/cuda-fixnum) has \
+         been released and will be useful in the other challenges.**"
       else
         sprintf "**$%s in prizes%s**"
           (Int.to_string_hum ~delimiter:',' dollars)

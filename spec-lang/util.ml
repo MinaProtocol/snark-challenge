@@ -13,3 +13,6 @@ module Html = Html_concise
 let base_url = Name.base_url
 
 let unlines = String.concat ~sep:"\n"
+
+let for_coinlist =
+  match Sys.getenv "FOR_COINLIST" with None -> false | Some _ -> true
