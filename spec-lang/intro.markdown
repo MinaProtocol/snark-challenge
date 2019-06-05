@@ -124,7 +124,7 @@ resources that can help get you started.
 
 ### Further resources
 
-- [**Prover Tutorial**](https://coinlist.co/build/coda/pages/tutorial). For those who haven't implemented elliptic curve cryptography before we recommend you start with [this tutorial](https://coinlist.co/build/coda/pages/tutorial). As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
+- [**Prover tutorial**](https://coinlist.co/build/coda/pages/tutorial). For those who haven't implemented elliptic curve cryptography before we recommend you start with [this tutorial](https://coinlist.co/build/coda/pages/tutorial). As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
 - [**Prover spec page**](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges). Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.
 
 ### Other challenges
