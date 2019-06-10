@@ -99,9 +99,6 @@
     <span class="math inline">d + 1</span> is guaranteed to be a power of <span class="math inline">2</span> in the MNT4753 case and of the form <span class="math inline">2^x 5^y</span> in the MNT6753 case.
     </p></li>
     <li>m : <span>uint64</span></li>
-    <li>ca : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
-    <li>cb : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
-    <li>cc : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
     <li>A : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
     <li>B1 : <span>Array(<a href="#JEdfMSQ="><span class="math inline">G_1</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
     <li>B2 : <span>Array(<a href="#JEdfMiQ="><span class="math inline">G_2</span></a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
@@ -111,6 +108,9 @@
     <h3 id="input">Input</h3>
     <ul>
     <li>w : <span>Array(<a href="#Rg==">F</a>, <span><a href="#bQ==">m</a>+1</span>)</span></li>
+    <li>ca : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
+    <li>cb : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
+    <li>cc : <span>Array(<a href="#Rg==">F</a>, <span><a href="#ZA==">d</a>+1</span>)</span></li>
     <li>r : <a href="#Rg==">F</a></li>
     </ul>
     <h3 id="output">Output</h3>
@@ -175,7 +175,7 @@
     <p>It can, if it likes, read the preprocessed files created in step 1 in order to help it solve the problem.</p></li>
     </ol>
     <h2 id="reference-implementation">Reference implementation</h2>
-    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover">here</a>. The &quot;main&quot; file is <a href="https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover/libsnark/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge/blob/master/reference-07-groth16-prover/libsnark/main.cpp#L199">here</a>.</p>
+    <p>The output of your submitted program will be checked against the reference implementation at this repo <a href="https://github.com/CodaProtocol/snark-challenge-prover-reference">here</a>. The &quot;main&quot; file is <a href="https://github.com/CodaProtocol/snark-challenge-prover-reference/blob/master/libsnark/main.cpp">here</a>. The core algorithm is implemented <a href="https://github.com/CodaProtocol/snark-challenge-prover-reference/blob/master/libsnark/main.cpp#L192">here</a>.</p>
     <h2 id="further-discussion-and-background">Further discussion and background</h2>
     <h3 id="starter-code">Starter code</h3>
     <ul>

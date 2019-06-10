@@ -72,17 +72,17 @@
     <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./build.sh</span></code></pre></div>
     <p>This will create three binaries. We won't go through them in detail right now but the <a href="https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges">problem page</a> has more info.</p>
     <p>To test the prover, run the following command:</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./generate_parameters</span> <span class="kw">&amp;&amp;</span> <span class="ex">./generate_inputs</span> 
-    <span class="bu">time</span> ./main compute parameters inputs outputs</code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./generate_parameters</span>
+    <span class="bu">time</span> ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs</code></pre></div>
     <p>This will save your program's output to the file <code>./outputs</code>.</p>
-    <p>Now let's make a change to the implementation and re-compile. Find the line</p>
+    <p>Now let's make a change to the implementation and re-compile. In <code>libsnark/main.cpp</code>, find the line</p>
     <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="at">const</span> multi_exp_method method = multi_exp_method_BDLO12;</code></pre></div>
-    <p>It should be line 22. Comment it out and uncomment the next line</p>
+    <p>It should be line 24. Comment it out and uncomment the next line</p>
     <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="at">const</span> multi_exp_method method = multi_exp_method_bos_coster;</code></pre></div>
     <p>Recompile and run with</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./build.sh</span> <span class="kw">&amp;&amp;</span> <span class="bu">time</span> ./main compute parameters inputs outputs</code></pre></div>
-    <p>The program should now be significantly faster!</p>
-    <p>Note that there is no need to rerun <code>./generate_parameters &amp;&amp; ./generate_inputs</code> every time you make a change.</p>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./build.sh</span> <span class="kw">&amp;&amp;</span> <span class="bu">time</span> ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs-new</code></pre></div>
+    <p>The program should now be significantly faster! Check that the new outputs and the old outputs agree by checking <code>shasum outputs outputs-new</code>.</p>
+    <p>Note that there is no need to rerun <code>./generate_parameters</code> every time you make a change.</p>
     <p>Commit and push your change.</p>
     <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">git</span> commit -am <span class="st">&#39;try to speed things up&#39;</span> <span class="kw">&amp;&amp;</span> <span class="fu">git</span> push</code></pre></div>
     <h2 id="submit">Submit</h2>

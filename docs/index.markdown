@@ -74,30 +74,31 @@ This will create three binaries. We won't go through them in detail right now bu
 
 To test the prover, run the following command:
 ```bash
-./generate_parameters && ./generate_inputs 
-time ./main compute parameters inputs outputs
+./generate_parameters
+time ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs
 ```
 This will save your program's output to the file `./outputs`.
 
 Now let's make a change to the implementation and re-compile.
-Find the line 
+In `libsnark/main.cpp`, find the line 
 ```c++
 const multi_exp_method method = multi_exp_method_BDLO12;
 ```
-It should be line 22. Comment it out and uncomment the next line
+It should be line 24. Comment it out and uncomment the next line
 ```c++
 const multi_exp_method method = multi_exp_method_bos_coster;
 ```
 
 Recompile and run with
 ```bash
-./build.sh && time ./main compute parameters inputs outputs
+./build.sh && time ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs-new
 ```
 
 The program should now be significantly faster!
+Check that the new outputs and the old outputs agree by checking
+`shasum outputs outputs-new`.
 
-Note that there is no need to rerun  `./generate_parameters && ./generate_inputs`
-every time you make a change.
+Note that there is no need to rerun  `./generate_parameters` every time you make a change.
 
 Commit and push your change.
 ```bash

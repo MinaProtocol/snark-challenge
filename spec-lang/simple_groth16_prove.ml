@@ -22,9 +22,6 @@ let definitional_params =
 type batch_params =
   { max_degree: Name.t
   ; num_vars: Name.t
-  ; ca: Name.t
-  ; cb: Name.t
-  ; cc: Name.t
   ; at: Name.t
   ; bt1: Name.t
   ; bt2: Name.t
@@ -32,7 +29,7 @@ type batch_params =
   ; ht: Name.t }
 
 (* For simplicity we hardcode num_inputs = 1. *)
-let batch_params {field; g1; g2} =
+let batch_params {field= _; g1; g2} =
   let open Problem.Interface in
   let%bind max_degree =
     ( ! ) Batch_parameter "d" (Literal UInt64)
@@ -46,27 +43,13 @@ let batch_params {field; g1; g2} =
     !Batch_parameter name
       (Literal (Array {element= Name group; length= Some len}))
   in
-  let evaluation_array name =
-    !Batch_parameter name
-      (Literal
-         (Array
-            { element= Name field
-            ; length=
-                (* The last entry here I think will always be zero. Test that. *)
-                Some
-                  (Literal (Add (Name max_degree, Literal (Value Bigint.one))))
-            }))
-  in
   let num_vars_plus_one =
     Literal (Integer.Add (Name num_vars, Literal (Value Bigint.one)))
   in
   let num_vars_minus_one =
     Literal (Integer.Sub (Name num_vars, Literal (Value Bigint.one)))
   in
-  let%map ca = evaluation_array "ca"
-  and cb = evaluation_array "cb"
-  and cc = evaluation_array "cc"
-  and at = group_array "A" g1 num_vars_plus_one
+  let%map at = group_array "A" g1 num_vars_plus_one
   (* At[i] = u_i(x) = A_i(t) *)
   and bt1 = group_array "B1" g1 num_vars_plus_one
   and bt2 = group_array "B2" g2 num_vars_plus_one
@@ -112,7 +95,7 @@ let batch_params {field; g1; g2} =
        alpha_g1 + \sum_{i=0}^m w[i] * ( \sum_{j=1}^n A[i][j] * T[j] ) + r delta
 
     *)
-  {num_vars; max_degree; ca; cb; cc; at; bt1; bt2; ht; lt}
+  {num_vars; max_degree; at; bt1; bt2; ht; lt}
 
 let delatex s =
   let ( >>= ) = Option.( >>= ) in
@@ -129,6 +112,19 @@ let interface =
   let%bind ({field; g1; g2} as params) = definitional_params in
   let field_input name = !Input name (Name field) in
   let%bind batch_params = batch_params params in
+  let evaluation_array name =
+    !Input name
+      (Literal
+         (Array
+            { element= Name field
+            ; length=
+                (* The last entry here I think will always be zero. Test that. *)
+                Some
+                  (Literal
+                     (Add
+                        ( Name batch_params.max_degree
+                        , Literal (Value Bigint.one) ))) }))
+  in
   let%bind _w =
     (* w[0] = 1 *)
     let num_vars_plus_one =
@@ -137,6 +133,9 @@ let interface =
     in
     !Input "w"
       (Literal (Array {element= Name field; length= Some num_vars_plus_one}))
+  and ca = evaluation_array "ca"
+  and cb = evaluation_array "cb"
+  and cc = evaluation_array "cc"
   and r =
     field_input "r"
     (*
@@ -151,9 +150,7 @@ let interface =
   let latex s = sprintf "$%s$" s in
   let description =
     let n = Fn.compose delatex Name.to_string in
-    let {num_vars; at; bt2; lt; bt1; max_degree; ht; ca; cb; cc} =
-      batch_params
-    in
+    let {num_vars; at; bt2; lt; bt1; max_degree; ht} = batch_params in
     let a_def =
       sprintf {md|\sum_{i=0}^{%s} w[i] \times %s[i]|md} (n num_vars) (n at)
       |> latex |> latex
@@ -294,11 +291,10 @@ let problem : Problem.t =
   ; preamble
   ; interface
   ; reference_implementation=
-      { repo=
-          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover"
+      { repo= "https://github.com/CodaProtocol/snark-challenge-prover-reference"
       ; main=
-          "https://github.com/CodaProtocol/snark-challenge/tree/master/reference-07-groth16-prover/libsnark/main.cpp"
+          "https://github.com/CodaProtocol/snark-challenge-prover-reference/blob/master/libsnark/main.cpp"
       ; core=
-          "https://github.com/CodaProtocol/snark-challenge/blob/master/reference-07-groth16-prover/libsnark/main.cpp#L199"
+          "https://github.com/CodaProtocol/snark-challenge-prover-reference/blob/master/libsnark/main.cpp#L192"
       }
   ; postamble }

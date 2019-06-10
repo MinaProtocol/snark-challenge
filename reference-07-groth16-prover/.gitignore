@@ -49,3 +49,6 @@ libsnark/zk_proof_systems/zksnark/ram_zksnark/profiling/profile_ram_zksnark
 libsnark/zk_proof_systems/zksnark/ram_zksnark/tests/test_ram_zksnark
 
 build
+parameters
+generate_inputs
+generate_parameters
