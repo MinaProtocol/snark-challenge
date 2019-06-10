@@ -36,7 +36,7 @@ At a high level, it consists of these steps:
 Go [here](https://github.com/CodaProtocol/snark-challenge-prover-reference) to fork the reference repo. Once you've
 forked it, run
 ```bash
-git clone https://github.com/YOUR_USER_NAME/snark-challenge-prover.git
+git clone https://github.com/YOUR_USER_NAME/snark-challenge-prover-reference.git
 ```
 to clone it.
 
