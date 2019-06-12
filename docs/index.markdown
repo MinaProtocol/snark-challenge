@@ -40,23 +40,23 @@ We expect many participants to use GPUs to try and speed up the SNARK prover, so
 1. Go to console.aws.amazon.com
 2. Login or create account
 3. Choose US West (Oregon) as your region
-<img src="oregon.png">
+<img src="static/oregon.png">
 4. Type EC2 in the "Find Services" searchbar
-<img src="ec2.png">
+<img src="static/ec2.png">
 5. Click launch instance
-<img src="launch.png">
+<img src="static/launch.png">
 6. Type "snark" in the search bar for AMIs
-<img src="snark.png">
+<img src="static/snark.png">
 7. In "Community AMIs," select the coda-snark-challenge-base-* image
-<img src="ami.png">
+<img src="static/ami.png">
 8. You should choose a GPU instance -- we recommend choosing a p2.xlarge
-<img src="p2x.png">
+<img src="static/p2x.png">
 9. Click "review and launch"
 10. Click launch
-<img src="launchv2.png">
+<img src="static/launchv2.png">
 11. Go to EC2
 12. Right click on instance and select "Connect"
-<img src="connect.png">
+<img src="static/connect.png">
 13. Follow the instructions to get connected
 
 ### Fork the git repo with reference code.
@@ -157,6 +157,8 @@ resources that can help get you started.
 
 - [**Prover tutorial**](https://coinlist.co/build/coda/pages/tutorial). For those who haven't implemented elliptic curve cryptography before we recommend you start with [this tutorial](https://coinlist.co/build/coda/pages/tutorial). As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
 - [**Prover spec page**](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges). Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.
+- A C++ reference we recommend is the [C++ Super-FAQ](https://isocpp.org/faq)
+- For CUDA questions, we recommed consulting the [CUDA C Programming guide](https://docs.nvidia.com/cuda/pdf/CUDA_C_Programming_Guide.pdf) ([web version](https://docs.nvidia.com/cuda/cuda-c-programming-guide/)). The [NVIDIA developer site](https://docs.nvidia.com/cuda/) is also an excellent resource, and there's a [free Udacity course](https://developer.nvidia.com/udacity-cs344-intro-parallel-programming) as well.
 
 ### Other challenges
 
