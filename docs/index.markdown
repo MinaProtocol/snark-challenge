@@ -105,7 +105,7 @@ This will create three binaries. We won't go through them in detail right now bu
 To test the prover, run the following command:
 ```bash
 ./generate_parameters fast
-time ./main MNT4753 compute MNT4753-parameters MNT4753-input MNT4753-output
+time ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs
 ```
 This will save your program's output to the file `./outputs`.
 
@@ -121,7 +121,7 @@ const multi_exp_method method = multi_exp_method_bos_coster;
 
 Recompile and run with
 ```bash
-./build.sh && time ./main MNT4753 compute MNT4753-parameters MNT4753-input MNT4753-output
+./build.sh && time ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs-new
 ```
 
 The program should now be significantly faster!
