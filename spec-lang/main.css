@@ -1,0 +1,24 @@
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.module .entries .entry {
+  margin-bottom: 12px;
+  word-wrap: break-word;
+  padding: 10px;
+}
+
+.module .entries .entry.field {
+  background-color: lightblue;
+}
+
+.module .entries .entry.type {
+  background-color: lightblue;
+}
+
+.module .entries .entry.value {
+  background-color: lightyellow;
+}
+
+.module .entries .entry .representation {
+}

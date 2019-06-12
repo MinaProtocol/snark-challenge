@@ -1,6 +1,6 @@
 # Start here 
 
-Welcome to the SNARK Challenge! By participating, you're joining researchers, engineers, students, and hackers from around the world to try and improve the world's cryptography commons. Along the way, you'll learn about zk-SNARKs, a cutting-edge cryptographic primitive that's being used widely in blockchain and cryptocurrency applications, numerical algorithms, and high performance computing.
+Welcome to the SNARK Challenge! By participating, you're joining researchers, engineers, students, and hackers from around the world to try and improve the world's cryptography commons. Along the way, you'll learn about zk-SNARKs, a cutting-edge cryptographic primitive that's being used widely in blockchain and cryptocurrency applications. You'll also implement numerical algorithms on high performance computing platforms.
 
 This page is meant to be your jumping-off point to start the challenge. It's split into three sections:
 
@@ -27,9 +27,57 @@ And finally, we're giving $500 to the first ten teams that finish a tutorial tha
 To start, we'll show you how to go through the submission workflow for the problem of speeding
 up the SNARK prover.
 At a high level, it consists of these steps:
+
+0. (Optional) Set up GPU machine.
 1. Fork the git repo with reference code.
 2. Compile and test.
 3. Submit.
+
+### (Optional) Set up GPU machine
+
+We expect many participants to use GPUs to try and speed up the SNARK prover, so we've set up a preconfigured AWS AMI that should help you get started!
+
+1. Go to console.aws.amazon.com
+
+2. Login or create account
+
+3. Choose US West (Oregon) as your region
+
+<img src="static/oregon.png">
+
+4. Type EC2 in the "Find Services" searchbar
+
+<img src="static/ec2.png">
+
+5. Click launch instance
+
+<img src="static/launch.png">
+
+6. Type "snark" in the search bar for AMIs
+
+<img src="static/snark.png">
+
+7. In "Community AMIs," select the coda-snark-challenge-base-* image
+
+<img src="static/ami.png">
+
+8. You should choose a GPU instance -- we recommend choosing a p2.xlarge
+
+<img src="static/p2x.png">
+
+9. Click "review and launch"
+
+10. Click launch
+
+<img src="static/launchv2.png">
+
+11. Go to EC2
+
+12. Right click on instance and select "Connect"
+
+<img src="static/connect.png">
+
+13. Follow the instructions to get connected
 
 ### Fork the git repo with reference code.
 
@@ -46,6 +94,8 @@ other distros):
 - On Mac:
 
         $  ./macos-setup.sh
+
+Beware, however, we haven't tested OSX well. Consider grabbing a cloud GPU machine, instructions [above](#cloud-setup).
 
 * On Ubuntu 16.04 LTS:
 
@@ -74,13 +124,13 @@ This will create three binaries. We won't go through them in detail right now bu
 
 To test the prover, run the following command:
 ```bash
-./generate_parameters
+./generate_parameters fast
 time ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs
 ```
 This will save your program's output to the file `./outputs`.
 
 Now let's make a change to the implementation and re-compile.
-In `libsnark/main.cpp`, find the line 
+In `libsnark/main.cu`, find the line 
 ```c++
 const multi_exp_method method = multi_exp_method_BDLO12;
 ```
@@ -127,6 +177,8 @@ resources that can help get you started.
 
 - [**Prover tutorial**](https://coinlist.co/build/coda/pages/tutorial). For those who haven't implemented elliptic curve cryptography before we recommend you start with [this tutorial](https://coinlist.co/build/coda/pages/tutorial). As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
 - [**Prover spec page**](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges). Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.
+- A C++ reference we recommend is the [C++ Super-FAQ](https://isocpp.org/faq)
+- For CUDA questions, we recommed consulting the [CUDA C Programming guide](https://docs.nvidia.com/cuda/pdf/CUDA_C_Programming_Guide.pdf) ([web version](https://docs.nvidia.com/cuda/cuda-c-programming-guide/)). The [NVIDIA developer site](https://docs.nvidia.com/cuda/) is also an excellent resource, and there's a [free Udacity course](https://developer.nvidia.com/udacity-cs344-intro-parallel-programming) as well.
 
 ### Other challenges
 
