@@ -17,8 +17,7 @@ The *embedding degree of $E$* is defined to be the smallest such $k$.
 elliptic curve with an order $r$ subgroup yields a SNARK construction for proving things
 about computations that use $\mathbb{F}_r$ arithmetic.
 
-If you don't know what pairing-friendly curves are, please click on the above links
-for some background.
+If you don't know what pairing-friendly curves are, please click [here](https://www.cosic.esat.kuleuven.be/ecc2013/files/pierrick_gaudry_2.pdf) for some background.
 
 Now, if we want to compose proofs together, we'll need a SNARK for the computation of
 *verifying* those proofs. For this, it's useful to know the following fact about
@@ -26,7 +25,6 @@ what kind of computation the SNARK verifier performs.
 
 **Fact 2:** An elliptic-curve defined over $\mathbb{F}_q$ yields a SNARK construction 
 whose verification algorithm is efficiently expressed using $\mathbb{F}_r$ arithmetic.
-This is because the Groth16 verifier just checks a few pairing equations.
 
 Combining these two facts yields the following fact.
 
@@ -41,10 +39,11 @@ This naturally leads to the definition of a *pairing-friendly graph of elliptic 
 which classifies arrangements of elliptic curves which enable composition of pairing-based
 SNARKs.
 
+
 ## Pairing-friendly graphs of curves
 
 **Definition:**
-A *paring-friendly graph of elliptic curves* is a directed graph $G = (V, A)$ along
+A *pairing-friendly graph of elliptic curves* is a directed graph $G = (V, A)$ along
 with some data associated to every vertex. Namely, for each vertex $v \in V$ we
 have an elliptic curve $E_v$ such that
 
@@ -150,7 +149,7 @@ The *smooth part* of a number is the largest divisor of that number which is
 prime factors of that number are small. This smallness can be quantified:
 for example, a 7-smooth number is a number whose prime factors are all at most
 7. Likewise, we can talk about the 7-smooth part of a number, which is the
-largest divisor of that number which is 7-smooth
+largest divisor of that number which is 7-smooth.
 
 **Definition:** Let's define a $(k, n)$-smooth pairing-friendly graph of curves to be a pairing friendly
 graph of curves such that for every vertex $v$ in the graph, the $k$-smooth part of
@@ -170,7 +169,7 @@ of a lollipop will be defined using a combination of the following criteria:
 
 - The length of the stick. (Shorter is better.)
 - The length of the cycle. (Shorter is better.)
-- The sizes of $r_v$ and $q_v$ where $v$ is the vertex at the base of the stick. (Smaller is better.)
+- The sizes of $r_v$ and $q_v$ where $v$ is the vertex at the base of the stick (which in the above figure corresponds to $E_3$). Smaller is better.
 - The size of $k$. (Smaller is better).
 - The size of $n$. (Larger is better).
 
@@ -210,4 +209,7 @@ Your submission should consist of the following (the more items included the bet
 - A [great paper](https://eprint.iacr.org/2006/372.pdf) giving a more in depth discussion of most of the known constructions of pairing friendly curves.
 - A [paper](https://arxiv.org/pdf/1803.02067.pdf) ruling out certain avenues to constructing pairing-friendly lollipops.
 - A [Github thread](https://github.com/zcash/zcash/issues/3425) about constructing pairing-friendly lollipops.
+- A [Github repo](https://github.com/scipr-lab/ecfactory) that contains a SageMath library for finding Elliptic curves
+- A [Guide](https://safecurves.cr.yp.to/) for ensuring found curves are securite
+- Resources for setting up a SageMath environment, [installation](http://doc.sagemath.org/html/en/installation/) and [tutorial](http://www.sagemath.org/tour-quickstart.html).
 
