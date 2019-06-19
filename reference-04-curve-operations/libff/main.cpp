@@ -134,16 +134,16 @@ int main(int argc, char *argv[])
       for (size_t i = 0; i < n; ++i) { g6_2.emplace_back(read_mnt6_g2(inputs)); }
 
       // Perform the computation
-      G1<mnt4753_pp> h4_1 = G1<mnt4753_pp>::one();
+      G1<mnt4753_pp> h4_1 = G1<mnt4753_pp>::zero();
       for (size_t i = 0; i < n; ++i) { h4_1 = h4_1 + g4_1[i]; }
 
-      G2<mnt4753_pp> h4_2 = G2<mnt4753_pp>::one();
+      G2<mnt4753_pp> h4_2 = G2<mnt4753_pp>::zero();
       for (size_t i = 0; i < n; ++i) { h4_2 = h4_2 + g4_2[i]; }
 
-      G1<mnt6753_pp> h6_1 = G1<mnt6753_pp>::one();
+      G1<mnt6753_pp> h6_1 = G1<mnt6753_pp>::zero();
       for (size_t i = 0; i < n; ++i) { h6_1 = h6_1 + g6_1[i]; }
 
-      G2<mnt6753_pp> h6_2 = G2<mnt6753_pp>::one();
+      G2<mnt6753_pp> h6_2 = G2<mnt6753_pp>::zero();
       for (size_t i = 0; i < n; ++i) { h6_2 = h6_2 + g6_2[i]; }
 
       // Write output
