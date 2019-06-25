@@ -29,7 +29,7 @@
   </head>
   <body>
     <h1 id="start-here">Start here</h1>
-    <p>Welcome to the SNARK Challenge! By participating, you're joining researchers, engineers, students, and hackers from around the world to try and improve the world's cryptography commons. Along the way, you'll learn about zk-SNARKs, a cutting-edge cryptographic primitive that's being used widely in blockchain and cryptocurrency applications, numerical algorithms, and high performance computing.</p>
+    <p>Welcome to the SNARK Challenge! By participating, you're joining researchers, engineers, students, and hackers from around the world to try and improve the world's cryptography commons. Along the way, you'll learn about zk-SNARKs, a cutting-edge cryptographic primitive that's being used widely in blockchain and cryptocurrency applications. You'll also implement numerical algorithms on high performance computing platforms.</p>
     <p>This page is meant to be your jumping-off point to start the challenge. It's split into three sections:</p>
     <ul>
     <li><a href="#introduction">Introduction</a>. We describe the challenge at a high level and explain how you can win part of the $100k prize pool.</li>
@@ -49,7 +49,54 @@
     <p>We're also offering prizes for the best SNARK verifier written in JavasCript ($10k) and the best elliptic curve improvements ($20k).</p>
     <p>And finally, we're giving $500 to the first ten teams that finish a tutorial that walks you through the main components of the SNARK prover.</p>
     <h2 id="quick-start">Quick start</h2>
-    <p>To start, we'll show you how to go through the submission workflow for the problem of speeding up the SNARK prover. At a high level, it consists of these steps: 1. Fork the git repo with reference code. 2. Compile and test. 3. Submit.</p>
+    <p>To start, we'll show you how to go through the submission workflow for the problem of speeding up the SNARK prover. At a high level, it consists of these steps:</p>
+    <ol start="0" style="list-style-type: decimal">
+    <li>(Optional) Set up GPU machine.</li>
+    <li>Fork the git repo with reference code.</li>
+    <li>Compile and test.</li>
+    <li>Submit.</li>
+    </ol>
+    <h3 id="optional-set-up-gpu-machine">(Optional) Set up GPU machine</h3>
+    <p>We expect many participants to use GPUs to try and speed up the SNARK prover, so we've set up a preconfigured AWS AMI that should help you get started!</p>
+    <ol style="list-style-type: decimal">
+    <li><p>Go to console.aws.amazon.com</p></li>
+    <li><p>Login or create account</p></li>
+    <li><p>Choose US West (Oregon) as your region</p></li>
+    </ol>
+    <p><img src="static/oregon.png"></p>
+    <ol start="4" style="list-style-type: decimal">
+    <li>Type EC2 in the &quot;Find Services&quot; searchbar</li>
+    </ol>
+    <p><img src="static/ec2.png"></p>
+    <ol start="5" style="list-style-type: decimal">
+    <li>Click launch instance</li>
+    </ol>
+    <p><img src="static/launch.png"></p>
+    <ol start="6" style="list-style-type: decimal">
+    <li>Type &quot;snark&quot; in the search bar for AMIs</li>
+    </ol>
+    <p><img src="static/snark.png"></p>
+    <ol start="7" style="list-style-type: decimal">
+    <li>In &quot;Community AMIs,&quot; select the coda-snark-challenge-base-* image</li>
+    </ol>
+    <p><img src="static/ami.png"></p>
+    <ol start="8" style="list-style-type: decimal">
+    <li>You should choose a GPU instance -- we recommend choosing a p2.xlarge</li>
+    </ol>
+    <p><img src="static/p2x.png"></p>
+    <ol start="9" style="list-style-type: decimal">
+    <li><p>Click &quot;review and launch&quot;</p></li>
+    <li><p>Click launch</p></li>
+    </ol>
+    <p><img src="static/launchv2.png"></p>
+    <ol start="11" style="list-style-type: decimal">
+    <li><p>Go to EC2</p></li>
+    <li><p>Right click on instance and select &quot;Connect&quot;</p></li>
+    </ol>
+    <p><img src="static/connect.png"></p>
+    <ol start="13" style="list-style-type: decimal">
+    <li>Follow the instructions to get connected</li>
+    </ol>
     <h3 id="fork-the-git-repo-with-reference-code.">Fork the git repo with reference code.</h3>
     <p>Go <a href="https://github.com/CodaProtocol/snark-challenge-prover-reference">here</a> to fork the reference repo. Once you've forked it, run</p>
     <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="fu">git</span> clone https://github.com/YOUR_USER_NAME/snark-challenge-prover-reference.git</code></pre></div>
@@ -58,6 +105,9 @@
     <ul>
     <li><p>On Mac:</p>
     <pre><code>$  ./macos-setup.sh</code></pre></li>
+    </ul>
+    <p>Beware, however, we haven't tested OSX well. Consider grabbing a cloud GPU machine, instructions <a href="#cloud-setup">above</a>.</p>
+    <ul>
     <li><p>On Ubuntu 16.04 LTS:</p>
     <pre><code>$ sudo apt-get install build-essential cmake git libgmp3-dev libprocps4-dev python-markdown libboost-all-dev libssl-dev</code></pre></li>
     <li><p>On Ubuntu 14.04 LTS:</p>
@@ -72,10 +122,10 @@
     <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./build.sh</span></code></pre></div>
     <p>This will create three binaries. We won't go through them in detail right now but the <a href="https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges">problem page</a> has more info.</p>
     <p>To test the prover, run the following command:</p>
-    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./generate_parameters</span>
+    <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">./generate_parameters</span> fast
     <span class="bu">time</span> ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs</code></pre></div>
     <p>This will save your program's output to the file <code>./outputs</code>.</p>
-    <p>Now let's make a change to the implementation and re-compile. In <code>libsnark/main.cpp</code>, find the line</p>
+    <p>Now let's make a change to the implementation and re-compile. In <code>libsnark/main.cu</code>, find the line</p>
     <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="at">const</span> multi_exp_method method = multi_exp_method_BDLO12;</code></pre></div>
     <p>It should be line 24. Comment it out and uncomment the next line</p>
     <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="at">const</span> multi_exp_method method = multi_exp_method_bos_coster;</code></pre></div>
@@ -101,6 +151,8 @@
     <ul>
     <li><a href="https://coinlist.co/build/coda/pages/tutorial"><strong>Prover tutorial</strong></a>. For those who haven't implemented elliptic curve cryptography before we recommend you start with <a href="https://coinlist.co/build/coda/pages/tutorial">this tutorial</a>. As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!</li>
     <li><a href="https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges"><strong>Prover spec page</strong></a>. Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.</li>
+    <li>A C++ reference we recommend is the <a href="https://isocpp.org/faq">C++ Super-FAQ</a></li>
+    <li>For CUDA questions, we recommed consulting the <a href="https://docs.nvidia.com/cuda/pdf/CUDA_C_Programming_Guide.pdf">CUDA C Programming guide</a> (<a href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/">web version</a>). The <a href="https://docs.nvidia.com/cuda/">NVIDIA developer site</a> is also an excellent resource, and there's a <a href="https://developer.nvidia.com/udacity-cs344-intro-parallel-programming">free Udacity course</a> as well.</li>
     </ul>
     <h3 id="other-challenges">Other challenges</h3>
     <p>In addition to this challenge, we're running two others, which you may be interested in doing depending on your background:</p>
