@@ -6,10 +6,6 @@
 
 using namespace libff;
 
-void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x) {
-  fwrite((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
-}
-
 Fq<mnt4753_pp> read_mnt4_fq(FILE* input) {
   // bigint<mnt4753_q_limbs> n;
   Fq<mnt4753_pp> x;
@@ -17,9 +13,8 @@ Fq<mnt4753_pp> read_mnt4_fq(FILE* input) {
   return x;
 }
 
-void write_mnt4_fq2(FILE* output, Fqe<mnt4753_pp> x) {
-  write_mnt4_fq(output, x.c0);
-  write_mnt4_fq(output, x.c1);
+void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x) {
+  fwrite((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
 Fqe<mnt4753_pp> read_mnt4_fq2(FILE* input) {
@@ -28,9 +23,9 @@ Fqe<mnt4753_pp> read_mnt4_fq2(FILE* input) {
   return Fqe<mnt4753_pp>(c0, c1);
 }
 
-void write_mnt4_fq_numeral(FILE* output, Fq<mnt4753_pp> x) {
-  auto out_numeral = x.as_bigint();
-  fwrite((void *) out_numeral.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
+void write_mnt4_fq2(FILE* output, Fqe<mnt4753_pp> x) {
+  write_mnt4_fq(output, x.c0);
+  write_mnt4_fq(output, x.c1);
 }
 
 Fq<mnt4753_pp> read_mnt4_fq_numeral(FILE* input) {
@@ -41,15 +36,20 @@ Fq<mnt4753_pp> read_mnt4_fq_numeral(FILE* input) {
   return b;
 }
 
-void write_mnt4_fq2_numeral(FILE* output, Fqe<mnt4753_pp> x) {
-  write_mnt4_fq_numeral(output, x.c0);
-  write_mnt4_fq_numeral(output, x.c1);
+void write_mnt4_fq_numeral(FILE* output, Fq<mnt4753_pp> x) {
+  auto out_numeral = x.as_bigint();
+  fwrite((void *) out_numeral.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
 Fqe<mnt4753_pp> read_mnt4_fq2_numeral(FILE* input) {
   Fq<mnt4753_pp> c0 = read_mnt4_fq_numeral(input);
   Fq<mnt4753_pp> c1 = read_mnt4_fq_numeral(input);
   return Fqe<mnt4753_pp>(c0, c1);
+}
+
+void write_mnt4_fq2_numeral(FILE* output, Fqe<mnt4753_pp> x) {
+  write_mnt4_fq_numeral(output, x.c0);
+  write_mnt4_fq_numeral(output, x.c1);
 }
 
 // The actual code for doing Fq2 multiplication lives in libff/algebra/fields/fp2.tcc

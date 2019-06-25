@@ -6,10 +6,6 @@
 
 using namespace libff;
 
-void write_mnt6_fq(FILE* output, Fq<mnt6753_pp> x) {
-  fwrite((void *) x.mont_repr.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
-}
-
 Fq<mnt6753_pp> read_mnt6_fq(FILE* input) {
   // bigint<mnt6753_q_limbs> n;
   Fq<mnt6753_pp> x;
@@ -17,10 +13,8 @@ Fq<mnt6753_pp> read_mnt6_fq(FILE* input) {
   return x;
 }
 
-void write_mnt6_fq3(FILE* output, Fqe<mnt6753_pp> x) {
-  write_mnt6_fq(output, x.c0);
-  write_mnt6_fq(output, x.c1);
-  write_mnt6_fq(output, x.c2);
+void write_mnt6_fq(FILE* output, Fq<mnt6753_pp> x) {
+  fwrite((void *) x.mont_repr.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
 Fqe<mnt6753_pp> read_mnt6_fq3(FILE* input) {
@@ -30,9 +24,10 @@ Fqe<mnt6753_pp> read_mnt6_fq3(FILE* input) {
   return Fqe<mnt6753_pp>(c0, c1, c2);
 }
 
-void write_mnt6_fq_numeral(FILE* output, Fq<mnt6753_pp> x) {
-  auto out_numeral = x.as_bigint();
-  fwrite((void *) out_numeral.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
+void write_mnt6_fq3(FILE* output, Fqe<mnt6753_pp> x) {
+  write_mnt6_fq(output, x.c0);
+  write_mnt6_fq(output, x.c1);
+  write_mnt6_fq(output, x.c2);
 }
 
 Fq<mnt6753_pp> read_mnt6_fq_numeral(FILE* input) {
@@ -43,10 +38,9 @@ Fq<mnt6753_pp> read_mnt6_fq_numeral(FILE* input) {
   return b;
 }
 
-void write_mnt6_fq3_numeral(FILE* output, Fqe<mnt6753_pp> x) {
-  write_mnt6_fq_numeral(output, x.c0);
-  write_mnt6_fq_numeral(output, x.c1);
-  write_mnt6_fq_numeral(output, x.c2);
+void write_mnt6_fq_numeral(FILE* output, Fq<mnt6753_pp> x) {
+  auto out_numeral = x.as_bigint();
+  fwrite((void *) out_numeral.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
 Fqe<mnt6753_pp> read_mnt6_fq3_numeral(FILE* input) {
@@ -54,6 +48,12 @@ Fqe<mnt6753_pp> read_mnt6_fq3_numeral(FILE* input) {
   Fq<mnt6753_pp> c1 = read_mnt6_fq_numeral(input);
   Fq<mnt6753_pp> c2 = read_mnt6_fq_numeral(input);
   return Fqe<mnt6753_pp>(c0, c1, c2);
+}
+
+void write_mnt6_fq3_numeral(FILE* output, Fqe<mnt6753_pp> x) {
+  write_mnt6_fq_numeral(output, x.c0);
+  write_mnt6_fq_numeral(output, x.c1);
+  write_mnt6_fq_numeral(output, x.c2);
 }
 
 // The actual code for doing Fq3 multiplication lives in libff/algebra/fields/fp3.tcc
