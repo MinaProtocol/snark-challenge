@@ -27,7 +27,7 @@ int main(void)
 
     auto output = fopen("inputs", "w");
 
-    size_t num_instances = 10;
+    size_t num_instances = 4;
 
     srand(time(NULL));
     for (size_t j = 0; j < num_instances; ++j) {
