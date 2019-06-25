@@ -4,6 +4,7 @@ type t =
   { intro: url
   ; theory: url
   ; prover: url
+  ; cloud_setup: url
   ; implementation_strategies: url
   ; mnt4: url
   ; mnt6: url

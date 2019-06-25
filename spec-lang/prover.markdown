@@ -11,6 +11,14 @@
 	+ [Curve Operations](https://coinlist.co/build/coda/pages/problem-04-curve-operations): $200
 - [Architecture reference](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges)
 
+## Introduction
+
+On this page, you’ll learn how to get started on the SNARK prover contest. Here’s what you can expect: 
+
+1. [Motivation](#motivation). We’ll give you some motivation and background (e.g. what a SNARK?). 
+2. [Starter code](#starter-code). Then, we’ll show you how to set up an environment to complete the challenge and walk you through the submission workflow.
+3. [Tutorials](#tutorials). Finally, we’ll guide you through several targeted tutorials that will walk you through the steps for your first improvement.
+
 ## Motivation
 
 In this challenge you’ll parallelizing the snark prover for GPU, vastly speeding up the time to create a snark proof.
@@ -60,49 +68,7 @@ To start, we'll show you how to go through the submission workflow for the probl
 
 We expect many participants to use GPUs to try and speed up the SNARK prover, so we've set up a preconfigured AWS AMI that should help you get started.
 
-1. Go to console.aws.amazon.com
-
-2. Login or create account
-
-3. Choose US West (Oregon) as your region
-
-<img src="static/oregon.png">
-
-4. Type EC2 in the "Find Services" searchbar
-
-<img src="static/ec2.png">
-
-5. Click launch instance
-
-<img src="static/launch.png">
-
-6. Type "snark" in the search bar for AMIs
-
-<img src="static/snark.png">
-
-7. In "Community AMIs," select the coda-snark-challenge-base-* image
-
-<img src="static/ami.png">
-
-8. You should choose a GPU instance -- we recommend choosing a p2.xlarge
-
-<img src="static/p2x.png">
-
-9. Click "review and launch"
-
-You may encounter an error where you aren't allowed to launch an p2.xlarge instance. We've found that requests [here](http://aws.amazon.com/contact-us/ec2-request) are quickly granted.
-
-10. Click launch
-
-<img src="static/launchv2.png">
-
-11. Go to EC2
-
-12. Right click on instance and select "Connect"
-
-<img src="static/connect.png">
-
-13. Follow the instructions to get connected
+Full instructions are [here](https://coinlist.co/build/coda/pages/cloud-setup).
 
 ### Fork the git repo with reference code.
 
