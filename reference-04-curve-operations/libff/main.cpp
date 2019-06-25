@@ -7,51 +7,51 @@
 using namespace libff;
 
 // mnt4 montgomery
-void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x) {
-  fwrite((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
-}
-
 Fq<mnt4753_pp> read_mnt4_fq(FILE* input) {
   Fq<mnt4753_pp> x;
   fread((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, input);
   return x;
 }
 
-// mnt6 montgomery
-void write_mnt6_fq(FILE* output, Fq<mnt6753_pp> x) {
-  fwrite((void *) x.mont_repr.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
+void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x) {
+  fwrite((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
+// mnt6 montgomery
 Fq<mnt6753_pp> read_mnt6_fq(FILE* input) {
   Fq<mnt6753_pp> x;
   fread((void *) x.mont_repr.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, input);
   return x;
 }
 
-// mnt4 fq2 montgomery
-void write_mnt4_fq2(FILE* output, Fqe<mnt4753_pp> x) {
-  write_mnt4_fq(output, x.c0);
-  write_mnt4_fq(output, x.c1);
+void write_mnt6_fq(FILE* output, Fq<mnt6753_pp> x) {
+  fwrite((void *) x.mont_repr.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
+// mnt4 fq2 montgomery
 Fqe<mnt4753_pp> read_mnt4_fq2(FILE* input) {
   Fq<mnt4753_pp> c0 = read_mnt4_fq(input);
   Fq<mnt4753_pp> c1 = read_mnt4_fq(input);
   return Fqe<mnt4753_pp>(c0, c1);
 }
 
-// mnt6 fq3 montgomery
-void write_mnt6_fq3(FILE* output, Fqe<mnt6753_pp> x) {
-  write_mnt6_fq(output, x.c0);
-  write_mnt6_fq(output, x.c1);
-  write_mnt6_fq(output, x.c2);
+void write_mnt4_fq2(FILE* output, Fqe<mnt4753_pp> x) {
+  write_mnt4_fq(output, x.c0);
+  write_mnt4_fq(output, x.c1);
 }
 
+// mnt6 fq3 montgomery
 Fqe<mnt6753_pp> read_mnt6_fq3(FILE* input) {
   Fq<mnt6753_pp> c0 = read_mnt6_fq(input);
   Fq<mnt6753_pp> c1 = read_mnt6_fq(input);
   Fq<mnt6753_pp> c2 = read_mnt6_fq(input);
   return Fqe<mnt6753_pp>(c0, c1, c2);
+}
+
+void write_mnt6_fq3(FILE* output, Fqe<mnt6753_pp> x) {
+  write_mnt6_fq(output, x.c0);
+  write_mnt6_fq(output, x.c1);
+  write_mnt6_fq(output, x.c2);
 }
 
 // mnt4 groups montgomery
@@ -61,16 +61,16 @@ G1<mnt4753_pp> read_mnt4_g1(FILE* input) {
   return G1<mnt4753_pp>(x, y, Fq<mnt4753_pp>::one());
 }
 
-G2<mnt4753_pp> read_mnt4_g2(FILE* input) {
-  Fqe<mnt4753_pp> x = read_mnt4_fq2(input);
-  Fqe<mnt4753_pp> y = read_mnt4_fq2(input);
-  return G2<mnt4753_pp>(x, y, Fqe<mnt4753_pp>::one());
-}
-
 void write_mnt4_g1(FILE* output, G1<mnt4753_pp> g) {
   g.to_affine_coordinates();
   write_mnt4_fq(output, g.X());
   write_mnt4_fq(output, g.Y());
+}
+
+G2<mnt4753_pp> read_mnt4_g2(FILE* input) {
+  Fqe<mnt4753_pp> x = read_mnt4_fq2(input);
+  Fqe<mnt4753_pp> y = read_mnt4_fq2(input);
+  return G2<mnt4753_pp>(x, y, Fqe<mnt4753_pp>::one());
 }
 
 void write_mnt4_g2(FILE* output, G2<mnt4753_pp> g) {
@@ -86,16 +86,16 @@ G1<mnt6753_pp> read_mnt6_g1(FILE* input) {
   return G1<mnt6753_pp>(x, y, Fq<mnt6753_pp>::one());
 }
 
-G2<mnt6753_pp> read_mnt6_g2(FILE* input) {
-  Fqe<mnt6753_pp> x = read_mnt6_fq3(input);
-  Fqe<mnt6753_pp> y = read_mnt6_fq3(input);
-  return G2<mnt6753_pp>(x, y, Fqe<mnt6753_pp>::one());
-}
-
 void write_mnt6_g1(FILE* output, G1<mnt6753_pp> g) {
   g.to_affine_coordinates();
   write_mnt6_fq(output, g.X());
   write_mnt6_fq(output, g.Y());
+}
+
+G2<mnt6753_pp> read_mnt6_g2(FILE* input) {
+  Fqe<mnt6753_pp> x = read_mnt6_fq3(input);
+  Fqe<mnt6753_pp> y = read_mnt6_fq3(input);
+  return G2<mnt6753_pp>(x, y, Fqe<mnt6753_pp>::one());
 }
 
 void write_mnt6_g2(FILE* output, G2<mnt6753_pp> g) {
@@ -105,11 +105,6 @@ void write_mnt6_g2(FILE* output, G2<mnt6753_pp> g) {
 }
 
 // mnt4 ordinary
-void write_mnt4_fq_numeral(FILE* output, Fq<mnt4753_pp> x) {
-  auto out_numeral = x.as_bigint();
-  fwrite((void *) out_numeral.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
-}
-
 Fq<mnt4753_pp> read_mnt4_fq_numeral(FILE* input) {
   // bigint<mnt4753_q_limbs> n;
   Fq<mnt4753_pp> x;
@@ -118,12 +113,12 @@ Fq<mnt4753_pp> read_mnt4_fq_numeral(FILE* input) {
   return b;
 }
 
-// mnt6 ordinary
-void write_mnt6_fq_numeral(FILE* output, Fq<mnt6753_pp> x) {
+void write_mnt4_fq_numeral(FILE* output, Fq<mnt4753_pp> x) {
   auto out_numeral = x.as_bigint();
-  fwrite((void *) out_numeral.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
+  fwrite((void *) out_numeral.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
+// mnt6 ordinary
 Fq<mnt6753_pp> read_mnt6_fq_numeral(FILE* input) {
   // bigint<mnt4753_q_limbs> n;
   Fq<mnt6753_pp> x;
@@ -132,30 +127,35 @@ Fq<mnt6753_pp> read_mnt6_fq_numeral(FILE* input) {
   return b;
 }
 
-// mnt4 fq2 ordinary
-void write_mnt4_fq2_numeral(FILE* output, Fqe<mnt4753_pp> x) {
-  write_mnt4_fq_numeral(output, x.c0);
-  write_mnt4_fq_numeral(output, x.c1);
+void write_mnt6_fq_numeral(FILE* output, Fq<mnt6753_pp> x) {
+  auto out_numeral = x.as_bigint();
+  fwrite((void *) out_numeral.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
+// mnt4 fq2 ordinary
 Fqe<mnt4753_pp> read_mnt4_fq2_numeral(FILE* input) {
   Fq<mnt4753_pp> c0 = read_mnt4_fq_numeral(input);
   Fq<mnt4753_pp> c1 = read_mnt4_fq_numeral(input);
   return Fqe<mnt4753_pp>(c0, c1);
 }
 
-// mnt6 fq3 ordinary
-void write_mnt6_fq3_numeral(FILE* output, Fqe<mnt6753_pp> x) {
-  write_mnt6_fq_numeral(output, x.c0);
-  write_mnt6_fq_numeral(output, x.c1);
-  write_mnt6_fq_numeral(output, x.c2);
+void write_mnt4_fq2_numeral(FILE* output, Fqe<mnt4753_pp> x) {
+  write_mnt4_fq_numeral(output, x.c0);
+  write_mnt4_fq_numeral(output, x.c1);
 }
 
+// mnt6 fq3 ordinary
 Fqe<mnt6753_pp> read_mnt6_fq3_numeral(FILE* input) {
   Fq<mnt6753_pp> c0 = read_mnt6_fq_numeral(input);
   Fq<mnt6753_pp> c1 = read_mnt6_fq_numeral(input);
   Fq<mnt6753_pp> c2 = read_mnt6_fq_numeral(input);
   return Fqe<mnt6753_pp>(c0, c1, c2);
+}
+
+void write_mnt6_fq3_numeral(FILE* output, Fqe<mnt6753_pp> x) {
+  write_mnt6_fq_numeral(output, x.c0);
+  write_mnt6_fq_numeral(output, x.c1);
+  write_mnt6_fq_numeral(output, x.c2);
 }
 
 // mnt4 groups ordinary
@@ -165,16 +165,16 @@ G1<mnt4753_pp> read_mnt4_g1_numeral(FILE* input) {
   return G1<mnt4753_pp>(x, y, Fq<mnt4753_pp>::one());
 }
 
-G2<mnt4753_pp> read_mnt4_g2_numeral(FILE* input) {
-  Fqe<mnt4753_pp> x = read_mnt4_fq2_numeral(input);
-  Fqe<mnt4753_pp> y = read_mnt4_fq2_numeral(input);
-  return G2<mnt4753_pp>(x, y, Fqe<mnt4753_pp>::one());
-}
-
 void write_mnt4_g1_numeral(FILE* output, G1<mnt4753_pp> g) {
   g.to_affine_coordinates();
   write_mnt4_fq_numeral(output, g.X());
   write_mnt4_fq_numeral(output, g.Y());
+}
+
+G2<mnt4753_pp> read_mnt4_g2_numeral(FILE* input) {
+  Fqe<mnt4753_pp> x = read_mnt4_fq2_numeral(input);
+  Fqe<mnt4753_pp> y = read_mnt4_fq2_numeral(input);
+  return G2<mnt4753_pp>(x, y, Fqe<mnt4753_pp>::one());
 }
 
 void write_mnt4_g2_numeral(FILE* output, G2<mnt4753_pp> g) {
@@ -190,16 +190,16 @@ G1<mnt6753_pp> read_mnt6_g1_numeral(FILE* input) {
   return G1<mnt6753_pp>(x, y, Fq<mnt6753_pp>::one());
 }
 
-G2<mnt6753_pp> read_mnt6_g2_numeral(FILE* input) {
-  Fqe<mnt6753_pp> x = read_mnt6_fq3_numeral(input);
-  Fqe<mnt6753_pp> y = read_mnt6_fq3_numeral(input);
-  return G2<mnt6753_pp>(x, y, Fqe<mnt6753_pp>::one());
-}
-
 void write_mnt6_g1_numeral(FILE* output, G1<mnt6753_pp> g) {
   g.to_affine_coordinates();
   write_mnt6_fq_numeral(output, g.X());
   write_mnt6_fq_numeral(output, g.Y());
+}
+
+G2<mnt6753_pp> read_mnt6_g2_numeral(FILE* input) {
+  Fqe<mnt6753_pp> x = read_mnt6_fq3_numeral(input);
+  Fqe<mnt6753_pp> y = read_mnt6_fq3_numeral(input);
+  return G2<mnt6753_pp>(x, y, Fqe<mnt6753_pp>::one());
 }
 
 void write_mnt6_g2_numeral(FILE* output, G2<mnt6753_pp> g) {
