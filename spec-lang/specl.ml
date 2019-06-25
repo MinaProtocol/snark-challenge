@@ -157,6 +157,7 @@ let site =
     { intro= Intro.url |> process_url
     ; theory= Theory.url |> process_url
     ; implementation_strategies= Implementation_strategies.url |> process_url
+    ; prover= Prover.url |> process_url
     ; field_arithmetic= problem_url 1 Field_arithmetic.problem |> process_url
     ; quadratic_extension=
         problem_url 2 Quadratic_extension.problem |> process_url
@@ -178,6 +179,7 @@ let site =
     [ File_system.directory "snark-challenge"
         ( page "intro" (Intro.page pages)
         @ page "tutorial" (Tutorial.page pages)
+        @ page "prover" (Prover.page pages)
         @ page "verifier" (Verifier.page pages)
         @ page "index" (Stage1.page pages)
         @ page "theory" (Theory.page pages)

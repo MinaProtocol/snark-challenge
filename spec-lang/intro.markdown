@@ -1,137 +1,54 @@
-# Start here 
+# Welcome to the SNARK Challenge! 
 
-Welcome to the SNARK Challenge! By participating, you're joining researchers, engineers, students, and hackers from around the world to try and improve the world's cryptography commons. Along the way, you'll learn about zk-SNARKs, a cutting-edge cryptographic primitive that's being used widely in blockchain and cryptocurrency applications, numerical algorithms, and high performance computing.
+## Table of Contents
 
-This page is meant to be your jumping-off point to start the challenge. It's split into three sections:
+- [Introduction](#introduction)
+	+ [Motivation](#motivation)
+	+ [Community and help](#community-and-help)
+	+ [Who should participate](#who-should-participate)
+- [SNARK Prover](https://coinlist.co/build/coda/pages/prover)
+	+ [Motivation](https://coinlist.co/build/coda/pages/prover#motivation)
+	+ [Starter Code](https://coinlist.co/build/coda/pages/prover#starter-code)
+	+ [Tutorials](https://coinlist.co/build/coda/pages/prover#tutorials)
+- [SNARK Verifier](https://coinlist.co/build/coda/pages/verifier)
+- [Elliptic Curve Search](https://coinlist.co/build/coda/pages/theory)
 
-- [Introduction](#introduction). We describe the challenge at a high level and explain how you can win part of the $100k prize pool.
-- [Quick start](#quick-start). This tutorial gets you up and running by showing how to start a project and make a submission.  
-- [Further resources and challenges](#further-resources-and-challenges). We've compiled a wealth of resources that might be helpful in improving your submission.
+## Motivation
 
-## Introduction
+Welcome to the SNARK Challenge! By participating, you’ll be improving an exciting new cryptography primitive while earning up to $100k in prizes along the way.
 
-We're offering $105k in cash to improve zk-SNARK cryptography. The main prize is *speeding up the zk-SNARK prover*, for which we're offering a total of $70k. That's broken down as follows:
+First, some background on zk-SNARKs. zk-SNARKs allow a *verifier* to trustlessly delegate computation to a *prover*. Here’s how it works: First, the prover can take any program, run it on their computer, and create a certificate verifying that the program was run correctly and the results are valid. Amazingly, the prover does not have to reveal all of the inputs (privacy) and the certificate is always really tiny---just a few kilobytes (succinctness---independent of program size!). The certificate can be read and checked by anyone in milliseconds, meaning that one party can do a huge, privacy-protecting computation and anyone from the public can quickly validate the results.
 
-- $7k to the first team that gets a 2x speedup
-- $8k to the first team that gets a 4x speedup
-- $10k to the first team that gets an 8x speedup
-- $15k to the first team that gets a 16x speedup
-- $30k to the fastest prover at the end of the contest
+This has awesome implications for verifiable computing, cryptocurrency, and privacy. But, while the cryptography is proven out, the implementations still have room for significant efficiency improvements.
 
-We're also offering prizes for the best SNARK verifier written in JavasCript ($10k) and the best elliptic curve improvements ($20k).
+That’s why we’re running the SNARK challenge. By participating, you’ll have the chance to develop a blazing fast prover, write a Javascript verifier, and improve the core cryptographic primitives, while learning about zk-SNARKs and and how they work along the way.
 
-And finally, we're giving $500 to the first ten teams that finish a tutorial that walks you through the main components of the SNARK prover.
+## Community and help
 
-## Quick start
+We're here to help. If you run into issues, have clarifying questions on the documentations, get stuck, or want to discuss ideas, ask on our [**Discord chat**](https://discord.gg/DUhaJ42) or send an email to brad@o1labs.org.
 
-To start, we'll show you how to go through the submission workflow for the problem of speeding
-up the SNARK prover.
-At a high level, it consists of these steps:
-1. Fork the git repo with reference code.
-2. Compile and test.
-3. Submit.
+## [SNARK Prover](https://coinlist.co/build/coda/pages/prover)
 
-### Fork the git repo with reference code.
+- $70,000
+- $500 for completing tutorial
 
-Go [here](https://github.com/CodaProtocol/snark-challenge-prover-reference) to fork the reference repo. Once you've
-forked it, run
-```bash
-git clone https://github.com/YOUR_USER_NAME/snark-challenge-prover-reference.git
-```
-to clone it.
+In [this challenge](https://coinlist.co/build/coda/pages/prover) we’re offering $70,000 in prizes for participants who parallelize the snark prover. The SNARK proving algorithm is heavily susceptible to parallelization, but until now, no one has built a GPU implementation.
 
-Now, install the dependencies as follows (it may be differ slightly for
-other distros):
+**If you have a background in GPUs** or want to learn more about them, this challenge is the one to tackle. Background in cryptography not required, you’ll learn all you need to along the way.
 
-- On Mac:
 
-        $  ./macos-setup.sh
+## [SNARK Verifier](https://coinlist.co/build/coda/pages/verifier)
 
-* On Ubuntu 16.04 LTS:
+- $10,000
 
-        $ sudo apt-get install build-essential cmake git libgmp3-dev libprocps4-dev python-markdown libboost-all-dev libssl-dev
+[This challenge](https://coinlist.co/build/coda/pages/verifier) offers $10,000 for the fastest JavaScript SNARK verifier. SNARKs have the potential to offer privacy and trust preserving technologies to the world - implementing an in-browser implementation will help make these possibilities available to a wide audience.
 
-* On Ubuntu 14.04 LTS:
+**If you know JavaScript** you’re well equipped to go after this challenge.
 
-        $ sudo apt-get install build-essential cmake git libgmp3-dev libprocps3-dev python-markdown libboost-all-dev libssl-dev
+## [Elliptic Curve Search](https://coinlist.co/build/coda/pages/theory)
 
-* On Fedora 21 through 23:
+- $20,000
 
-        $ sudo yum install gcc-c++ cmake make git gmp-devel procps-ng-devel python2-markdown
+The elliptic curves underlying SNARK constructions may be improved, which could dramatically improve the efficiency and capabilities of the prover. In this challenge we invite participants to find a set of curves which will be fast for both recursive and non-recursive problems. That way, everyone can standardize around the same curves making tooling and problems more universally collaborative.
 
-* On Fedora 20:
-
-        $ sudo yum install gcc-c++ cmake make git gmp-devel procps-ng-devel python-markdown
-
-## Compile and test
-
-Once that's done, build with
-```bash
-./build.sh
-```
-
-This will create three binaries. We won't go through them in detail right now but the [problem page](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges) has more info.
-
-To test the prover, run the following command:
-```bash
-./generate_parameters
-time ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs
-```
-This will save your program's output to the file `./outputs`.
-
-Now let's make a change to the implementation and re-compile.
-In `libsnark/main.cpp`, find the line 
-```c++
-const multi_exp_method method = multi_exp_method_BDLO12;
-```
-It should be line 24. Comment it out and uncomment the next line
-```c++
-const multi_exp_method method = multi_exp_method_bos_coster;
-```
-
-Recompile and run with
-```bash
-./build.sh && time ./main MNT4753 compute MNT4753-parameters MNT4753-input outputs-new
-```
-
-The program should now be significantly faster!
-Check that the new outputs and the old outputs agree by checking
-`shasum outputs outputs-new`.
-
-Note that there is no need to rerun  `./generate_parameters` every time you make a change.
-
-Commit and push your change.
-```bash
-git commit -am 'try to speed things up' && git push
-```
-
-## Submit
-
-Go to [this page](https://coinlist.co/build/coda/projects/new) to create a submission.
-
-- Pick a team name and a description like "quick start".
-- Paste in your github repo URL from step 1.
-- Select NVIDIA for the architecture (it's not actually important in this case since the reference code doesn't use the GPU).
-- Select `nvidia/cuda:10.1-devel` for the docker image.
-- Select "Groth16 optimzation" for the problem.
-- Click submit!
-
-## Further resources and challenges
-
-Now that you've gotten your feet wet, you're probably ready to
-start figuring out how to speed up the SNARK prover. Depending on 
-your background and experience, we've provided a few different 
-resources that can help get you started.
-
-### Further resources
-
-- [**Prover tutorial**](https://coinlist.co/build/coda/pages/tutorial). For those who haven't implemented elliptic curve cryptography before we recommend you start with [this tutorial](https://coinlist.co/build/coda/pages/tutorial). As a bonus, if you're one of the first 10 to finish the tutorial, you'll earn a $500 prize!
-- [**Prover spec page**](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges). Start here if you're familiar with elliptic curve cryptography. We've included CUDA code for finite-field arithmetic and many other optimization ideas for you to try out.
-
-### Other challenges
-
-In addition to this challenge, we're running two others, which you may be interested in doing depending on your background:
-
-- [**Verifier**](https://coinlist.co/build/coda/pages/verifier). This is a good challenge for those with JavaScript or WebAssembly expertise, with $10,000 in prizes for the fastest implementation.
-- [**Curve search**](https://coinlist.co/build/coda/pages/theory). This challenge is aimed at improving the underlying elliptic curves, with $20,000 in prizes for the best curves.
-
+**Folks with a background in cryptography** should be ready to go after [this challenge](https://coinlist.co/build/coda/pages/theory). See the documentation for the curves we suggest searching for and how best to search for them.
