@@ -24,7 +24,7 @@ Now, if we want to compose proofs together, we'll need a SNARK for the computati
 what kind of computation the SNARK verifier performs.
 
 **Fact 2:** An elliptic-curve defined over $\mathbb{F}_q$ yields a SNARK construction 
-whose verification algorithm is efficiently expressed using $\mathbb{F}_r$ arithmetic.
+whose verification algorithm is efficiently expressed using $\mathbb{F}_r$ arithmetic. In other words, verification is done efficiently using arithmetic in a field equal to the order of the subgroup of the original elliptic curve.
 
 Combining these two facts yields the following fact.
 
@@ -35,10 +35,16 @@ elliptic curve $E_2$ with a subgroup of order $q$.
 That is, to check $E_1$'s verifier, by fact 2 you need a SNARK which can check $\mathbb{F}_q$
 arithmetic, which by fact 1 means you need a curve with an order $\mathbb{q}$ subgroup.
 
-This naturally leads to the definition of a *pairing-friendly graph of elliptic curves*,
-which classifies arrangements of elliptic curves which enable composition of pairing-based
-SNARKs.
 
+Keeping track of the respective qs and rs here may be a little confusing, but to restate, with $E_1$​ defined over a field $\mathbb{F}_q$, and with a subgroup of order $r$, we have that:
+
+- you can produce SNARKs proving things about computation in $\mathbb{F}_r$;
+- these SNARKs themselves are most efficiently verified using arithmetic in $\mathbb{F}_r$; 
+- If SNARKs were to come from elsewhere, proving things about $\mathbb{F}_q$, arithmetic, $E_1$ would then be able to efficiently *verify* that SNARK. 
+
+If this is still only partially making sense, the diagram in the section below shows an instantiation, which will help further clarify the relationship between rs and qs.
+
+This naturally leads to the definition of a *pairing-friendly graph of elliptic curves*, which classifies arrangements of elliptic curves which enable composition of pairing-based SNARKs.
 
 ## Pairing-friendly graphs of curves
 

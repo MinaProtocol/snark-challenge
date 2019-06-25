@@ -3,8 +3,9 @@
 ## Table of Contents
 
 - [Introduction](#introduction)
-	+ [Background](#background)
-	+ Who should participate?
+	+ [Motivation](#motivation)
+	+ [Community and help](#community-and-help)
+	+ [Who should participate](#who-should-participate)
 - [SNARK Prover](https://coinlist.co/build/coda/pages/prover)
 	+ [Motivation](https://coinlist.co/build/coda/pages/prover#motivation)
 	+ [Starter Code](https://coinlist.co/build/coda/pages/prover#starter-code)
@@ -12,24 +13,42 @@
 - [SNARK Verifier](https://coinlist.co/build/coda/pages/verifier)
 - [Elliptic Curve Search](https://coinlist.co/build/coda/pages/theory)
 
-## Introduction
+## Motivation
 
-Welcome to the SNARK Challenge! By participating, you're joining researchers, engineers, students, and hackers from around the world to try and improve the world's cryptography commons. Along the way, you'll learn about zk-SNARKs, a cutting-edge cryptographic primitive that's being used widely in blockchain and cryptocurrency applications. You'll also implement numerical algorithms on high performance computing platforms.
+Welcome to the SNARK Challenge! By participating, you’ll be improving an exciting new cryptography primitive while earning up to $100k in prizes along the way.
 
-### Background
+First, some background on zk-SNARKs. zk-SNARKs allow a *verifier* to trustlessly delegate computation to a *prover*. Here’s how it works: First, the prover can take any program, run it on their computer, and create a certificate verifying that the program was run correctly and the results are valid. Amazingly, the prover does not have to reveal all of the inputs (privacy) and the certificate is always really tiny---just a few kilobytes (succinctness---independent of program size!). The certificate can be read and checked by anyone in milliseconds, meaning that one party can do a huge, privacy-protecting computation and anyone from the public can quickly validate the results.
 
-zk-SNARKs have been developing rapidly in the past few years, and in crypto they’re one of the most promising ways to bring scalability and privacy to blockchains. But in many ways we’re still at the surface of what’s possible. We've developed this challenge to improve SNARKs in three specific ways:
+This has awesome implications for verifiable computing, cryptocurrency, and privacy. But, while the cryptography is proven out, the implementations still have room for significant efficiency improvements.
 
-- [SNARK Prover](https://coinlist.co/build/coda/pages/prover). SNARK provers will become dramatically faster when they are implemented on GPUs, since many of the computational steps involved in SNARK proving are perfectly parallelizable. We're offering $70,000 in prizes to speed up the SNARK prover.
-- [SNARK Verifier](https://coinlist.co/build/coda/pages/verifier). Verifying SNARK circuits is computationally inexpensive, so we think it should be accessible to everyone. We're offering a $10k prize for the fastest implementation of a SNARK verifier in JavaScript.
-- [Elliptic Curve Search](https://coinlist.co/build/coda/pages/theory). The elliptic curves underlying SNARK constructions may be improved, which could dramatically improve the efficiency of the prover. The highest quality ellptic curve construction will receive a $20k prize.
+That’s why we’re running the SNARK challenge. By participating, you’ll have the chance to develop a blazing fast prover, write a Javascript verifier, and improve the core cryptographic primitives, while learning about zk-SNARKs and and how they work along the way.
 
-### Who should participate
+## Community and help
 
-You don't need a background in cryptography to participate in this challenge. Below, we've described the type of backgrounds we think would be most helpful in completing each of the challenges
+We're here to help. If you run into issues, have clarifying questions on the documentations, get stuck, or want to discuss ideas, ask on our [**Discord chat**](https://discord.gg/DUhaJ42) or send an email to brad@o1labs.org.
 
-- [Snark Prover](https://coinlist.co/build/coda/pages/prover). If you have a background in GPU or other high performance computing or you want to learn, this challenge is for you. We've described the mechanics of the SNARK prover construction, provided reference code, and developed a tutorial to get you started. The first teams who implement SNARKs on GPUs will be eligible for up to $70k in prizes, with an additional $5k in rewards for completing the tutorial.
-- [Snark Verifier](https://coinlist.co/build/coda/pages/verifier). This challenge is best for those who can write optimized JavaScript code. We've described how to implement the verifier, and are offering a $10k reward for the fastest version.
-- [Elliptic Curve Search](https://coinlist.co/build/coda/pages/theory). Those with a background in cryptography or those who have access to lots of compute are best qualified for this challenge. We've described the parameters of the curve search and how to submit new curves for evaluation. The highest quality curve construction will receive a $20k prize.
+## [SNARK Prover](https://coinlist.co/build/coda/pages/prover)
 
-If you have any questions, you can always ask on our [discord](https://discord.gg/DUhaJ42).
+- $70,000
+- $500 for completing tutorial
+
+In [this challenge](https://coinlist.co/build/coda/pages/prover) we’re offering $70,000 in prizes for participants who parallelize the snark prover. The SNARK proving algorithm is heavily susceptible to parallelization, but until now, no one has built a GPU implementation.
+
+**If you have a background in GPUs** or want to learn more about them, this challenge is the one to tackle. Background in cryptography not required, you’ll learn all you need to along the way.
+
+
+## [SNARK Verifier](https://coinlist.co/build/coda/pages/verifier)
+
+- $10,000
+
+[This challenge](https://coinlist.co/build/coda/pages/verifier) offers $10,000 for the fastest JavaScript SNARK verifier. SNARKs have the potential to offer privacy and trust preserving technologies to the world - implementing an in-browser implementation will help make these possibilities available to a wide audience.
+
+**If you know JavaScript** you’re well equipped to go after this challenge.
+
+## [Elliptic Curve Search](https://coinlist.co/build/coda/pages/theory)
+
+- $20,000
+
+The elliptic curves underlying SNARK constructions may be improved, which could dramatically improve the efficiency and capabilities of the prover. In this challenge we invite participants to find a set of curves which will be fast for both recursive and non-recursive problems. That way, everyone can standardize around the same curves making tooling and problems more universally collaborative.
+
+**Folks with a background in cryptography** should be ready to go after [this challenge](https://coinlist.co/build/coda/pages/theory). See the documentation for the curves we suggest searching for and how best to search for them.
