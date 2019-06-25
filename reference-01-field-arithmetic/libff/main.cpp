@@ -66,7 +66,7 @@ void print_array(uint8_t* a) {
 int main(int argc, char *argv[])
 {
     // argv should be
-    // { "main", "compute", inputs, outputs }
+    // { "main", "compute" or "compute-numeral", inputs, outputs }
 
     mnt4753_pp::init_public_params();
     mnt6753_pp::init_public_params();

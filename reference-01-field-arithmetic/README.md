@@ -5,22 +5,27 @@ This directory contains a reference CPU implementation of
 using [libff](README-libff.md).
 
 
-#### Build
+### Build
 ``` bash
 ./build.sh
 ```
 
-#### Generate Inputs
+### Generate Inputs
 ``` bash
 ./generate_inputs
 ```
 
 ### Run
+For interpreting inputs in montgomery representation:
 ``` bash
 ./main compute inputs outputs
+```
+Or for interpreting them as ordinary numbers:
+``` bash
+./main compute-numeral inputs outputs
 ```
 
 ### Check results
 ``` bash
-sha256sum outputs
+shasum outputs
 ```
