@@ -7,19 +7,15 @@
 
 using namespace libff;
 
-void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x) {
-  fwrite((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
-}
-
-void write_mnt6_fq(FILE* output, Fq<mnt6753_pp> x) {
-  fwrite((void *) x.mont_repr.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
-}
-
 Fq<mnt4753_pp> read_mnt4_fq(FILE* input) {
   // bigint<mnt4753_q_limbs> n;
   Fq<mnt4753_pp> x;
   fread((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, input);
   return x;
+}
+
+void write_mnt4_fq(FILE* output, Fq<mnt4753_pp> x) {
+  fwrite((void *) x.mont_repr.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
 Fq<mnt6753_pp> read_mnt6_fq(FILE* input) {
@@ -29,14 +25,8 @@ Fq<mnt6753_pp> read_mnt6_fq(FILE* input) {
   return x;
 }
 
-void write_mnt4_fq_numeral(FILE* output, Fq<mnt4753_pp> x) {
-  auto out_numeral = x.as_bigint();
-  fwrite((void *) out_numeral.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
-}
-
-void write_mnt6_fq_numeral(FILE* output, Fq<mnt6753_pp> x) {
-  auto out_numeral = x.as_bigint();
-  fwrite((void *) out_numeral.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
+void write_mnt6_fq(FILE* output, Fq<mnt6753_pp> x) {
+  fwrite((void *) x.mont_repr.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
 Fq<mnt4753_pp> read_mnt4_fq_numeral(FILE* input) {
@@ -47,12 +37,22 @@ Fq<mnt4753_pp> read_mnt4_fq_numeral(FILE* input) {
   return b;
 }
 
+void write_mnt4_fq_numeral(FILE* output, Fq<mnt4753_pp> x) {
+  auto out_numeral = x.as_bigint();
+  fwrite((void *) out_numeral.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
+}
+
 Fq<mnt6753_pp> read_mnt6_fq_numeral(FILE* input) {
   // bigint<mnt4753_q_limbs> n;
   Fq<mnt6753_pp> x;
   fread((void *) x.mont_repr.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, input);
   auto b = Fq<mnt6753_pp>(x.mont_repr);
   return b;
+}
+
+void write_mnt6_fq_numeral(FILE* output, Fq<mnt6753_pp> x) {
+  auto out_numeral = x.as_bigint();
+  fwrite((void *) out_numeral.data, libff::mnt6753_q_limbs * sizeof(mp_size_t), 1, output);
 }
 
 void print_array(uint8_t* a) {
@@ -66,7 +66,7 @@ void print_array(uint8_t* a) {
 int main(int argc, char *argv[])
 {
     // argv should be
-    // { "main", "compute", inputs, outputs }
+    // { "main", "compute" or "compute-numeral", inputs, outputs }
 
     mnt4753_pp::init_public_params();
     mnt6753_pp::init_public_params();
