@@ -5,10 +5,10 @@
 - [Community and help](#community-and-help)
 - [Starter code](#starter-code)
 - [Tutorials](#tutorials)
-	+ [Field Arithmetic](https://coinlist.co/build/coda/pages/problem-01-field-arithmetinc)
-	+ [Quadratic Extension Arithmetic](https://coinlist.co/build/coda/pages/problem-02-quadratic-extension-arithmetic): $150
-	+ [Cubic Extension Arithmetic](https://coinlist.co/build/coda/pages/problem-03-cubic-extension-arithmetic): $150
-	+ [Curve Operations](https://coinlist.co/build/coda/pages/problem-04-curve-operations): $200
+	+ [Field Arithmetic](https://coinlist.co/build/coda/pages/prover_tutorials#field-arithmetic)
+	+ [Quadratic Extension Arithmetic](https://coinlist.co/build/coda/pages/prover_tutorials#quadratic-extension-arithmetic): $150
+	+ [Cubic Extension Arithmetic](https://coinlist.co/build/coda/pages/prover_tutorials#cubic-extension-arithmetic): $150
+	+ [Curve Operations](https://coinlist.co/build/coda/pages/prover_tutorials#curve-operations): $200
 - [Architecture reference](https://coinlist.co/build/coda/pages/problem-07-groth16-prover-challenges)
 
 ## Introduction
@@ -66,7 +66,9 @@ To start, we'll show you how to go through the submission workflow for the probl
 
 ### (Optional) Set up GPU machine
 
-We expect many participants to use GPUs to try and speed up the SNARK prover, so we've set up a preconfigured AWS AMI that should help you get started.
+We expect many participants to use GPUs to try and speed up the SNARK prover, so we've set up a preconfigured AWS AMI that should help you get started. 
+
+Please note, this instance costs about $1/hour. If cost is an issue for you, please reach out to us on the [Discord chat](https://discord.gg/DUhaJ42) or send an email to brad@o1labs.org
 
 Full instructions are [here](https://coinlist.co/build/coda/pages/cloud-setup).
 
@@ -179,21 +181,25 @@ Go to [this page](https://coinlist.co/build/coda/projects/new) to create a submi
 
 ## Tutorials
 
-To help you get ready for your first GPU-based submission, we've created a series of tutorials that walk you through to your first big improvement.
+To help you get ready for your first submission, we've created a series of 3 tutorial sages that walk you through how to implement elliptic curves. Each stage should take a few hours, and by the end you’ll be setup to make your first big improvement.
 
-The first 10 participants who complete the four challenges in this stage will receive $500 and a SNARK Challenge swag-bag. You'll also be very well positioned to apply their solutions to create submissions for the $70,000 prizes for speeding up the prover.
+The first 10 participants who complete the challenges in this stage will receive $500 and a SNARK Challenge swag-bag. You'll also be very well positioned to apply their solutions to create submissions for the $70,000 prizes for speeding up the prover.
 
-We've released [starter code](https://github.com/CodaProtocol/cuda-fixnum) that performs arithmetic on large numbers (see [field arithmetic](https://coinlist.co/build/coda/pages/problem-01-field-arithmetic)) to get you started. Next, we suggest do you the following to build up to implementing multi-exponentiation on the GPU.
+**Start with the tutorial [here](https://coinlist.co/build/coda/pages/tutorial-intro).**
 
-1. **[Quadratic Extension Arithmetic](https://coinlist.co/build/coda/pages/problem-02-quadratic-extension-arithmetic) tutorial: $150**. Working from the starter code should make this relatively straightforward. 
-2. **[Cubic Extension Arithmetic tutorial](https://coinlist.co/build/coda/pages/problem-03-cubic-extension-arithmetic): $200**. This builds on the quadratic extension arithmetic module.
-3. **[Curve Operations tutorial](https://coinlist.co/build/coda/pages/problem-04-curve-operations): $200**. This builds upon both of the above tutorials
+### Next steps and improvement suggestions
 
-Once you've finished curve operations, here’s what we recommend working on next to implement multi-exponentiation.
+After you’ve finished the tutorial, you’ll have an on-GPU implementation of curve operations and you’ll be ready to start swapping components of the reference CPU prover for GPU components.
 
-- Try improving the multi-exponentiations with on-GPU versions using the curve operations from the tutorial. Each multi-exponentiation can be seen as a [map-reduce](https://youtu.be/81uR9W5PZ5M?t=772), as explained here. Start by implementing the "map" part on GPU, leaving the "reduce" part on CPU.
-- Do the multi-exponentiations entirely on-GPU using an on-GPU [reduce](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction).
-- Use an on-GPU FFT (see for example [cuFFT](https://developer.nvidia.com/cufft)), adapted to finite fields. You can find a C++ implementation of a finite-field FFT [here](https://github.com/CodaProtocol/snark-challenge-prover-reference/blob/master/depends/libfqfft/libfqfft/evaluation_domain/domains/basic_radix2_domain_aux.tcc#L46).
+The first thing to do is to swap out is the prover’s multi-exponentiations (see prover reference [here](https://coinlist.co/build/coda/pages/problem-05-multi-exponentiation)).
+
+The multi-exponentiations can be seen as a giant map-reduce, as explained [here](https://youtu.be/81uR9W5PZ5M?t=772). Move the “map” off CPU to take advantage of the parallelism offered by a GPU!
+
+After that, some more hints on what to try:
+
+- Put the [reduce](https://github.com/NVIDIA/cuda-samples/tree/master/Samples/reduction) portion of the multi-exponentiations on GPU as well
+- Use an on-GPU FFT (see for example [cuFFT](https://developer.nvidia.com/cufft)) for the FFT portion of the prover
+- Optimize the curve operations further (see “jacobian coordinates” and “mixed addition” - ask us for hints as well we have many ideas on cool hacks for further efficiency gains)
 
 For more information on the prover architecture, we suggest looking at the following
 

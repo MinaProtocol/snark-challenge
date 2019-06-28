@@ -158,6 +158,7 @@ let site =
     ; theory= Theory.url |> process_url
     ; implementation_strategies= Implementation_strategies.url |> process_url
     ; prover= Prover.url |> process_url
+    ; prover_tutorials= Prover_tutorials.url |> process_url
     ; cloud_setup= Cloud_setup.url |> process_url
     ; field_arithmetic= problem_url 1 Field_arithmetic.problem |> process_url
     ; quadratic_extension=
@@ -181,6 +182,7 @@ let site =
         ( page "intro" (Intro.page pages)
         @ page "tutorial" (Tutorial.page pages)
         @ page "prover" (Prover.page pages)
+        @ page "prover_tutorials" (Prover_tutorials.page pages)
         @ page "cloud_setup" (Cloud_setup.page pages)
         @ page "verifier" (Verifier.page pages)
         @ page "index" (Stage1.page pages)
