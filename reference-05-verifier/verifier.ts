@@ -496,6 +496,12 @@ type VerificationKey = {
   query : Array<AffineG1>,
 };
 
+const generateTestCase : () => {
+    verificationKey: VerificationKey,
+    input : FrT,
+    proof : Proof
+  } = g.generateTestCase;
+
 /* This function should check
   e(proof.a, proof.b)
   === proof.alphaBeta
@@ -547,7 +553,7 @@ function verifierCore (
     Pairing.g2Precompute(G2.ofAffine(vk.delta)));
   const res2 =
     Pairing.finalExponentiation(
-      Fq.div(ySdeltaPrime, zDelta));
+      Fq6.div(ySdeltaPrime, zDelta));
   if (! Fq6.equal(res2, Fq6.one)) {
     return false;
   }

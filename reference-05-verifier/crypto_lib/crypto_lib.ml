@@ -177,6 +177,44 @@ module V = Bowe_gabizon.Make (struct
   let hash = H.hash
 end)
 
+let test_case () =
+  let open Mnt6753 in
+  let scalar () = N.of_int (Random.int Int.max_value) in
+  let g scale = scale (scalar ()) in
+  let g1 () = g G1.(scale one) in
+  let g2 () = g G2.(scale one) in
+  let a = g1 () in
+  let b = g2 () in
+  let c = g1 () in
+  let delta_scalar = scalar () in
+  let delta_g2 = G2.(scale one) delta_scalar in
+  let d = scalar () in
+  let delta_prime = G2.(scale delta_g2) d in
+  let y_s = H.hash ?message:None ~a ~b ~c ~delta_prime in
+  let z = G1.scale y_s d in
+  let query = Array.init 2 ~f:(fun _ -> g1 ()) in
+  let input =
+    let zero = Char.to_int '0' in
+    N.of_string
+      (String.init 225 ~f:(fun _ -> Char.of_int_exn (zero + Random.int 10)))
+  in
+  let alpha_beta =
+    let open Pairing in
+    let ml p q =
+      miller_loop (G1_precomputation.create p) (G2_precomputation.create q)
+    in
+    (* e(A, B) - (e((q0 + I*q1), 1) + e(C, delta_prime)) = ab
+    *)
+    let open Fq6 in
+    final_exponentiation
+      ( ml a b
+      / (ml G1.(query.(0) + scale query.(1) input) G2.one * ml c delta_prime)
+      )
+  in
+  ( {V.Verification_key.alpha_beta; delta= delta_g2; query}
+  , input
+  , {V.Proof.a; b; c; delta_prime; z} )
+
 type 'a affine_point = < x: 'a Js.readonly_prop ; y: 'a Js.readonly_prop > Js.t
 
 type 'a jacobian_point =
@@ -209,6 +247,14 @@ let conv_fq3 ((a, b, c) : Mnt6753.Fq3.t) : fq3 =
   end
 
 let unconv_fq3 (x : fq3) : Mnt6753.Fq3.t = (x##.a, x##.b, x##.c)
+
+let conv_g2 (p : Mnt6753.G2.t) : fq3 affine_point =
+  let x, y = Mnt6753.G2.to_affine_coordinates p in
+  object%js
+    val x = conv_fq3 x
+
+    val y = conv_fq3 y
+  end
 
 type fq6 = < a: fq3 Js.readonly_prop ; b: fq3 Js.readonly_prop > Js.t
 
@@ -297,6 +343,54 @@ let fq6_object : fq6 simple_field_object Js.t =
     method negate x = fn negate x
   end
 
+type verification_key =
+  < alphaBeta: fq6 Js.readonly_prop
+  ; delta: fq3 affine_point Js.readonly_prop
+  ; query: Fq.t affine_point Js.js_array Js.t Js.readonly_prop >
+  Js.t
+
+type proof =
+  < a: Fq.t affine_point Js.readonly_prop
+  ; b: fq3 affine_point Js.readonly_prop
+  ; c: Fq.t affine_point Js.readonly_prop
+  ; deltaPrime: fq3 affine_point Js.readonly_prop
+  ; z: Fq.t affine_point Js.readonly_prop >
+  Js.t
+
+let test_case () =
+  let vk, input, proof = test_case () in
+  let input : Fr.t = Obj.magic input in
+  let vk : verification_key =
+    object%js
+      val alphaBeta = conv_fq6 vk.alpha_beta
+
+      val delta = conv_g2 vk.delta
+
+      val query = Js.array (Array.map vk.query ~f:conv_g1)
+    end
+  in
+  let proof : proof =
+    let {V.Proof.a; b; c; delta_prime; z} = proof in
+    object%js
+      val a = conv_g1 a
+
+      val c = conv_g1 c
+
+      val z = conv_g1 z
+
+      val b = conv_g2 b
+
+      val deltaPrime = conv_g2 delta_prime
+    end
+  in
+  object%js
+    val verificationKey = vk
+
+    val input = input
+
+    val proof = proof
+  end
+
 let () =
   let blake2s =
     Js.wrap_callback (fun (bits : bool Js.t Js.js_array Js.t) ->
@@ -309,6 +403,7 @@ let () =
   Js.Unsafe.global ##. MNT6Fq := make_field_object (module Fq) ;
   Js.Unsafe.global ##. MNT6Fr := make_field_object (module Fr) ;
   Js.Unsafe.global ##. MNT6Fq6 := fq6_object ;
+  Js.Unsafe.global##.generateTestCase := Js.wrap_callback test_case ;
   Js.Unsafe.global##.blake2s := blake2s
 
 module type T = sig

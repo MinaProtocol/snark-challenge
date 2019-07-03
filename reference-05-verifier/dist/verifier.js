@@ -332,6 +332,7 @@ function hashToGroup(a, b, c, deltaPrime) {
         return chunk(bits, 3);
     }
 }
+var generateTestCase = g.generateTestCase;
 /* This function should check
   e(proof.a, proof.b)
   === proof.alphaBeta
@@ -356,7 +357,7 @@ function verifierCore(vk, input, proof) {
     }
     var ySdeltaPrime = Pairing.millerLoop(Pairing.g1Precompute(G1.ofAffine(proof.yS)), deltaPrime);
     var zDelta = Pairing.millerLoop(Pairing.g1Precompute(G1.ofAffine(proof.z)), Pairing.g2Precompute(G2.ofAffine(vk.delta)));
-    var res2 = Pairing.finalExponentiation(Fq.div(ySdeltaPrime, zDelta));
+    var res2 = Pairing.finalExponentiation(Fq6.div(ySdeltaPrime, zDelta));
     if (!Fq6.equal(res2, Fq6.one)) {
         return false;
     }
