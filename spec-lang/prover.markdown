@@ -25,9 +25,9 @@ In this challenge you’ll parallelizing the snark prover for GPU, vastly speedi
 
 We're offering $70k in cash to speed up the zk-SNARK prover. That's broken down as follows:
 
-- $7k to the first team that gets a 2x speedup
-- $8k to the first team that gets a 4x speedup
-- $10k to the first team that gets an 8x speedup
+- $7k + 1 [Satoshi's Treasure Key](https://satoshistreasure.xyz/16) to the first team that gets a 2x speedup
+- $8k + 1 [Satoshi's Treasure Key](https://satoshistreasure.xyz/16) to the first team that gets a 4x speedup
+- $10k + 1 [Satoshi's Treasure Key](https://satoshistreasure.xyz/16) to the first team that gets an 8x speedup
 - $15k to the first team that gets a 16x speedup
 - $30k to the fastest prover at the end of the contest
 
@@ -185,7 +185,7 @@ To help you get ready for your first submission, we've created a series of 3 tut
 
 The first 10 participants who complete the challenges in this stage will receive $500 and a SNARK Challenge swag-bag. You'll also be very well positioned to apply their solutions to create submissions for the $70,000 prizes for speeding up the prover.
 
-**Start with the tutorial [here](https://coinlist.co/build/coda/pages/tutorial-intro).**
+**Start with the tutorial [here](https://coinlist.co/build/coda/pages/prover-tutorials).**
 
 ### Next steps and improvement suggestions
 

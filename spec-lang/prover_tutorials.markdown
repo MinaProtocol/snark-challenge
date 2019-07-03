@@ -28,7 +28,7 @@ We intend for each of these stages to take at most a few hours, given some backg
 
 - [Starter Code: Field Arithmetic](#field-arithmetic)
 - [Stage 1: Quadratic Extension Arithmetic](#quadratic-extension-arithmetic): $150
-- [Stage 2: Cubic Extension Arithmetic](#cubic-extension-arithmetic): $200
+- [Stage 2: Cubic Extension Arithmetic](#cubic-extension-arithmetic): $150
 - [Stage 3: Curve Operations](#curve-operations): $200
 
 By the end of the tutorial stages, you’ll understand:
@@ -69,11 +69,11 @@ For example, if the modulus is "17," then:
 
 ```
 10 + 10 = 20 mod 17 = 3
-7\*4 = 28 mod 17 = 11
+7*4 = 28 mod 17 = 11
 84 = 84 mod 17 = 16
 ```
 
-Division also takes on a slightly different meaning. An element times its inverse is still 1 (½ x 2 = 1). However, the inverse is itself an element on the field instead of a fraction. For example, for 2, 2-1 x 2 = 1, but 2-1 = 9. You can verify that 9 x 2 = 18 = 18 mod 17 = 1. Every element besides zero in the field has another element as its inverse. (for 17, [1,1], [2,9], [3,6], etc)
+Division also takes on a slightly different meaning. An element times its inverse is still 1 (½ x 2 = 1). However, the inverse is itself an element on the field instead of a fraction. For example, for 2, 2^(-1) x 2 = 1, but 2^(-1) = 9. You can verify that 9 x 2 = 18 = 18 mod 17 = 1. Every element besides zero in the field has another element as its inverse. (for 17, [1,1], [2,9], [3,6], etc)
 
 For our problem, our modulus is very large (753 bits!). The starter code represents uses bignums to accommodate this.
 
@@ -121,7 +121,7 @@ var fq2_add = (a, b) => {
 ### Cubic Extension Arithmetic
 
 - [Reference code on github](https://github.com/CodaProtocol/snark-challenge/tree/master/reference-03-cubic-extension)
-- Prize: $200 for first 10 submissions
+- Prize: $150 for first 10 submissions
 - [Detailed Cubic Extension Spec](https://coinlist.co/build/coda/pages/problem-04-curve-operations)
 
 In this tutorial you will implement “Cubic Extension” Arithmetic. After this, you’ll be ready to implement operations on elliptic curves!
@@ -215,6 +215,17 @@ var curve_add = (p, q) => {
 ```
 
 However, if p == q then you do a different algorithm called “doubling”. 
+
+```
+var curve_double = (p, q) => {
+  var s = (p.x*p.x+p.x*p.x+p.x*p.x + coeff_a) / (p.y + p.y);
+  var x = s*s - p.x - q.x;
+  return {
+    x: x,
+    y: s*(p.x - x) - p.y
+  };
+};
+```
 
 Curves have some additional parameters unique to each curve. `coeff_a` is one of these parameters. See [here](https://github.com/CodaProtocol/snark-challenge/blob/master/reference-04-curve-operations/libff/algebra/curves/mnt753/mnt4753/mnt4753_init.cpp#L119) for where `coeff_a` is defined for MNT4_G1 (which happens to be just "2" for this curve). See sibling files in the reference repo for the `coeff_a` of the other 3 curves.
 

@@ -23,16 +23,20 @@ This has awesome implications for verifiable computing, cryptocurrency, and priv
 
 That’s why we’re running the SNARK challenge. By participating, you’ll have the chance to develop a blazing fast prover, write a Javascript verifier, and improve the core cryptographic primitives, while learning about zk-SNARKs and and how they work along the way.
 
+If you prefer a video intro, check out the video below:
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/81uR9W5PZ5M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ## Community and help
 
 We're here to help. If you run into issues, have clarifying questions on the documentations, get stuck, or want to discuss ideas, ask on our [**Discord chat**](https://discord.gg/DUhaJ42) or send an email to brad@o1labs.org.
 
 ## [SNARK Prover](https://coinlist.co/build/coda/pages/prover)
 
-- $70,000
+- $70,000 + [Satoshi's Treasure Keys](https://satoshistreasure.xyz/16)
 - $500 for completing tutorial
 
-In [this challenge](https://coinlist.co/build/coda/pages/prover) we’re offering $70,000 in prizes for participants who parallelize the snark prover. The SNARK proving algorithm is heavily susceptible to parallelization, but until now, no one has built a GPU implementation.
+In [this challenge](https://coinlist.co/build/coda/pages/prover) we’re offering $70,000 + 3 [Satoshi's Treasure Keys](https://satoshistreasure.xyz/16) in prizes for participants who parallelize the snark prover. The SNARK proving algorithm is heavily susceptible to parallelization, but until now, no one has built a GPU implementation.
 
 **If you have a background in GPUs** or want to learn more about them, this challenge is the one to tackle. Background in cryptography not required, you’ll learn all you need to along the way.
 

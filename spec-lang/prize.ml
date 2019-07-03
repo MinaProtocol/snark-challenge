@@ -81,4 +81,4 @@ let render xs =
                (Participant_set.to_string p)
                (Reward.to_string r) ] ))
 
-let stage1 amount : t = [(First_n 25, Dollars amount); (All, Swag_bag)]
+let stage1 amount : t = [(First_n 10, Dollars amount); (All, Swag_bag)]
