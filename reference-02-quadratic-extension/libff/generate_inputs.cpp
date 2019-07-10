@@ -16,10 +16,25 @@ void write_mnt4_fq2(FILE* output, Fqe<mnt4753_pp> x) {
   write_mnt4_fq(output, x.c1);
 }
 
-int main(void)
+void write_mnt4_fq_numeral(FILE* output, Fq<mnt4753_pp> x) {
+  auto out_numeral = x.as_bigint();
+  fwrite((void *) out_numeral.data, libff::mnt4753_q_limbs * sizeof(mp_size_t), 1, output);
+}
+
+void write_mnt4_fq2_numeral(FILE* output, Fqe<mnt4753_pp> x) {
+  write_mnt4_fq_numeral(output, x.c0);
+  write_mnt4_fq_numeral(output, x.c1);
+}
+
+int main(int argc, char **argv)
 {
     mnt4753_pp::init_public_params();
 
+    auto write_mnt4_q2 = write_mnt4_fq2;
+
+    if (argc >= 2 && strcmp(argv[1], "numeral") == 1) {
+      write_mnt4_q2 = write_mnt4_fq2_numeral;
+    }
     auto output = fopen("inputs", "w");
 
     size_t num_instances = 10;
@@ -34,14 +49,14 @@ int main(void)
       for (size_t i = 0; i < n; ++i) {
         Fq<mnt4753_pp> c0 = SHA512_rng<Fq<mnt4753_pp>>(offset + 2 * i);
         Fq<mnt4753_pp> c1 = SHA512_rng<Fq<mnt4753_pp>>(offset + 2 * i + 1);
-        write_mnt4_fq2(output, Fqe<mnt4753_pp>(c0, c1));
+        write_mnt4_q2(output, Fqe<mnt4753_pp>(c0, c1));
       }
 
       offset = rand();
       for (size_t i = 0; i < n; ++i) {
         Fq<mnt4753_pp> c0 = SHA512_rng<Fq<mnt4753_pp>>(offset + 2 * i);
         Fq<mnt4753_pp> c1 = SHA512_rng<Fq<mnt4753_pp>>(offset + 2 * i + 1);
-        write_mnt4_fq2(output, Fqe<mnt4753_pp>(c0, c1));
+        write_mnt4_q2(output, Fqe<mnt4753_pp>(c0, c1));
       }
     }
 }
