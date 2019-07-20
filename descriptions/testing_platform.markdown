@@ -46,13 +46,17 @@ sudo add-apt-repository ppa:graphics-drivers/ppa
 sudo apt install nvidia-headless-418 nvidia-utils-418
 sudo reboot
 
-# CUDA
+# CUDA 10.0
 sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
-wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.1.105-1_amd64.deb
-sudo dpkg -i cuda-repo-ubuntu1804_10.1.105-1_amd64.deb
+#wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.1.105-1_amd64.deb
+#sudo dpkg -i cuda-repo-ubuntu1804_10.1.105-1_amd64.deb
+wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
+sudo dpkg -i cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
 
 sudo apt-get update
-sudo apt-get install cuda-libraries-10-1 cuda-libraries-dev-10-1 cuda-compiler-10-1
+#sudo apt-get install cuda-libraries-10-1 cuda-libraries-dev-10-1 cuda-compiler-10-1
+sudo apt-get install cuda-libraries-10-0 cuda-libraries-dev-10-0 cuda-compiler-10-0
+
 
 # pathing hack for mixbench
 sudo ln -s /usr/local/cuda-10.1 /usr/local/cuda
