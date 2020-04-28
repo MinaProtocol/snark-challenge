@@ -141,28 +141,28 @@ $$
 \begin{aligned}
   z(x)
   &= (x - 1)(x - \omega^1) \dots (x - \omega^{d}) \\
-  &= x^{d} - 1
+  &= x^{d+1} - 1
 \end{aligned}
 $$
 
 One would want to obtain the coefficients of $h$ by computing its evaluations
-on $\omega^0, \dots, \omega^{d}$ as `(d[i] * d[i] - d[i]) / z(ω_i)` for each `i`.
+on $\omega^0, \dots, \omega^{d}$ as `(a[i] * b[i] - c[i]) / z(ω_i)` for each `i`.
 This won't work however as $z(\omega^i) = 0$ for each $i$. Alternatively, one can do the following.
 
 1. Perform 3 inverse FFTs to compute the coefficients of $a, b$ and $c$.
 2. Use the coefficients of these polynomials to compute the evaluations of of $a, b, c$
-    on the "shifted set" $\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}$.
+    on the "shifted set" $\{ \sigma , \sigma^1 \omega^1, \sigma^2 \omega^2, \dots, \sigma^{d} \omega^{d}\}$.
 
     Let's say `ea` is an array with `ea[i]` being the i<sup>th</sup> coefficient of the polynomial
-    `a`. Then we can evaluate `a` on the set $\{ \sigma , \sigma \omega^1, \sigma \omega^2, \dots, \sigma \omega^{d}\}$
+    `a`. Then we can evaluate `a` on the set $\{ \sigma , \sigma^1 \omega^1, \sigma^2 \omega^2, \dots, \sigma^{d} \omega^{d}\}$
     by computing `sa = ea.map((ai, i) => sigma**i * ai)` and then performing an FFT on `sa`.
     Analogously for the polynomials $b$ and $c$ to obtain evaluation arrays `eb` and `ec`.
 
     In all this step requires 3 FFTs.
-3. Note that $z(\sigma \omega^i) = \sigma^{d} \omega^{d} - 1 = \sigma^{d} - 1$.
+3. Note that $z(\sigma \omega) = \sigma^{d+1} \omega^{d+1} - 1 = \sigma^{d+1} - 1$.
     So, having computed `sa, sb, sc`, you can compute the evaluations of 
     $h(x) = \frac{a(x) b(x) - c(x)}{z(x)}$  on the
-    shifted set as `sh[i] = (sa[i] * sb[i] - sc[i]) / (sigma**d - 1)`.
+    shifted set as `sh[i] = (sa[i] * sb[i] - sc[i]) / (sigma**(d+1) - 1)`.
 
 4. Finally, we can now obtain the coefficients `H` of $h$ by performing an inverse FFT on `sh` 
     to obtain `shifted_H` and
